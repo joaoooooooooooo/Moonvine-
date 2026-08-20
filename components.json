@@ -20,6 +20,9 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@coss": "https://coss.com/ui/r/{name}.json"
+    "@coss": "https://coss.com/ui/r/{name}.json",
+    "@lucide-animated": "https://lucide-animated.com/r/{name}.json",
+    "@efferd": "https://efferd.com/r/{style}/{name}.json",
+    "@evilcharts": "https://evilcharts.com/r/{name}.json"
   }
 }

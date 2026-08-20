@@ -99,7 +99,7 @@ export function AvatarMenuSearchCommand({
     <>
       <button
         className={cn(
-          "inline-flex h-9 w-fit items-center rounded-md border border-input bg-background px-3 py-2 text-foreground text-sm shadow-xs outline-none transition-[color,background-color,box-shadow] hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 placeholder:text-muted-foreground/70",
+          "inline-flex h-9 w-fit items-center rounded-md border border-input bg-background px-3 py-2 text-foreground text-sm shadow-xs outline-none hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 placeholder:text-muted-foreground/70",
           className,
         )}
         onClick={() => setOpen(true)}

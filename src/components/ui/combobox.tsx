@@ -319,7 +319,7 @@ export function ComboboxList({
     <ScrollArea overscrollContain scrollbarGutter scrollFade>
       <ComboboxPrimitive.List
         className={cn(
-          "not-empty:scroll-py-1 not-empty:px-1 not-empty:py-1 in-data-has-overflow-y:pe-3",
+          "not-empty:scroll-py-1 not-empty:px-1 not-empty:py-1 not-empty:space-y-1 in-data-has-overflow-y:pe-3",
           className,
         )}
         data-slot="combobox-list"
