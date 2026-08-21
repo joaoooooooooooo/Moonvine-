@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronLeftIcon } from "lucide-react";
 import { Logo } from "@/features/console/components/logo";
 import {
 	Sidebar,
@@ -18,10 +19,22 @@ import {
 	useCurrentConsolePath,
 } from "@/features/console/components/app-shared";
 import { NavUser } from "@/features/console/components/nav-user";
+import { settingsNavItems } from "@/features/settings/config/settings-nav";
 
 export function AppSidebar() {
 	const currentPath = useCurrentConsolePath();
 	const currentNavGroups = getNavGroups(currentPath);
+	const isSettings = currentPath.startsWith("#/settings");
+	const visibleNavGroups = isSettings
+		? [
+				{
+					items: settingsNavItems.map((item) => ({
+						...item,
+						isActive: item.url === currentPath,
+					})),
+				},
+			]
+		: currentNavGroups;
 
 	return (
 		<Sidebar
@@ -30,17 +43,32 @@ export function AppSidebar() {
 			variant="sidebar"
 		>
 			<SidebarHeader className="relative h-14 justify-center px-2 py-0">
-				<a
-					className="rounded-lg flex h-10 w-max items-center justify-center px-3 hover:bg-muted dark:hover:bg-muted/50"
-					href="#link"
-				>
-					<Logo className="hidden h-4 md:block" variant="type" />
-					<Logo className="h-5 md:hidden" variant="icon" />
-					<span className="sr-only">Moonvine</span>
-				</a>
+				{isSettings ? (
+					<SidebarMenu>
+						<SidebarMenuItem>
+							<SidebarMenuButton
+								className="font-medium"
+								render={<a href="#/observatory" />}
+								tooltip="Back to console"
+							>
+								<ChevronLeftIcon />
+								<span>Settings</span>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					</SidebarMenu>
+				) : (
+					<a
+						className="rounded-lg flex h-10 w-max items-center justify-center px-3 hover:bg-muted dark:hover:bg-muted/50"
+						href="#/observatory"
+					>
+						<Logo className="hidden h-4 md:block" variant="type" />
+						<Logo className="h-5 md:hidden" variant="icon" />
+						<span className="sr-only">Moonvine</span>
+					</a>
+				)}
 			</SidebarHeader>
 			<SidebarContent>
-				{currentNavGroups.map((group, index) => (
+				{visibleNavGroups.map((group, index) => (
 					<SidebarGroup key={`sidebar-group-${index}`}>
 						{group.label && (
 							<SidebarGroupLabel className="font-normal">

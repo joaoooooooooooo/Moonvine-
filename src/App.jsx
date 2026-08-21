@@ -5,6 +5,7 @@ import { Entities } from "@/pages/Entities";
 import { Observatory } from "@/pages/Observatory";
 import { People } from "@/pages/People";
 import { Reports } from "@/pages/Reports";
+import { Settings } from "@/pages/Settings";
 import { Agentation } from "agentation";
 import {
   getActiveNavItem,
@@ -35,11 +36,14 @@ function App() {
     if (currentPath === "#/reports") {
       return <Reports />;
     }
-    if (currentPath === "#/people") {
+    if (currentPath === "#/people" || currentPath.startsWith("#/people/")) {
       return <People />;
     }
     if (currentPath === "#/entities") {
       return <Entities />;
+    }
+    if (currentPath.startsWith("#/settings")) {
+      return <Settings />;
     }
 
     return <ConsolePagePlaceholder title={activeItem?.title ?? "Observatory"} />;

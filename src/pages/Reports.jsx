@@ -5,7 +5,7 @@ export function Reports() {
     <section className="space-y-6">
       <div className="space-y-2">
         <h1 className="font-semibold text-2xl tracking-tight">Reports</h1>
-        <p className="max-w-2xl text-muted-foreground text-sm">
+        <p className="max-w-sm text-muted-foreground text-sm">
           Review scheduled report runs by company, month, week, and report type.
         </p>
       </div>

@@ -1,16 +1,16 @@
-import { PeopleTable } from "@/features/peopleTable/components/peopleTable";
+import { people } from "@/features/people/config/people-data";
+import { PeopleList } from "@/features/people/pages/people-list";
+import { PersonDetails } from "@/features/people/pages/person-details";
+import { useCurrentConsolePath } from "@/features/console/components/app-shared";
 
 export function People() {
-  return (
-    <section className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="font-semibold text-2xl tracking-tight">People</h1>
-        <p className="max-w-2xl text-muted-foreground text-sm">
-          Review the people connected to your accounts, companies, and report delivery.
-        </p>
-      </div>
+  const currentPath = useCurrentConsolePath();
+  const personId = currentPath.match(/^#\/people\/([^/]+)$/)?.[1];
 
-      <PeopleTable />
-    </section>
-  );
+  if (!personId) {
+    return <PeopleList />;
+  }
+
+  const person = people.find((item) => item.id === personId);
+  return <PersonDetails person={person} />;
 }

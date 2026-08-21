@@ -9,7 +9,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 		<div className="relative overflow-hidden">
 			<SideLineBackground contentWidth="80rem" variant="small" />
 			<SidebarProvider className="relative mx-auto h-svh w-full max-w-7xl lg:border-x">
-				<FullWidthDivider className="top-14 z-60 -translate-y-px" />
+				<FullWidthDivider className="top-14 z-40 -translate-y-px" />
 				<AppSidebar />
 				<SidebarInset>
 					<AppHeader />

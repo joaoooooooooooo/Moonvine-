@@ -11,6 +11,7 @@ import {
   SettingsIcon,
   UsersIcon,
 } from "lucide-react";
+import { settingsNavItems } from "@/features/settings/config/settings-nav";
 
 export type SidebarNavItem = {
 	title: string;
@@ -69,7 +70,7 @@ export const navGroups: SidebarNavGroup[] = [
 		items: [
 			{
 				title: "Settings",
-				url: "#/settings",
+				url: "#/settings/profile",
 				icon: (
 					<SettingsIcon
 					/>
@@ -151,7 +152,9 @@ export function getNavGroups(path: string): SidebarNavGroup[] {
     ...group,
     items: group.items.map((item) => ({
       ...item,
-      isActive: item.url === path,
+      isActive:
+        item.url === path ||
+        (item.url === "#/people" && path.startsWith("#/people/")),
     })),
   }));
 }
@@ -168,5 +171,15 @@ export function getNavLinks(path: string): SidebarNavItem[] {
 }
 
 export function getActiveNavItem(path: string) {
+  if (path.startsWith("#/settings")) {
+    return settingsNavItems.find((item) => item.url === path) ?? settingsNavItems[0];
+  }
+
+  if (path.startsWith("#/people/")) {
+    return navGroups
+      .flatMap((group) => group.items)
+      .find((item) => item.url === "#/people");
+  }
+
   return getNavLinks(path).find((item) => item.isActive) ?? null;
 }

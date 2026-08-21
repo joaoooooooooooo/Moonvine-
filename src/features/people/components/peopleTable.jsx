@@ -16,7 +16,8 @@ import {
   ChevronUpIcon,
 } from "lucide-react";
 import { useId } from "react";
-import { usePeopleTable } from "@/features/peopleTable/hooks/use-people-table";
+import { people } from "@/features/people/config/people-data";
+import { usePeopleTable } from "@/features/people/hooks/use-people-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,40 +44,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data = [
-  {
-    id: "person-001",
-    companies: ["Apta", "Apta Agency"],
-    email: "admin@apta.agency",
-    name: "Apta Admin",
-    tags: [
-      { label: "Account user", variant: "outline" },
-      { label: "Report recipient", variant: "success" },
-    ],
-  },
-  {
-    id: "person-002",
-    companies: ["Apta Agency"],
-    email: "dan@apta.agency",
-    name: "Dan Guerra",
-    tags: [{ label: "Account user", variant: "outline" }],
-  },
-  {
-    id: "person-003",
-    companies: ["Apta Agency"],
-    email: "luis@apta.agency",
-    name: "Luis",
-    tags: [{ label: "Account user", variant: "outline" }],
-  },
-  {
-    id: "person-004",
-    companies: ["Apta Agency"],
-    email: "victor@apta.agency",
-    name: "Victor Braga",
-    tags: [{ label: "Account user", variant: "outline" }],
-  },
-];
-
 function getInitials(value) {
   return value
     .split(" ")
@@ -93,7 +60,7 @@ const columns = [
       const name = row.getValue("name");
 
       return (
-        <div className="flex items-center gap-4">
+        <div className="flex w-fit items-center gap-4">
           <Avatar className="size-10 border border-border bg-background text-foreground">
             <AvatarFallback className="bg-primary font-semibold text-primary-foreground">
               {getInitials(name)}
@@ -147,7 +114,7 @@ export function PeopleTable() {
 
   const table = useReactTable({
     columns,
-    data,
+    data: people,
     enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -218,7 +185,21 @@ export function PeopleTable() {
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  aria-label={`Open ${row.original.name}`}
+                  className="cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                  key={row.id}
+                  onClick={() => {
+                    window.location.hash = `/people/${row.original.id}`;
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      window.location.hash = `/people/${row.original.id}`;
+                    }
+                  }}
+                  role="link"
+                  tabIndex={0}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
