@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeftIcon } from "lucide-react";
-import { Logo } from "@/features/console/components/logo";
+import { Badge } from "@/components/ui/badge";
 import {
 	Sidebar,
 	SidebarContent,
@@ -16,10 +16,29 @@ import {
 import {
 	footerNavLinks,
 	getNavGroups,
+	type SidebarNavItem,
 	useCurrentConsolePath,
 } from "@/features/console/components/app-shared";
 import { NavUser } from "@/features/console/components/nav-user";
 import { settingsNavItems } from "@/features/settings/config/settings-nav";
+
+function SidebarIconBadge({
+	item,
+}: {
+	item: SidebarNavItem;
+}) {
+	const variant = item.badgeVariant ?? "outline";
+
+	return (
+		<Badge
+			className="size-6 rounded-md p-0 [&_svg]:size-3.5 [&_svg]:opacity-100"
+			size="lg"
+			variant={variant}
+		>
+			{item.icon}
+		</Badge>
+	);
+}
 
 export function AppSidebar() {
 	const currentPath = useCurrentConsolePath();
@@ -42,12 +61,12 @@ export function AppSidebar() {
 			collapsible="offExamples"
 			variant="sidebar"
 		>
-			<SidebarHeader className="relative h-14 justify-center px-2 py-0">
+			<SidebarHeader className={isSettings ? "relative h-14 px-2 py-0" : "relative h-14 p-0"}>
 				{isSettings ? (
-					<SidebarMenu>
+					<SidebarMenu className="h-full px-0 py-2">
 						<SidebarMenuItem>
 							<SidebarMenuButton
-								className="font-medium"
+								className="h-10 font-medium"
 								render={<a href="#/observatory" />}
 								tooltip="Back to console"
 							>
@@ -57,20 +76,13 @@ export function AppSidebar() {
 						</SidebarMenuItem>
 					</SidebarMenu>
 				) : (
-					<a
-						className="rounded-lg flex h-10 w-max items-center justify-center px-3 hover:bg-muted dark:hover:bg-muted/50"
-						href="#/observatory"
-					>
-						<Logo className="hidden h-4 md:block" variant="type" />
-						<Logo className="h-5 md:hidden" variant="icon" />
-						<span className="sr-only">Moonvine</span>
-					</a>
+					<NavUser />
 				)}
 			</SidebarHeader>
 			<SidebarContent>
 				{visibleNavGroups.map((group, index) => (
 					<SidebarGroup key={`sidebar-group-${index}`}>
-						{group.label && (
+						{group.label && group.label !== "Console" && (
 							<SidebarGroupLabel className="font-normal">
 								{group.label}
 							</SidebarGroupLabel>
@@ -83,7 +95,7 @@ export function AppSidebar() {
 										render={<a href={item.url} />}
 										tooltip={item.title}
 									>
-										{item.icon}
+										<SidebarIconBadge item={item} />
 										<span>{item.title}</span>
 									</SidebarMenuButton>
 								</SidebarMenuItem>
@@ -102,13 +114,12 @@ export function AppSidebar() {
 								render={<a href={item.url} />}
 								size="sm"
 							>
-								{item.icon}
+								<SidebarIconBadge item={item} />
 								<span>{item.title}</span>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
 					))}
 				</SidebarMenu>
-				<NavUser />
 			</SidebarFooter>
 		</Sidebar>
 	);

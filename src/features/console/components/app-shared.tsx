@@ -18,6 +18,7 @@ export type SidebarNavItem = {
 	url: string;
 	icon: React.ReactNode;
 	isActive?: boolean;
+	badgeVariant?: "success" | "info" | "warning";
 };
 
 export type SidebarNavGroup = {
@@ -38,14 +39,7 @@ export const navGroups: SidebarNavGroup[] = [
 					<LayoutGridIcon
 					/>
 				),
-			},
-			{
-				title: "Accounts",
-				url: "#/accounts",
-				icon: (
-					<NetworkIcon
-					/>
-				),
+				badgeVariant: "success",
 			},
 			{
 				title: "Reports",
@@ -54,6 +48,7 @@ export const navGroups: SidebarNavGroup[] = [
 					<SatelliteDishIcon
 					/>
 				),
+				badgeVariant: "info",
 			},
 			{
 				title: "Entities",
@@ -62,12 +57,21 @@ export const navGroups: SidebarNavGroup[] = [
 					<BlocksIcon
 					/>
 				),
+				badgeVariant: "warning",
 			},
 		],
 	},
 	{
 		label: "Administration",
 		items: [
+			{
+				title: "Accounts",
+				url: "#/accounts",
+				icon: (
+					<NetworkIcon
+					/>
+				),
+			},
 			{
 				title: "Settings",
 				url: "#/settings/profile",

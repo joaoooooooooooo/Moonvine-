@@ -111,9 +111,7 @@ const columns = [
   },
   {
     accessorKey: "type",
-    cell: ({ row }) => (
-      <Badge variant="outline">{row.getValue("type")}</Badge>
-    ),
+    cell: ({ row }) => <Badge variant="outline">{row.getValue("type")}</Badge>,
     header: "Type",
     size: 120,
   },
@@ -140,23 +138,22 @@ export function EntitiesTable() {
 
   return (
     <div className="space-y-4">
-      <CardFrame className="w-full [&_[data-slot=table-container]]:m-0 [&_[data-slot=table-container]]:w-full [&_[data-slot=table-container]]:p-1">
+      <CardFrame className="w-full  [&_[data-slot=table-container]]:m-0 [&_[data-slot=table-container]]:w-full [&_[data-slot=table-container]]:p-0">
         <Table
-          className="table-fixed [&_td]:!whitespace-normal [&_th]:!whitespace-normal"
-          variant="card"
+          className="table-fixed bg-card [&_td]:!whitespace-normal [&_th]:!whitespace-normal"
         >
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow className="hover:bg-transparent" key={headerGroup.id}>
+              <TableRow className="hover:bg-" key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
-                    className="h-11"
+                    className="h-11 px-3 text-left text-sm font-semibold bg-background text-muted-foreground"
                     key={header.id}
                     style={{ width: `${header.getSize()}px` }}
                   >
                     {header.isPlaceholder ? null : header.column.getCanSort() ? (
                       <div
-                        className="flex h-full cursor-pointer select-none items-center justify-between gap-2"
+                        className="flex h-full cursor-pointer select-none items-center justify-between gap-2 "
                         onClick={header.column.getToggleSortingHandler()}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
@@ -213,7 +210,7 @@ export function EntitiesTable() {
             )}
           </TableBody>
         </Table>
-        <CardFrameFooter className="p-2">
+        <CardFrameFooter className="p-2 bg-background">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2 whitespace-nowrap">
               <Label className="sr-only" htmlFor={id}>

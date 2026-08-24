@@ -8,8 +8,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="relative overflow-hidden">
 			<SideLineBackground contentWidth="80rem" variant="small" />
-			<SidebarProvider className="relative mx-auto h-svh w-full max-w-7xl lg:border-x">
-				<FullWidthDivider className="top-14 z-40 -translate-y-px" />
+			<SidebarProvider className="relative mx-auto h-svh w-full max-w-[110rem] lg:border-x">
+			
 				<AppSidebar />
 				<SidebarInset>
 					<AppHeader />

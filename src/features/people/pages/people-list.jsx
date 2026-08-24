@@ -4,11 +4,10 @@ export function PeopleList() {
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <h1 className="font-semibold text-2xl tracking-tight">People</h1>
-        <p className="max-w-sm text-muted-foreground text-sm">
+        <h1 className="max-w-[28rem] text-2xl text-foreground">
           Review the people connected to your accounts, companies, and report
           delivery.
-        </p>
+        </h1>
       </div>
 
       <PeopleTable />

@@ -4,10 +4,9 @@ export function Accounts() {
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <h1 className="font-semibold text-2xl tracking-tight">Accounts</h1>
-        <p className="max-w-sm text-muted-foreground text-sm">
+        <h1 className="max-w-[28rem] text-2xl text-foreground">
           Review active customer accounts, ownership, regional coverage, and revenue health.
-        </p>
+        </h1>
       </div>
 
       <AccountTable />

@@ -37,11 +37,11 @@ export function NavUser() {
 	const { isMobile } = useSidebar();
 
 	return (
-		<SidebarMenu className="border-t p-2">
+		<SidebarMenu className="h-14 border-b px-2 py-2">
 			<SidebarMenuItem>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<SidebarMenuButton className="text-muted-foreground">
+						<SidebarMenuButton className="h-10 text-muted-foreground">
 							<Avatar className="size-5">
 								<AvatarImage alt={user.name} src={user.avatar} />
 							<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>

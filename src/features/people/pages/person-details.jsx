@@ -14,12 +14,9 @@ export function PersonDetails({ person }) {
         <div className="space-y-6">
           <PeopleDetailBreadcrumb person={person} />
           <div className="space-y-2">
-            <h1 className="font-semibold text-2xl tracking-tight">
-              Person not found
-            </h1>
-            <p className="max-w-sm text-muted-foreground text-sm">
+            <h1 className="max-w-[28rem] text-2xl text-foreground">
               This person is not available in the current workspace.
-            </p>
+            </h1>
           </div>
         </div>
       )}
