@@ -11,6 +11,7 @@ import {
   SettingsIcon,
   UsersIcon,
 } from "lucide-react";
+import type { BadgeProps } from "@/components/ui/badge";
 import { settingsNavItems } from "@/features/settings/config/settings-nav";
 
 export type SidebarNavItem = {
@@ -18,7 +19,7 @@ export type SidebarNavItem = {
 	url: string;
 	icon: React.ReactNode;
 	isActive?: boolean;
-	badgeVariant?: "success" | "info" | "warning";
+	badgeVariant?: BadgeProps["variant"];
 };
 
 export type SidebarNavGroup = {

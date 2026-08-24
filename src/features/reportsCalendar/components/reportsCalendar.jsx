@@ -8,7 +8,7 @@ import { ReportsTable } from "@/features/reportsTable/components/reportsTable";
 import { cn } from "@/lib/utils";
 
 const TODAY = new Date(2026, 7, 23);
-const INITIAL_MONTH = new Date(2026, 2, 1);
+const INITIAL_MONTH = new Date(2026, 7, 1);
 
 const dayButtonClassNames =
   "relative flex size-(--cell-size) aspect-square items-center justify-center rounded-[10px] text-sm font-normal text-foreground disabled:pointer-events-none disabled:opacity-64";
