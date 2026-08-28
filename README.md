@@ -95,4 +95,4 @@ npm run build-storybook
 
 - The repository currently mixes `.jsx`, `.tsx`, `.js`, and `.ts` files.
 - The component registry is configured in [`components.json`](./components.json), including custom registries such as `@coss` and `@evilcharts`.
-- This README reflects the current stack in the repository as of August 24, 2026.
+- This README reflects the current stack in the repository as of August 2 8, 2026.
