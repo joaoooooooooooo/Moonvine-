@@ -26,6 +26,7 @@ function ConsolePagePlaceholder({ title }) {
 function App() {
   const currentPath = useCurrentConsolePath();
   const activeItem = getActiveNavItem(currentPath);
+  const isReportsPage = currentPath === "#/reports";
   const currentPage = useMemo(() => {
     if (currentPath === "#/observatory") {
       return <Observatory />;
@@ -51,7 +52,7 @@ function App() {
 
   return (
     <>
-      <ConsoleShell>{currentPage}</ConsoleShell>
+      {isReportsPage ? currentPage : <ConsoleShell>{currentPage}</ConsoleShell>}
 
       {process.env.NODE_ENV === "development" && <Agentation />}
     </>
