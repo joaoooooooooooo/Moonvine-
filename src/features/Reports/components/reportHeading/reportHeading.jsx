@@ -47,7 +47,11 @@ export function ReportHeading({
             </Badge>
           </>
         ) : null}
-        <h1 className={cn("text-4xl font-medium tracking-[-0.022em] text-foreground")}>
+        <h1
+          className={cn(
+            "text-4xl font-medium tracking-[-0.022em] text-foreground [text-wrap:balance]",
+          )}
+        >
           {title}
         </h1>
       </div>
@@ -59,6 +63,7 @@ export function ReportHeading({
             <p
               className={cn(
                 "max-w-[21.75rem] text-base leading-6 font-medium text-muted-foreground",
+                "[text-wrap:pretty]",
                 align === "right" && "text-right",
               )}
             >

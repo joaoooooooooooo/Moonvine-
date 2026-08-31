@@ -1,14 +1,16 @@
-import { useEffect } from "react";
-import { ThemeSwitcherDropdown } from "@/components/navigation/avatar-menu";
+import { useEffect, useMemo, useState } from "react";
 import { CopyButton } from "@/components/shared/copy-button";
 import { SideLineBackground } from "@/components/ui/line-background";
+import { ActionCard } from "@/features/Reports/components/actionItem";
+import { EntitySegment } from "@/features/Reports/components/entitySegment";
 import { ReportsMultiSeriesLineChart } from "@/features/Reports/components/line";
+import { ReportNav } from "@/features/Reports/components/nav";
 import { ReportHeading } from "@/features/Reports/components/reportHeading/reportHeading";
 import { Metric1 } from "@/features/Reports/components/metric1";
 import { ReportSection } from "@/features/Reports/components/reportSection/reportSection";
 import { SocialCard } from "@/features/Reports/components/social-card";
 import { StatusListCard } from "@/features/Reports/components/status-list";
-import { CalendarIcon, EyeIcon, NewspaperIcon } from "lucide-react";
+import { CalendarIcon, EyeIcon } from "lucide-react";
 
 const statusListItems = [
   { label: "Client social", badge: "7 Posts", variant: "info" },
@@ -21,34 +23,111 @@ const statusListItems = [
   { label: "Search Console", badge: "Not Connect", variant: "disabled" },
 ];
 
-const socialCards = [
+const socialCardsByEntity = {
+  competitor: [
+    {
+      badge: "Competitor",
+      icon: <EyeIcon />,
+      metaLabel: "LinkedIn",
+      name: "Superside",
+      thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
+      title: "Competitor visibility increased around product landing pages.",
+      variant: "competitor",
+    },
+    {
+      badge: "Competitor",
+      icon: <EyeIcon />,
+      metaLabel: "LinkedIn",
+      name: "Superside",
+      thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
+      title: "Superside published another high-visibility post around campaign work.",
+      variant: "competitor",
+    },
+    {
+      badge: "Competitor",
+      icon: <EyeIcon />,
+      metaLabel: "LinkedIn",
+      name: "Superside",
+      thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
+      title: "Engagement clustered around Superside's creative production positioning.",
+      variant: "competitor",
+    },
+  ],
+  you: [
+    {
+      icon: <CalendarIcon />,
+      metaLabel: "LinkedIn",
+      name: "Apta Agency",
+      thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
+      title: "Blank canvas to a fully built Webflow site.",
+      variant: "default",
+    },
+    {
+      icon: <CalendarIcon />,
+      metaLabel: "LinkedIn",
+      name: "Apta Agency",
+      thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
+      title: "Apta Agency shared another product-focused post with steady engagement.",
+      variant: "default",
+    },
+    {
+      icon: <CalendarIcon />,
+      metaLabel: "LinkedIn",
+      name: "Apta Agency",
+      thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
+      title: "The week's owned updates stayed consistent across design and development themes.",
+      variant: "default",
+    },
+  ],
+};
+
+const actionCards = [
   {
-    icon: <CalendarIcon />,
-    name: "Apta Agency",
-    thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-    title: "Blank canvas to a fully built Webflow site.",
-    variant: "default",
+    count: "01",
+    description: "Structured data was not detected on the checked priority pages.",
+    items: [
+      { label: "Add llm.txt", variant: "default" },
+      { label: "Review robots.txt rules", variant: "default" },
+    ],
+    title: "LLM.txt Missing",
   },
   {
-    badge: "Competitor",
-    icon: <EyeIcon />,
-    name: "Superside",
-    thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-    title: "Competitor visibility increased around product landing pages.",
-    variant: "badge",
+    count: "02",
+    description: "Important pages have mixed metadata quality and should be normalized this week.",
+    items: [
+      { label: "Rewrite homepage meta description", variant: "default" },
+      { label: "Align title tags across service pages", variant: "default" },
+    ],
+    title: "Metadata Alignment",
   },
   {
-    badge: "News",
-    badgeVariant: "info",
-    icon: <NewspaperIcon />,
-    name: "Market signal",
-    thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-    title: "Industry coverage added more context to this week's movement.",
-    variant: "badge",
+    count: "03",
+    description: "A few tracked URLs are still missing internal reinforcement from high-authority pages.",
+    items: [
+      { label: "Link pricing page from top nav", variant: "default" },
+      { label: "Add case study cross-links", variant: "default" },
+    ],
+    title: "Internal Linking Gaps",
+  },
+  {
+    count: "04",
+    description: "There is room to improve entity coverage on pages already performing well in search.",
+    items: [
+      { label: "Add organization schema to about page", variant: "default" },
+      { label: "Expand entity mentions on service pages", variant: "default" },
+    ],
+    title: "Entity Coverage",
   },
 ];
 
 export function Reports() {
+  const [activeEntity, setActiveEntity] = useState("you");
+
+  const socialCards = useMemo(
+    () => socialCardsByEntity[activeEntity] ?? socialCardsByEntity.you,
+    [activeEntity],
+  );
+
   useEffect(() => {
     const previousHtmlOverflow = document.documentElement.style.overflow;
     const previousBodyOverflow = document.body.style.overflow;
@@ -63,11 +142,13 @@ export function Reports() {
   }, []);
 
   return (
-    <main className="relative h-svh overflow-x-hidden overflow-y-auto">
+    <main className="relative h-svh overflow-x-hidden overflow-y-auto pt-16">
       <SideLineBackground contentWidth="80rem" variant="medium" />
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl justify-end px-4 pt-4 md:px-6 md:pt-6">
-        <ThemeSwitcherDropdown />
-      </div>
+      <ReportNav
+        avatarFallback="AA"
+        companyName="Apta Agency"
+        reportLabel="Aug 31 Report"
+      />
       <ReportSection>
         <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,26.5rem)_auto] xl:items-start xl:justify-between xl:gap-16">
           <ReportHeading
@@ -106,24 +187,187 @@ export function Reports() {
       </ReportSection>
       <ReportSection>
         <div className="flex flex-col gap-12">
-          <ReportHeading
-            align="left"
-            badge={null}
-            className="max-w-[24rem]"
-            description="Competitor, watch-list, news, and search-neighbor signals that help explain the surrounding market."
-            title="What happened around you"
-          />
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <ReportHeading
+              align="left"
+              badge={null}
+              className="max-w-[24rem]"
+              description="Competitor, watch-list, news, and search-neighbor signals that help explain the surrounding market."
+              title="What happened around you"
+            />
+            <EntitySegment
+              className="self-start lg:self-end"
+              onValueChange={setActiveEntity}
+              value={activeEntity}
+            />
+          </div>
+          <div className="grid items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
             {socialCards.map((card) => (
               <SocialCard
+                avatarSrc={card.avatarSrc}
                 badge={card.badge}
                 badgeVariant={card.badgeVariant}
                 icon={card.icon}
                 key={`${card.name}-${card.title}`}
+                metaLabel={card.metaLabel}
                 name={card.name}
                 thumbnailSrc={card.thumbnailSrc}
                 title={card.title}
                 variant={card.variant}
+              />
+            ))}
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection>
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            align="left"
+            badge={null}
+            className="max-w-[36rem]"
+            description="Debug placement for the donut distribution chart component."
+            title="Your AI visibility summary across sources, visibility and share of voice"
+          />
+          <EntitySegment
+            className="w-full"
+            chartViews={[
+              {
+                comparisonBadgeLabel: "+ 12 %",
+                comparisonText: "Vs Last Week",
+                data: [
+                  {
+                    channel: "subject",
+                    label: "Apta Agency",
+                    kind: "entity",
+                    role: "subject",
+                    value: 37,
+                  },
+                  {
+                    channel: "superside",
+                    label: "Superside",
+                    kind: "entity",
+                    role: "comparison",
+                    value: 28,
+                  },
+                  {
+                    channel: "curio",
+                    label: "Curio Digital",
+                    kind: "entity",
+                    role: "comparison",
+                    value: 21,
+                  },
+                  {
+                    channel: "others",
+                    kind: "others",
+                    label: "Others",
+                    role: "comparison",
+                    value: 14,
+                  },
+                ],
+                label: "Average across 1 daily points",
+                subjectValue: "37",
+                tabLabel: "Source Presence",
+                value: "source-presence",
+              },
+              {
+                comparisonBadgeLabel: "+ 8 %",
+                comparisonText: "Vs Last Week",
+                data: [
+                  {
+                    channel: "subject",
+                    label: "Apta Agency",
+                    kind: "entity",
+                    role: "subject",
+                    value: 41,
+                  },
+                  {
+                    channel: "superside",
+                    label: "Superside",
+                    kind: "entity",
+                    role: "comparison",
+                    value: 30,
+                  },
+                  {
+                    channel: "curio",
+                    label: "Curio Digital",
+                    kind: "entity",
+                    role: "comparison",
+                    value: 17,
+                  },
+                  {
+                    channel: "others",
+                    kind: "others",
+                    label: "Others",
+                    role: "comparison",
+                    value: 12,
+                  },
+                ],
+                label: "Average visibility across 1 daily points",
+                subjectValue: "41",
+                tabLabel: "Visibility",
+                value: "visibility",
+              },
+              {
+                comparisonBadgeLabel: "+ 19 %",
+                comparisonText: "Vs Last Week",
+                data: [
+                  {
+                    channel: "subject",
+                    label: "Apta Agency",
+                    kind: "entity",
+                    role: "subject",
+                    value: 37,
+                  },
+                  {
+                    channel: "superside",
+                    label: "Superside",
+                    kind: "entity",
+                    role: "comparison",
+                    value: 28,
+                  },
+                  {
+                    channel: "curio",
+                    label: "Curio Digital",
+                    kind: "entity",
+                    role: "comparison",
+                    value: 21,
+                  },
+                  {
+                    channel: "others",
+                    label: "Others",
+                    kind: "others",
+                    role: "comparison",
+                    value: 14,
+                  },
+                ],
+                label: "Share of voice across 1 daily points",
+                subjectValue: "37",
+                tabLabel: "Share of voice",
+                value: "share-of-voice",
+              },
+            ]}
+            layout="chart"
+            value="you"
+          />
+        </div>
+      </ReportSection>
+      <ReportSection>
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            align="left"
+            badge={null}
+            className="max-w-[24rem]"
+            description="Priority fixes and opportunities pulled into a compact action queue for the week."
+            title="What to do next"
+          />
+          <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {actionCards.map((card) => (
+              <ActionCard
+                count={card.count}
+                description={card.description}
+                items={card.items}
+                key={card.count}
+                title={card.title}
               />
             ))}
           </div>

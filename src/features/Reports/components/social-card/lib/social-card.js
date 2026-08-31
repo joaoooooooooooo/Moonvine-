@@ -1,4 +1,9 @@
 export const socialCardVariants = {
+  competitor: {
+    badgeVariant: "warning",
+    nameClassName: "text-foreground",
+    showBadge: true,
+  },
   badge: {
     badgeVariant: "warning",
     nameClassName: "text-foreground",
@@ -6,7 +11,7 @@ export const socialCardVariants = {
   },
   default: {
     badgeVariant: "warning",
-    nameClassName: "text-muted-foreground",
+    nameClassName: "text-foreground",
     showBadge: false,
   },
 };

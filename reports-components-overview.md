@@ -1,144 +1,91 @@
-# Reports Components Overview
+# Reports Overview
 
 Updated: August 28, 2026
 
-## Summary
+## EN
 
-This update adds a new dedicated Reports page experience and the reusable components needed to support it. The work includes new report-specific content blocks, a new ECharts-based line chart, and a few shared UI primitives that can be reused in other areas of the product.
+### Summary
 
-## What changed
+This update introduces the first standalone Reports experience, with reusable UI blocks for report sections, KPI summaries, signal lists, social/context cards, and a new ECharts-based trend chart.
 
-### 1. New Reports page
+### Component count
 
-Modified:
+- Added: 11 component families
+- Changed: 4 existing items
 
-- `src/pages/Reports.jsx`
-- `src/App.jsx`
+Added component families:
 
-What it adds:
+1. `ReportsMultiSeriesLineChart`
+2. `Metric1`
+3. `ReportHeading`
+4. `ReportSection`
+5. `SocialCard`
+6. `StatusListCard`
+7. `StatusListItem`
+8. `CopyButton`
+9. `FrameCard`
+10. `EChartsLineChart`
+11. `EChartsShipmentsLineChart`
 
-- A dedicated full-page Reports layout rather than rendering inside the standard console shell.
-- A structured page flow with multiple sections for the weekly summary, signal lists, charted performance, and surrounding market activity.
-- A top-right theme switcher and a copy-link action for sharing the report view.
-- Page-level overflow handling so the report behaves like a standalone scrollable experience.
+Changed existing items:
 
-PM note:
+1. `Reports` page
+2. `App` routing/rendering flow
+3. `Badge`
+4. `ReportsCalendar` moved into the new Reports feature structure
 
-- This is the main feature surface introduced in the change set.
+### What was delivered
 
-### 2. New report-specific components
+- A dedicated Reports page with its own full-page layout and scroll behavior.
+- Reusable report content blocks to standardize headings, sections, metrics, and lists.
+- A new line-chart foundation in ECharts for weekly comparisons and future analytics views.
+- Shared UI improvements, including a framed card pattern, expanded badge support, and a copy-link action.
+- A typography fix so Geist can load correctly across the app in production.
 
-Created under `src/features/Reports/components`.
+### PM framing
 
-#### `ReportHeading`
+This release delivers the first complete Reports surface and sets up reusable foundations for future reporting and analytics features.
 
-- Reusable heading block for report sections.
-- Supports title, description, optional badge, left/right alignment, and optional follow-up action content.
-- Used to keep section intros visually consistent across the page.
+## PT
 
-#### `ReportSection`
+### Resumo
 
-- Reusable section wrapper for spacing, full-width dividers, and vertical frame lines.
-- Creates a consistent editorial layout across all report sections.
+Esta atualização entrega a primeira experiência standalone de Reports, com blocos reutilizáveis para seções do relatório, KPIs, listas de sinais, cards sociais/contextuais e um novo gráfico de tendência com ECharts.
 
-#### `Metric1`
+### Quantidade de componentes
 
-- Reusable metric summary component for large KPI callouts.
-- Supports prefix/suffix values, comparison badges, comparison copy, alignment, and size variants.
-- Used both as a hero metric and in the chart summary area.
+- Adicionados: 11 famílias de componentes
+- Alterados: 4 itens existentes
 
-#### `StatusListCard` and `StatusListItem`
+Famílias de componentes adicionadas:
 
-- Card pattern for summarizing report signals in a stacked list.
-- Supports multiple status treatments including informational, warning, success, default, and disabled states.
-- Designed for quick scanning of signal coverage and connection status.
+1. `ReportsMultiSeriesLineChart`
+2. `Metric1`
+3. `ReportHeading`
+4. `ReportSection`
+5. `SocialCard`
+6. `StatusListCard`
+7. `StatusListItem`
+8. `CopyButton`
+9. `FrameCard`
+10. `EChartsLineChart`
+11. `EChartsShipmentsLineChart`
 
-#### `SocialCard`
+Itens existentes alterados:
 
-- Card pattern for external or contextual signals such as competitor, news, and watch-list items.
-- Supports thumbnails, icons, optional badges, and a link-style action indicator.
-- Used to present "what happened around you" content in a visual grid.
+1. Página `Reports`
+2. Fluxo de roteamento/renderização em `App`
+3. `Badge`
+4. `ReportsCalendar` movido para a nova estrutura da feature de Reports
 
-#### `ReportsMultiSeriesLineChart`
+### O que foi entregue
 
-- Report-specific chart composition for weekly trend comparisons.
-- Combines a KPI summary, legend, and two-series line chart in one reusable block.
-- Current example compares "This week" vs "Last week" for shipped orders.
+- Uma página de Reports dedicada, com layout próprio e comportamento de scroll independente.
+- Blocos reutilizáveis para padronizar headings, seções, métricas e listas do relatório.
+- Uma nova base de gráfico de linha em ECharts para comparações semanais e futuras visões analíticas.
+- Melhorias de UI compartilhada, incluindo o padrão de card com moldura, expansão do `Badge` e ação de copiar link.
+- Correção de tipografia para o Geist carregar corretamente em produção em toda a aplicação.
 
-#### `ReportsCalendar`
+### Sugestão de framing para PM
 
-- Existing calendar component was reorganized into the new `Reports` feature folder.
-- Continues to support scheduled report viewing by month, week, and report type.
-- No meaningful behavioral rewrite was introduced in the moved file based on the current diff.
-
-## Shared components added or updated
-
-### 3. New shared UI building blocks
-
-Created:
-
-- `src/components/ui/frame-card.tsx`
-- `src/components/shared/copy-button/*`
-
-Modified:
-
-- `src/components/ui/badge.tsx`
-
-What they add:
-
-- `FrameCard` introduces a reusable framed card treatment with separate top/content regions and optional filled styling.
-- `CopyButton` adds a reusable copy-to-clipboard action with temporary "Copied" feedback.
-- `Badge` was expanded to better support the new report states and visual treatments, including transparent/backgroundless usage.
-
-PM note:
-
-- These are not report-only. They create reusable patterns for future features.
-
-## Charting work
-
-### 4. New ECharts line-chart implementation
-
-Created:
-
-- `src/components/evilcharts/charts/echarts-line-chart.tsx`
-- `src/components/evilcharts/blocks/shipments-echarts-line-chart.tsx`
-
-What it adds:
-
-- A new composable line-chart system built on ECharts.
-- Support for grid, axes, tooltip, legends, active dots, multiple line styles, and loading states.
-- A shipments-focused example block that packages the chart with summary metrics and legend treatment.
-
-PM note:
-
-- This is the main infrastructure addition behind the chart section on the Reports page.
-- It appears designed for reuse beyond this specific report screen.
-
-## Styling and typography support
-
-### 5. Global typography fix
-
-Modified:
-
-- `src/styles/index.css`
-
-What it changes:
-
-- Geist font usage was made explicit at the root, body, and form-control levels.
-- Headings remain intentionally mapped to the heading font token.
-
-PM note:
-
-- This was a supporting fix to make the chosen typeface render consistently across the full report experience.
-
-## High-level impact
-
-- Introduces a presentable standalone Reports page.
-- Establishes reusable report layout primitives instead of one-off page code.
-- Adds a richer charting foundation for future data storytelling.
-- Expands shared UI inventory with reusable cards, badges, and copy actions.
-- Improves consistency of typography across the experience.
-
-## Suggested PM framing
-
-This release introduces the first full version of the new Reports experience. It includes a dedicated report page, reusable content blocks for metrics and signal summaries, a new ECharts-based trend chart, and shared UI foundations that can support future reporting and analytics surfaces.
+Esta entrega lança a primeira versão completa da superfície de Reports e cria bases reutilizáveis para futuras funcionalidades de reporting e analytics.

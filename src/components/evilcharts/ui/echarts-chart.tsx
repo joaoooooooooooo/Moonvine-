@@ -138,6 +138,13 @@ export type ResolvedColors = {
   };
 };
 
+function resolveScopedColor(probe: HTMLElement, value: string): string {
+  probe.className = "";
+  probe.style.color = "";
+  probe.style.color = value;
+  return normalizeColor(getComputedStyle(probe).color);
+}
+
 // Reads the injected CSS vars + theme tokens from the live DOM. Series slots come
 // from `getComputedStyle` on the container; tokens are read off a throwaway probe
 // carrying the matching Tailwind class (robust to the var naming a theme uses).
@@ -148,22 +155,23 @@ export function resolveColors(
 ): ResolvedColors {
   const computed = getComputedStyle(container);
   const series: Record<string, string[]> = {};
+  const probe = document.createElement("span");
+  probe.style.cssText = "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none;";
+  container.appendChild(probe);
 
   for (const key of seriesKeys) {
     const count = getColorsCount(config[key] ?? {});
     const slots: string[] = [];
     for (let n = 0; n < count; n++) {
       const raw = computed.getPropertyValue(`--color-${key}-${n}`).trim();
-      slots.push(raw ? normalizeColor(raw) : "rgba(120, 120, 120, 1)");
+      slots.push(raw ? resolveScopedColor(probe, raw) : "rgba(120, 120, 120, 1)");
     }
     series[key] = slots;
   }
 
-  const probe = document.createElement("span");
-  probe.style.cssText = "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none;";
-  container.appendChild(probe);
   const readToken = (className: string) => {
     probe.className = className;
+    probe.style.color = "";
     return normalizeColor(getComputedStyle(probe).color);
   };
   const tokens = {

@@ -7,7 +7,7 @@ export function ReportSection({
   className,
   contentClassName,
   innerClassName,
-  showTopDivider = true,
+  showTopDivider = false,
   showBottomDivider = true,
 }) {
   return (

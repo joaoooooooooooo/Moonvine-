@@ -7,12 +7,17 @@ import type React from "react";
 import { cn } from "@/lib/utils";
 
 export const frameCardVariants = cva(
-  "relative flex flex-col items-start rounded-2xl border p-1",
+  "relative flex flex-col items-start rounded-2xl border",
   {
     defaultVariants: {
+      variant: "default",
       withFill: false,
     },
     variants: {
+      variant: {
+        default: "p-1",
+        insert: "px-1 py-0",
+      },
       withFill: {
         false: "border-border bg-transparent",
         true: "border-border bg-card",
@@ -22,17 +27,19 @@ export const frameCardVariants = cva(
 );
 
 export interface FrameCardProps extends useRender.ComponentProps<"div"> {
+  variant?: VariantProps<typeof frameCardVariants>["variant"];
   withFill?: VariantProps<typeof frameCardVariants>["withFill"];
 }
 
 export function FrameCard({
   className,
   render,
+  variant,
   withFill,
   ...props
 }: FrameCardProps): React.ReactElement {
   const defaultProps = {
-    className: cn(frameCardVariants({ className, withFill })),
+    className: cn(frameCardVariants({ className, variant, withFill })),
     "data-slot": "frame-card",
   };
 
