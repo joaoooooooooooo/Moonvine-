@@ -154,6 +154,7 @@ export function EntitySegment({
             <DonutDistribution
               className="order-1 mx-auto w-full max-w-[16rem] lg:order-2 lg:mx-0 lg:max-w-[25rem]"
               data={currentChartView?.data}
+              key={currentChartView?.value}
               layout="chart-only"
             />
           </div>

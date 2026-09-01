@@ -52,6 +52,7 @@ import {
   type ReactNode,
 } from "react";
 import { dotItemStyle, dotStyle, sampleGradient, type DotVariant } from "@/components/evilcharts/ui/echarts-dot";
+import { useChartViewport } from "@/hooks/use-chart-viewport";
 import { LegendOverlay, type LegendVariant } from "@/components/evilcharts/ui/echarts-legend";
 import type { ComposeOption, ImagePatternObject } from "echarts/core";
 import { LineChart, type LineSeriesOption } from "echarts/charts";
@@ -1560,6 +1561,7 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
   const containerRef = useRef<HTMLDivElement>(null);
   const mountRef = useRef<HTMLDivElement>(null);
   const echartsRef = useRef<EChartsInstance | null>(null);
+  const { isInView, hasEnteredView } = useChartViewport(containerRef);
 
   // The single imperative surface (see LiveState). `resolved` lives here rather
   // than in state: as state it forced an extra render pass and an effect whose
@@ -2136,6 +2138,11 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
     const container = containerRef.current;
     if (!chart || !container) return;
 
+    // Wait to create the series until the chart enters view. Rendering the same
+    // option off-screen first leaves ECharts nothing new to animate on entry.
+    if (isLoading) live.hasRevealed = false;
+    if (!hasEnteredView) return;
+
     // Colors come from the <style> committed just before this effect ran — read
     // them here, right before the push, rather than round-tripping through state.
     live.resolved = resolveColors(container, config, seriesKeys);
@@ -2161,8 +2168,7 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
     // otherwise replay the entrance on each of them. A loading cycle re-arms it:
     // the Recharts twin unmounts its <Area>s while loading and replays the intro
     // on remount, so data → loading → data draws in again here too.
-    if (isLoading) live.hasRevealed = false;
-    const shouldReveal = !live.hasRevealed && !isLoading;
+    const shouldReveal = hasEnteredView && !live.hasRevealed && !isLoading;
     if (shouldReveal) live.hasRevealed = true;
     const revealEnabled =
       animation && shouldReveal && effectiveAnimation !== "none" && !shouldReduceMotion;
@@ -2182,6 +2188,7 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
     buildOption,
     chartOptions,
     isLoading,
+    hasEnteredView,
     animation,
     effectiveAnimation,
     shouldReduceMotion,
@@ -2193,7 +2200,7 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
   // ── Animated dashed stroke — rAF sweeps the dash offset while unselected ─────
   useEffect(() => {
     const chart = echartsRef.current;
-    if (!chart || isLoading) return;
+    if (!chart || isLoading || !isInView) return;
     const animatedKeys = areas
       .filter((area) => area.strokeVariant === "animated-dashed" && !area.enableBufferLine)
       .map((area) => area.dataKey);
@@ -2225,12 +2232,12 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
       if (delayTimer !== undefined) clearTimeout(delayTimer);
       cancelAnimationFrame(raf);
     };
-  }, [renderer, live, areas, hasSelection, isLoading]);
+  }, [renderer, live, areas, hasSelection, isLoading, isInView]);
 
   // ── Loading shimmer — rAF sweeps a bright band, regenerating data off-screen ─
   useEffect(() => {
     const chart = echartsRef.current;
-    if (!chart || !isLoading) return;
+    if (!chart || !isLoading || !isInView) return;
 
     let raf = 0;
     let lastPhase = 0;
@@ -2284,7 +2291,7 @@ export function EChartsAreaChart<TData extends Record<string, unknown>>({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [renderer, live, isLoading, loadingPoints, loadingData]);
+  }, [renderer, live, isLoading, loadingPoints, loadingData, isInView]);
 
   // ── Legend overlay position ──────────────────────────────────────────────────
   // Insets match the Recharts legend's breathing room inside the plot frame.

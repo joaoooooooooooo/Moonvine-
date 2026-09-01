@@ -33,6 +33,7 @@ import {
   type FC,
   type ReactNode,
 } from "react";
+import { useChartViewport } from "@/hooks/use-chart-viewport";
 import { TooltipComponent, type TooltipComponentOption } from "echarts/components";
 import { LegendOverlay, type LegendVariant } from "@/components/evilcharts/ui/echarts-legend";
 import { PieChart, type PieSeriesOption } from "echarts/charts";
@@ -952,6 +953,7 @@ export function EChartsPieChart<TData extends Record<string, unknown>>({
   const containerRef = useRef<HTMLDivElement>(null);
   const mountRef = useRef<HTMLDivElement>(null);
   const echartsRef = useRef<EChartsInstance | null>(null);
+  const { isInView, hasEnteredView } = useChartViewport(containerRef);
 
   // The single imperative surface (see LiveState). `resolved` lives here rather
   // than in state: as state it would force an extra render pass and an effect
@@ -1116,6 +1118,11 @@ export function EChartsPieChart<TData extends Record<string, unknown>>({
     const container = containerRef.current;
     if (!chart || !container) return;
 
+    // Wait to create the series until the chart enters view. Rendering the same
+    // option off-screen first leaves ECharts nothing new to animate on entry.
+    if (isLoading) live.hasRevealed = false;
+    if (!hasEnteredView) return;
+
     // Colors come from the <style> committed just before this effect ran — read
     // them here, right before the push, rather than round-tripping through state.
     live.resolved = resolveColors(container, config, sectorKeys);
@@ -1138,8 +1145,7 @@ export function EChartsPieChart<TData extends Record<string, unknown>>({
     // notMerge would otherwise replay the entrance on each. A loading cycle
     // re-arms it: the Recharts twin remounts its sectors after loading and
     // replays the intro, so data → loading → data draws in again here too.
-    if (isLoading) live.hasRevealed = false;
-    const shouldReveal = !live.hasRevealed && !isLoading;
+    const shouldReveal = hasEnteredView && !live.hasRevealed && !isLoading;
     if (shouldReveal) live.hasRevealed = true;
     const revealEnabled = animation && shouldReveal && !shouldReduceMotion;
     push(revealEnabled);
@@ -1155,6 +1161,7 @@ export function EChartsPieChart<TData extends Record<string, unknown>>({
     buildOption,
     chartOptions,
     isLoading,
+    hasEnteredView,
     animation,
     shouldReduceMotion,
     config,
@@ -1180,7 +1187,7 @@ export function EChartsPieChart<TData extends Record<string, unknown>>({
   // ── Loading shimmer — rAF sweeps a bright window around the ring ──────────────
   useEffect(() => {
     const chart = echartsRef.current;
-    if (!chart || !isLoading) return;
+    if (!chart || !isLoading || !isInView) return;
 
     const cornerRadius = pie?.cornerRadius ?? DEFAULT_CORNER_RADIUS;
     const paddingAngle = pie?.paddingAngle ?? DEFAULT_PADDING_ANGLE;
@@ -1218,7 +1225,7 @@ export function EChartsPieChart<TData extends Record<string, unknown>>({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [live, isLoading, pie, renderer]);
+  }, [live, isLoading, pie, renderer, isInView]);
 
   // ── Legend overlay position ──────────────────────────────────────────────────
   const legendStyle: CSSProperties = {
