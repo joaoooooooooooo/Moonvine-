@@ -32,6 +32,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Nib Pro';
+    src: url('/NibPro-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -279,6 +287,9 @@
     }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    }
+  h1, h2 {
+    font-family: 'Nib Pro', 'Geist', sans-serif;
     }
   code, kbd, samp, pre {
     font-family: var(--font-mono);

@@ -1,17 +1,20 @@
 import { Separator } from "@/components/ui/separator";
 import { FullWidthDivider } from "@/features/console/components/full-width-divider";
 import { cn } from "@/lib/utils";
+import { SectionHeading } from "./sectionHeading";
 
 export function ReportSection({
   children,
   className,
   contentClassName,
+  heading,
+  id,
   innerClassName,
   showTopDivider = false,
   showBottomDivider = true,
 }) {
   return (
-    <section className={cn("relative", className)}>
+    <section className={cn("relative scroll-mt-16", className)} id={id}>
       {showTopDivider ? <FullWidthDivider position="top" /> : null}
       {showBottomDivider ? <FullWidthDivider position="bottom" /> : null}
 
@@ -27,6 +30,8 @@ export function ReportSection({
           orientation="vertical"
         />
       </div>
+
+      {heading ? <SectionHeading title={heading} /> : null}
 
       <div className="mx-auto w-full max-w-7xl px-4 py-16 md:px-6 md:py-20 xl:py-28">
         <div

@@ -7,7 +7,7 @@ import { ReportsMultiSeriesLineChart } from "@/features/Reports/components/line"
 import { ReportNav } from "@/features/Reports/components/nav";
 import { ReportHeading } from "@/features/Reports/components/reportHeading/reportHeading";
 import { Metric1 } from "@/features/Reports/components/metric1";
-import { ReportSection } from "@/features/Reports/components/reportSection/reportSection";
+import { ReportSection } from "@/features/Reports/components/reportSection/components/reportSection";
 import { SocialCard } from "@/features/Reports/components/social-card";
 import { StatusListCard } from "@/features/Reports/components/status-list";
 import { CalendarIcon, EyeIcon } from "lucide-react";
@@ -149,7 +149,7 @@ export function Reports() {
         companyName="Apta Agency"
         reportLabel="Aug 31 Report"
       />
-      <ReportSection>
+      <ReportSection heading="Overview" id="report-overview">
         <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,26.5rem)_auto] xl:items-start xl:justify-between xl:gap-16">
           <ReportHeading
             afterDescription={<CopyButton label="Copy report link" />}
@@ -159,7 +159,7 @@ export function Reports() {
           <Metric1 align="right" className="xl:justify-self-end" />
         </div>
       </ReportSection>
-      <ReportSection>
+      <ReportSection heading="This week" id="weekly-overview">
         <div className="flex flex-col gap-12">
           <ReportHeading
             badge={null}
@@ -173,7 +173,7 @@ export function Reports() {
           </div>
         </div>
       </ReportSection>
-      <ReportSection>
+      <ReportSection heading="Social" id="social-performance">
         <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] xl:items-start xl:gap-16">
           <ReportHeading
             align="left"
@@ -185,7 +185,7 @@ export function Reports() {
           <ReportsMultiSeriesLineChart />
         </div>
       </ReportSection>
-      <ReportSection>
+      <ReportSection heading="Market" id="market-activity">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <ReportHeading
@@ -219,7 +219,7 @@ export function Reports() {
           </div>
         </div>
       </ReportSection>
-      <ReportSection>
+      <ReportSection heading="Visibility" id="ai-visibility">
         <div className="flex flex-col gap-12">
           <ReportHeading
             align="left"
@@ -351,7 +351,7 @@ export function Reports() {
           />
         </div>
       </ReportSection>
-      <ReportSection>
+      <ReportSection heading="Actions" id="recommended-actions">
         <div className="flex flex-col gap-12">
           <ReportHeading
             align="left"
