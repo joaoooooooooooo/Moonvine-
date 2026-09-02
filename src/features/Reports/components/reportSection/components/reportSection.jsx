@@ -1,13 +1,12 @@
 import { Separator } from "@/components/ui/separator";
 import { FullWidthDivider } from "@/features/console/components/full-width-divider";
 import { cn } from "@/lib/utils";
-import { SectionHeading } from "./sectionHeading";
 
 export function ReportSection({
   children,
   className,
   contentClassName,
-  heading,
+  contentContainerClassName,
   id,
   innerClassName,
   showTopDivider = false,
@@ -31,9 +30,12 @@ export function ReportSection({
         />
       </div>
 
-      {heading ? <SectionHeading title={heading} /> : null}
-
-      <div className="mx-auto w-full max-w-7xl px-4 py-16 md:px-6 md:py-20 xl:py-28">
+      <div
+        className={cn(
+          "mx-auto w-full max-w-7xl px-4 py-16 md:px-6 md:py-20 xl:py-28",
+          contentContainerClassName,
+        )}
+      >
         <div
           className={cn(
             "w-full px-0 md:px-10 xl:px-[10.5rem]",

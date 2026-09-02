@@ -20,13 +20,18 @@ export function ReportHeading({
       className={cn(
         "flex max-w-[26.5rem] flex-col gap-5",
         align === "right" && "items-end text-right",
+        align === "center" && "items-center text-center",
         className,
       )}
     >
       <div
         className={cn(
           "flex flex-col gap-3.5",
-          align === "right" ? "items-end" : "items-start",
+          align === "center"
+            ? "items-center"
+            : align === "right"
+              ? "items-end"
+              : "items-start",
         )}
       >
         {badge ? (
@@ -57,7 +62,11 @@ export function ReportHeading({
       </div>
       {description || afterDescription ? (
         <div
-          className={cn("flex flex-col gap-4", align === "right" && "items-end")}
+          className={cn(
+            "flex flex-col gap-4",
+            align === "right" && "items-end",
+            align === "center" && "items-center",
+          )}
         >
           {description ? (
             <p
@@ -65,6 +74,7 @@ export function ReportHeading({
                 "max-w-[21.75rem] text-base leading-6 font-medium text-muted-foreground",
                 "[text-wrap:pretty]",
                 align === "right" && "text-right",
+                align === "center" && "text-center",
               )}
             >
               {description}

@@ -5,11 +5,13 @@ import { ActionCard } from "@/features/Reports/components/actionItem";
 import { EntitySegment } from "@/features/Reports/components/entitySegment";
 import { ReportsMultiSeriesLineChart } from "@/features/Reports/components/line";
 import { ReportNav } from "@/features/Reports/components/nav";
+import { NextStepsDivider } from "@/features/Reports/components/nextStepsDivider";
 import { ReportHeading } from "@/features/Reports/components/reportHeading/reportHeading";
 import { Metric1 } from "@/features/Reports/components/metric1";
 import { ReportSection } from "@/features/Reports/components/reportSection/components/reportSection";
 import { SocialCard } from "@/features/Reports/components/social-card";
 import { StatusListCard } from "@/features/Reports/components/status-list";
+import { TaskCard } from "@/features/Reports/components/taskCard/taskCard";
 import { CalendarIcon, EyeIcon } from "lucide-react";
 
 const statusListItems = [
@@ -120,6 +122,97 @@ const actionCards = [
   },
 ];
 
+const fixTasks = [
+  {
+    description:
+      "Create an llms.txt file that points AI crawlers to the public pages and content your organization wants surfaced.",
+    fixPrompt:
+      "Create a concise llms.txt file for this website. Link to the key services, important articles, about page, and any public information that best explains the organization.",
+    meta: "Checked standard location",
+    title: "LLMs file not detected",
+  },
+  {
+    description:
+      "Review robots.txt so search and AI crawlers can access the intended public pages and locate the sitemap.",
+    fixPrompt:
+      "Audit and correct robots.txt for this website. Allow the intended public pages, confirm the sitemap location, and avoid blocking important crawler access.",
+    meta: "Checked standard location",
+    title: "Robots file needs attention",
+  },
+  {
+    description:
+      "Add a visible FAQ section to key service or topic pages using real buyer questions and direct answers.",
+    fixPrompt:
+      "Add a concise visible FAQ section to the relevant service pages. Use real buyer questions about fit, timing, process, and next steps, with clear answers on the page.",
+    meta: "Priority public pages",
+    title: "Visible FAQs not detected",
+  },
+  {
+    description:
+      "Publish valid JSON-LD that describes the organization and the primary content types shown on key public pages.",
+    fixPrompt:
+      "Add valid JSON-LD schema to key public pages. Include the Organization and applicable WebPage, Service, Article, Person, BreadcrumbList, and FAQPage types.",
+    meta: "Priority public pages",
+    title: "Structured data not detected",
+  },
+  {
+    description:
+      "Write unique meta descriptions for affected pages so search results clearly explain the page value and intended audience.",
+    fixPrompt:
+      "Write unique, specific meta descriptions for the affected pages. State the page value and audience in plain language and keep each description useful in search results.",
+    meta: "26 affected pages",
+    title: "Duplicate meta descriptions",
+  },
+  {
+    description:
+      "Find the shared title-tag pattern across affected pages, correct it, and verify that each title is unique and relevant.",
+    fixPrompt:
+      "Audit duplicate title tags across the affected pages. Identify the shared template or page-copy cause, create unique titles, and verify the issue is resolved.",
+    meta: "12 affected pages",
+    title: "Duplicate title tag",
+  },
+  {
+    description:
+      "Strengthen internal links from relevant pages so affected URLs are easier for readers and crawlers to discover.",
+    fixPrompt:
+      "Add relevant internal links from stronger pages to the affected URLs. Use descriptive anchor text and connect each page to the next useful service, article, or contact route.",
+    meta: "2 affected pages",
+    title: "Broken internal links",
+  },
+  {
+    description:
+      "Expand thin pages with helpful visible copy and remove unnecessary template clutter that hides the main content.",
+    fixPrompt:
+      "Improve pages with a low text-to-HTML ratio. Add useful visible copy that explains the page topic and reduce unnecessary template or markup clutter where possible.",
+    meta: "50 affected pages",
+    title: "Low text to HTML ratio",
+  },
+  {
+    description:
+      "Add one clear H1 to each affected page so the topic is unambiguous for readers, search engines, and AI crawlers.",
+    fixPrompt:
+      "Add one clear, descriptive H1 to each affected page. Make it accurately state the primary page topic and align it with the visible content.",
+    meta: "30 affected pages",
+    title: "Missing h1",
+  },
+  {
+    description:
+      "Expand thin pages with direct explanations of the service, audience, use cases, and a useful next step.",
+    fixPrompt:
+      "Expand low-word-count pages with clear, useful copy about the service, intended audience, use cases, proof points, and the next step a reader can take.",
+    meta: "15 affected pages",
+    title: "Low word count",
+  },
+  {
+    description:
+      "Keep one primary H1 per page and convert additional primary headings to the appropriate lower-level heading.",
+    fixPrompt:
+      "Audit pages with multiple H1 tags. Keep one clear H1 that defines the page topic, then change additional H1s to suitable H2 or H3 headings.",
+    meta: "5 affected pages",
+    title: "Multiple h1 tags",
+  },
+];
+
 export function Reports() {
   const [activeEntity, setActiveEntity] = useState("you");
 
@@ -149,7 +242,7 @@ export function Reports() {
         companyName="Apta Agency"
         reportLabel="Aug 31 Report"
       />
-      <ReportSection heading="Overview" id="report-overview">
+      <ReportSection id="report-overview">
         <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,26.5rem)_auto] xl:items-start xl:justify-between xl:gap-16">
           <ReportHeading
             afterDescription={<CopyButton label="Copy report link" />}
@@ -159,7 +252,7 @@ export function Reports() {
           <Metric1 align="right" className="xl:justify-self-end" />
         </div>
       </ReportSection>
-      <ReportSection heading="This week" id="weekly-overview">
+      <ReportSection id="weekly-overview">
         <div className="flex flex-col gap-12">
           <ReportHeading
             badge={null}
@@ -168,12 +261,12 @@ export function Reports() {
             title="What's covered this week."
           />
           <div className="grid gap-3 lg:grid-cols-2">
-          <StatusListCard items={statusListItems} title="Signals" />
-          <StatusListCard items={statusListItems} title="Signals" withFill />
+            <StatusListCard items={statusListItems} title="Signals" />
+            <StatusListCard items={statusListItems} title="Signals" withFill />
           </div>
         </div>
       </ReportSection>
-      <ReportSection heading="Social" id="social-performance">
+      <ReportSection id="social-performance">
         <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] xl:items-start xl:gap-16">
           <ReportHeading
             align="left"
@@ -185,7 +278,7 @@ export function Reports() {
           <ReportsMultiSeriesLineChart />
         </div>
       </ReportSection>
-      <ReportSection heading="Market" id="market-activity">
+      <ReportSection id="market-activity">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <ReportHeading
@@ -219,7 +312,7 @@ export function Reports() {
           </div>
         </div>
       </ReportSection>
-      <ReportSection heading="Visibility" id="ai-visibility">
+      <ReportSection id="ai-visibility">
         <div className="flex flex-col gap-12">
           <ReportHeading
             align="left"
@@ -351,12 +444,20 @@ export function Reports() {
           />
         </div>
       </ReportSection>
-      <ReportSection heading="Actions" id="recommended-actions">
+      <ReportSection
+        contentClassName="flex justify-center"
+        contentContainerClassName="!px-0 !py-0 md:!px-0 md:!py-0 xl:!py-0"
+        id="next-steps-divider"
+        innerClassName="md:!px-0 xl:!px-0"
+      >
+        <NextStepsDivider className="!min-h-[40rem] w-full md:!min-h-[42rem] xl:!min-h-[46rem]" />
+      </ReportSection>
+      <ReportSection id="recommended-actions">
         <div className="flex flex-col gap-12">
           <ReportHeading
-            align="left"
+            align="center"
             badge={null}
-            className="max-w-[24rem]"
+            className="mx-auto max-w-[24rem]"
             description="Priority fixes and opportunities pulled into a compact action queue for the week."
             title="What to do next"
           />
@@ -369,6 +470,22 @@ export function Reports() {
                 key={card.count}
                 title={card.title}
               />
+            ))}
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection id="fix-prompts">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            align="center"
+            badge={null}
+            className="mx-auto max-w-[32rem]"
+            description="Prioritized technical and content fixes from the latest site review. Copy a prompt to hand each item to the right owner."
+            title="Fix prompts"
+          />
+          <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {fixTasks.map((task) => (
+              <TaskCard {...task} key={task.title} />
             ))}
           </div>
         </div>
