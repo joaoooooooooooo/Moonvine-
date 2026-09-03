@@ -6,6 +6,7 @@ import { EntitySegment } from "@/features/Reports/components/entitySegment";
 import { ReportsMultiSeriesLineChart } from "@/features/Reports/components/line";
 import { ReportNav } from "@/features/Reports/components/nav";
 import { NextStepsDivider } from "@/features/Reports/components/nextStepsDivider";
+import { NextStepsIntro } from "@/features/Reports/components/nextStepsIntro";
 import { ReportHeading } from "@/features/Reports/components/reportHeading/reportHeading";
 import { Metric1 } from "@/features/Reports/components/metric1";
 import { ReportSection } from "@/features/Reports/components/reportSection/components/reportSection";
@@ -312,6 +313,18 @@ export function Reports() {
           </div>
         </div>
       </ReportSection>
+      <ReportSection
+        contentClassName="flex justify-center"
+        contentContainerClassName="!px-0 !py-0 md:!px-0 md:!py-0 xl:!py-0"
+        id="next-steps-divider"
+        innerClassName="md:!px-0 xl:!px-0"
+      >
+        <NextStepsDivider className="!min-h-[32rem] w-full md:!min-h-[34rem] xl:!min-h-[38rem]">
+          Your AI Visibibility
+          <br />
+          summary.
+        </NextStepsDivider>
+      </ReportSection>
       <ReportSection id="ai-visibility">
         <div className="flex flex-col gap-12">
           <ReportHeading
@@ -445,19 +458,27 @@ export function Reports() {
         </div>
       </ReportSection>
       <ReportSection
-        contentClassName="flex justify-center"
-        contentContainerClassName="!px-0 !py-0 md:!px-0 md:!py-0 xl:!py-0"
-        id="next-steps-divider"
+        contentContainerClassName="!py-0 md:!py-0 xl:!py-0"
+        id="next-steps-intro"
         innerClassName="md:!px-0 xl:!px-0"
       >
-        <NextStepsDivider className="!min-h-[40rem] w-full md:!min-h-[42rem] xl:!min-h-[46rem]" />
+        <NextStepsIntro>
+          <div className="w-full md:px-10 xl:px-[10.5rem]">
+            <ReportHeading
+              align="left"
+              badge={null}
+              className="max-w-[28rem]"
+              description="Start with the LinkedIn post. It led Apta Agency's activity this week. Competitor activity was visible too, especially Superside and Curio Digital."
+              title="Here is the nexts steps for apta agency"
+            />
+          </div>
+        </NextStepsIntro>
       </ReportSection>
       <ReportSection id="recommended-actions">
         <div className="flex flex-col gap-12">
           <ReportHeading
-            align="center"
             badge={null}
-            className="mx-auto max-w-[24rem]"
+            className="max-w-[24rem]"
             description="Priority fixes and opportunities pulled into a compact action queue for the week."
             title="What to do next"
           />
@@ -477,9 +498,8 @@ export function Reports() {
       <ReportSection id="fix-prompts">
         <div className="flex flex-col gap-12">
           <ReportHeading
-            align="center"
             badge={null}
-            className="mx-auto max-w-[32rem]"
+            className="max-w-[32rem]"
             description="Prioritized technical and content fixes from the latest site review. Copy a prompt to hand each item to the right owner."
             title="Fix prompts"
           />

@@ -18,7 +18,7 @@ const ORBIT_SIZE = 1082;
 const POINT_SIZE = 8;
 const STROKE_THICKNESS = 0.8;
 
-export function NextStepsDivider({ className }) {
+export function NextStepsDivider({ children, className }) {
   const { rive, RiveComponent } = useRive({
     src: moonvineOrbitSrc,
     stateMachines: "State Machine 1",
@@ -102,9 +102,7 @@ export function NextStepsDivider({ className }) {
       </div>
 
       <h1 className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center text-center text-4xl font-medium tracking-[-0.022em] text-foreground [text-wrap:balance]">
-        Here is yout
-        <br />
-        next steps.
+        {children}
       </h1>
     </div>
   );
