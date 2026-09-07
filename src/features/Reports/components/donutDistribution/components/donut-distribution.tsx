@@ -10,6 +10,7 @@ import type React from "react";
 import { cn } from "@/lib/utils";
 
 export type DonutDistributionDatum = {
+  isCompetitor?: boolean;
   channel: string;
   label: string;
   kind?: "entity" | "others";
@@ -52,7 +53,7 @@ const defaultChartData: DonutDistributionDatum[] = [
   },
 ];
 
-const ORDERS = 1284;
+
 const SUBJECT_COLOR = "var(--chart-highlight)";
 const OTHERS_COLOR = "var(--color-neutral-600)";
 const COMPARISON_COLORS = [
@@ -110,7 +111,9 @@ export function DonutDistribution({
   className,
   data = defaultChartData,
   layout = "full",
+  totalLabel = "Total orders",
 }: {
+  totalLabel?: string;
   className?: string;
   data?: DonutDistributionDatum[];
   layout?: "chart-only" | "full";
@@ -141,10 +144,10 @@ export function DonutDistribution({
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div className="border-border flex aspect-square w-[56%] flex-col items-center justify-center rounded-full border border-dashed">
           <span className="text-primary text-lg leading-none font-semibold tracking-tight sm:text-2xl">
-            {money(totalOrders || ORDERS)}
+            {money(totalOrders)}
           </span>
           <span className="text-muted-foreground mt-1 text-[10px] sm:text-xs">
-            Total orders
+            {totalLabel}
           </span>
         </div>
       </div>

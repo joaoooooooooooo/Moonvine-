@@ -1,8 +1,10 @@
+import { groupChartEntities } from "./group-chart-entities";
 import { useMemo, useState } from "react";
 import { EyeIcon, UserRoundIcon } from "lucide-react";
 import { FrameCard, FrameCardContent, FrameCardTop } from "@/components/ui/frame-card";
-import { EntityChartTabs } from "@/features/Reports/components/entitySegment/components/entity-chart-tabs";
+import { EntityChartSelect } from "@/features/Reports/components/entitySegment/components/entity-chart-select";
 import { Metric1 } from "@/features/Reports/components/metric1";
+import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import {
   DonutDistribution,
   getDonutDistributionPresentation,
@@ -47,9 +49,10 @@ export function EntitySegment({
   const currentChartView =
     resolvedChartViews.find((item) => item.value === activeChartView) ??
     resolvedChartViews[0];
+  const groupedChartData = useMemo(() => groupChartEntities(currentChartView?.data ?? []), [currentChartView]);
   const currentChartPresentation = useMemo(
-    () => getDonutDistributionPresentation(currentChartView?.data ?? []),
-    [currentChartView],
+    () => getDonutDistributionPresentation(groupedChartData),
+    [groupedChartData],
   );
 
   const tabsNode = (
@@ -94,7 +97,7 @@ export function EntitySegment({
     <div className={cn("flex flex-col", className)}>
       <FrameCard className="w-full" withFill>
         <FrameCardTop className="h-auto p-2">
-          <EntityChartTabs
+          <EntityChartSelect
             items={resolvedChartViews.map((item) => ({
               label: item.tabLabel,
               value: item.value,
@@ -110,6 +113,7 @@ export function EntitySegment({
                 <Metric1
                   className="max-w-none"
                   comparisonBadgeLabel={currentChartView?.comparisonBadgeLabel}
+                  comparisonBadgeVariant={currentChartView?.comparisonBadgeVariant ?? "success"}
                   comparisonText={currentChartView?.comparisonText}
                   label={currentChartView?.label}
                   prefix=""
@@ -122,6 +126,7 @@ export function EntitySegment({
                 <Metric1
                   className="max-w-none"
                   comparisonBadgeLabel={currentChartView?.comparisonBadgeLabel}
+                  comparisonBadgeVariant={currentChartView?.comparisonBadgeVariant ?? "success"}
                   comparisonText={currentChartView?.comparisonText}
                   label={currentChartView?.label}
                   prefix=""
@@ -133,15 +138,20 @@ export function EntitySegment({
 
               <div className="flex min-h-0 min-w-0 max-w-64 flex-1 flex-col justify-start rounded-lg">
                 {currentChartPresentation.items.map(
-                  ({ channel, color, label: itemLabel, value: itemValue }) => (
+                  ({ channel, color, kind, role, isCompetitor, label: itemLabel, value: itemValue }) => (
                     <div key={channel} className="flex items-center gap-2 py-1.5 sm:py-2">
                       <span
                         className="size-2.5 shrink-0 rounded-[3px]"
                         style={{ backgroundColor: color }}
                       />
-                      <span className="text-muted-foreground truncate text-sm">
-                        {itemLabel}
-                      </span>
+                      <div className="flex min-w-0 flex-col items-start gap-1">
+                        <span className="max-w-full truncate text-sm text-muted-foreground">
+                          {itemLabel}
+                        </span>
+                        {(isCompetitor ?? (role === "comparison" && kind !== "others")) && (
+                          <ReportBadge segment="competitor" />
+                        )}
+                      </div>
                       <span className="text-primary ml-auto text-sm font-semibold">
                         {itemValue.toLocaleString("en-US")}%
                       </span>
@@ -153,9 +163,9 @@ export function EntitySegment({
 
             <DonutDistribution
               className="order-1 mx-auto w-full max-w-[16rem] lg:order-2 lg:mx-0 lg:max-w-[25rem]"
-              data={currentChartView?.data}
-              key={currentChartView?.value}
+              data={groupedChartData}
               layout="chart-only"
+              totalLabel="Total share"
             />
           </div>
         </FrameCardContent>

@@ -1,50 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeSwitcherDropdown } from "@/components/navigation/avatar-menu";
 import { FullWidthDivider } from "@/features/console/components/full-width-divider";
-import { ReportBreadcrumb } from "@/features/Reports/components/nav/components/report-breadcrumb";
 import { Tabs, TabsList, TabsTrigger } from "@/features/Reports/components/nav/components/nav-tabs";
 import { cn } from "@/lib/utils";
 
 const reportNavItems = [
   { label: "Overview", value: "report-overview" },
   { label: "This week", value: "weekly-overview" },
+  { label: "Questions", value: "questions-asked" },
   { label: "Social", value: "social-performance" },
   { label: "Market", value: "market-activity" },
+  { label: "News", value: "news" },
   { label: "Visibility", value: "ai-visibility" },
   { label: "Actions", value: "recommended-actions" },
 ];
 
-export function ReportNav({
-  avatarAlt,
-  avatarFallback,
-  avatarSrc,
-  className,
-  companyName,
-  reportLabel,
-}) {
-  const [activeSection, setActiveSection] = useState(reportNavItems[0].value);
+export function ReportNav({ className, items = reportNavItems }) {
+  const headerRef = useRef(null);
+  const [activeSection, setActiveSection] = useState(items[0]?.value);
 
   useEffect(() => {
-    const scrollRoot = document.querySelector("main");
+    const scrollRoot = headerRef.current?.closest("main");
     if (!scrollRoot) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleSection = entries.find((entry) => entry.isIntersecting);
-        if (visibleSection) setActiveSection(visibleSection.target.id);
-      },
-      { root: scrollRoot, rootMargin: "-64px 0px -50%", threshold: 0 },
-    );
-
-    for (const item of reportNavItems) {
-      const section = document.getElementById(item.value);
-      if (section) observer.observe(section);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+    let frame;
+    const update = () => {
+      const top = scrollRoot.getBoundingClientRect().top + 80;
+      let current = items[0]?.value;
+      for (const item of items) {
+        const section = document.getElementById(item.value);
+        if (section && section.getBoundingClientRect().top <= top) current = item.value;
+      }
+      setActiveSection(current);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+    update();
+    scrollRoot.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      scrollRoot.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [items]);
 
   const handleSectionChange = (value) => {
     setActiveSection(value);
@@ -66,20 +68,19 @@ export function ReportNav({
       >
       <div className="relative">
         <FullWidthDivider position="bottom" />
-
         <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
           <div className="w-full px-0 md:px-10 xl:px-[10.5rem]">
             <div className="flex h-16 w-full items-center justify-between gap-4">
-              <nav aria-label="Report sections" className="hidden h-full lg:block">
+              <nav aria-label="Report sections" className="h-full min-w-0 flex-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <Tabs
-                  className="h-full"
+                  className="flex h-full w-max"
                   onValueChange={handleSectionChange}
                   value={activeSection}
                   variant="underline"
                 >
-                  <TabsList className="h-full gap-0 border-b-0">
-                    {reportNavItems.map((item) => (
-                      <TabsTrigger className="h-full px-3 py-0" key={item.value} value={item.value}>
+                  <TabsList className="flex h-full gap-0 border-b-0">
+                    {items.map((item) => (
+                      <TabsTrigger className="mb-0 h-full px-3 py-0" indicatorClassName="bottom-0" key={item.value} value={item.value}>
                         {item.label}
                       </TabsTrigger>
                     ))}
@@ -87,14 +88,7 @@ export function ReportNav({
                 </Tabs>
               </nav>
 
-              <div className="ml-auto flex min-w-0 items-center gap-3">
-                <ReportBreadcrumb
-                  avatarAlt={avatarAlt}
-                  avatarFallback={avatarFallback}
-                  avatarSrc={avatarSrc}
-                  companyName={companyName}
-                  reportLabel={reportLabel}
-                />
+              <div className="ml-auto flex shrink-0 items-center gap-3">
                 <ThemeSwitcherDropdown />
               </div>
             </div>

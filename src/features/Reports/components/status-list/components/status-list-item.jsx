@@ -25,7 +25,7 @@ export function StatusListItem({
         <Badge
           className="shrink-0"
           hideBackground={variant !== "disabled"}
-          size="default"
+          size="lg"
           variant={styles.badgeVariant}
         >
           {badge}

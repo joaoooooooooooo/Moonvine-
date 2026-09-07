@@ -111,7 +111,7 @@ const columns = [
   },
   {
     accessorKey: "type",
-    cell: ({ row }) => <Badge variant="outline">{row.getValue("type")}</Badge>,
+    cell: ({ row }) => <Badge size="lg" variant="outline">{row.getValue("type")}</Badge>,
     header: "Type",
     size: 120,
   },

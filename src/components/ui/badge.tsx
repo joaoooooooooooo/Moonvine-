@@ -15,6 +15,10 @@ export const badgeVariants = cva(
       variant: "default",
     },
     variants: {
+      desktopSize: {
+        default: "xl:h-4.5 xl:min-w-4.5 xl:rounded-sm xl:px-[calc(--spacing(1)-1px)] xl:text-xs",
+        lg: "xl:h-5.5 xl:min-w-5.5 xl:rounded-sm xl:px-[calc(--spacing(1.5)-1px)] xl:text-sm",
+      },
       hideBackground: {
         false: "",
         true:
@@ -48,12 +52,14 @@ export const badgeVariants = cva(
 );
 
 export interface BadgeProps extends useRender.ComponentProps<"span"> {
+  desktopSize?: VariantProps<typeof badgeVariants>["desktopSize"];
   hideBackground?: VariantProps<typeof badgeVariants>["hideBackground"];
   variant?: VariantProps<typeof badgeVariants>["variant"];
   size?: VariantProps<typeof badgeVariants>["size"];
 }
 
 export function Badge({
+  desktopSize,
   className,
   hideBackground,
   variant,
@@ -62,7 +68,7 @@ export function Badge({
   ...props
 }: BadgeProps): React.ReactElement {
   const defaultProps = {
-    className: cn(badgeVariants({ className, hideBackground, size, variant })),
+    className: cn(badgeVariants({ className, desktopSize, hideBackground, size, variant })),
     "data-slot": "badge",
   };
 

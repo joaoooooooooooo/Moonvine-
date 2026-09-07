@@ -6,15 +6,43 @@ const defaultTitle =
 const defaultDescription =
   "The LinkedIn post was Apta Agency's most visible owned update this week.";
 
+const headingSizeClasses = {
+  large:
+    "text-4xl/10 font-semibold tracking-[-0.022em]",
+  medium: "text-3xl/9",
+  small: "text-2xl/normal",
+};
+
+const labelOptions = {
+  bad: { text: "Bad", variant: "error" },
+  warning: { text: "Warning", variant: "warning" },
+  good: { text: "Good", variant: "success" },
+};
+
 export function ReportHeading({
   align = "left",
   afterDescription,
-  badge = "Good",
-  badgeVariant = "secondary",
+  badge,
+  badgeVariant,
   className,
   description = defaultDescription,
+  label,
+  size = "large",
   title = defaultTitle,
+  variant = "section",
+  as,
 }) {
+  const Heading = as ?? (variant === "intro" ? "h1" : "h2");
+  const labelOption =
+    label === undefined
+      ? badge === null
+        ? null
+        : labelOptions.good
+      : labelOptions[label];
+  const badgeText = badge ?? labelOption?.text;
+  const resolvedBadgeVariant =
+    badgeVariant ?? (badge ? "secondary" : labelOption?.variant);
+
   return (
     <div
       className={cn(
@@ -34,31 +62,20 @@ export function ReportHeading({
               : "items-start",
         )}
       >
-        {badge ? (
-          <>
-            <Badge
-              className="px-1 tracking-[0.01em] md:hidden"
-              size="default"
-              variant={badgeVariant}
-            >
-              {badge}
-            </Badge>
-            <Badge
-              className="hidden px-1.5 tracking-[0.01em] md:inline-flex"
-              size="lg"
-              variant={badgeVariant}
-            >
-              {badge}
-            </Badge>
-          </>
+        {badgeText ? (
+          <Badge size="lg" variant={resolvedBadgeVariant}>
+            {badgeText}
+          </Badge>
         ) : null}
-        <h1
+        <Heading
           className={cn(
-            "text-4xl font-medium tracking-[-0.022em] text-foreground [text-wrap:balance]",
+            headingSizeClasses[size] ?? headingSizeClasses.large,
+            variant === "intro" ? "report-heading-large text-[2.5rem]/11" : "font-sans",
+            "text-foreground [text-wrap:balance]",
           )}
         >
           {title}
-        </h1>
+        </Heading>
       </div>
       {description || afterDescription ? (
         <div

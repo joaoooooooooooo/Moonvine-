@@ -213,7 +213,7 @@ export function ReportsTable() {
           const reportType = row.getValue("reportType");
 
           return (
-            <Badge variant={reportType === "Special" ? "warning" : "outline"}>
+            <Badge size="lg" variant={reportType === "Special" ? "warning" : "outline"}>
               {reportType}
             </Badge>
           );

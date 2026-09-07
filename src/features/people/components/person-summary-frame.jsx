@@ -47,7 +47,7 @@ export function PersonSummaryFrame({ person }) {
         </div>
         <div className="flex flex-wrap gap-1">
           {person.tags.map((tag) => (
-            <Badge key={tag.label} variant={tag.variant}>
+            <Badge size="lg" key={tag.label} variant={tag.variant}>
               {tag.label}
             </Badge>
           ))}

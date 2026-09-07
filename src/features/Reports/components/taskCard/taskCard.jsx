@@ -1,4 +1,5 @@
 import { CopyButton } from "@/components/shared/copy-button";
+import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import {
   FrameCard,
   FrameCardContent,
@@ -10,23 +11,34 @@ export function TaskCard({
   className,
   description,
   fixPrompt,
+  meta,
+  priority,
+  scopeNote,
   title,
 }) {
   return (
-    <FrameCard className={cn("w-full", className)} withFill>
-      <FrameCardContent className="min-h-64 justify-between gap-6 shadow-none before:shadow-none">
-        <div className="mt-auto flex w-full flex-col gap-3">
-          <span
-            aria-hidden="true"
-            className="size-1.5 shrink-0 rounded-full bg-warning"
-          />
+    <FrameCard className={cn(
+        "w-full",
+        priority === "high" && "inset-shadow-[0_1px_--theme(--color-warning/20%)] dark:inset-shadow-[0_1px_--theme(--color-warning/28%)]",
+        className,
+      )} withFill>
+      <FrameCardContent className="gap-6 shadow-none before:shadow-none">
+        <div className="flex w-full flex-col gap-2 border-b pb-5">
+          <ReportBadge segment="warning">
+            {priority === "high" ? "High Priority" : null}
+          </ReportBadge>
           <h3 className="text-xl leading-7 font-medium tracking-[-0.01em] text-foreground [text-wrap:balance]">
             {title}
           </h3>
-          <p className="text-sm leading-5 text-muted-foreground [text-wrap:pretty]">
-            {description}
-          </p>
+          {meta && <p className="text-sm text-muted-foreground">{meta}</p>}
         </div>
+        <div className="w-full">
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-foreground">What to fix</h4>
+            <p className="text-sm leading-6 text-muted-foreground [text-wrap:pretty]">{description}</p>
+          </div>
+        </div>
+        {scopeNote && <p className="text-sm leading-6 text-muted-foreground italic">{scopeNote}</p>}
       </FrameCardContent>
 
       <FrameCardTop className="h-auto p-1">

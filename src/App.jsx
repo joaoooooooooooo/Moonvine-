@@ -1,3 +1,4 @@
+import { ReportSections } from "@/pages/ReportSections";
 import { useMemo } from "react";
 import { ConsoleShell } from "@/layouts/ConsoleShell";
 import { Accounts } from "@/pages/Accounts";
@@ -26,13 +27,16 @@ function ConsolePagePlaceholder({ title }) {
 function App() {
   const currentPath = useCurrentConsolePath();
   const activeItem = getActiveNavItem(currentPath);
-  const isReportsPage = currentPath === "#/reports";
+  const isReportsPage = currentPath === "#/reports" || currentPath === "#/report-sections";
   const currentPage = useMemo(() => {
     if (currentPath === "#/observatory") {
       return <Observatory />;
     }
     if (currentPath === "#/accounts") {
       return <Accounts />;
+    }
+    if (currentPath === "#/report-sections") {
+      return <ReportSections />;
     }
     if (currentPath === "#/reports") {
       return <Reports />;

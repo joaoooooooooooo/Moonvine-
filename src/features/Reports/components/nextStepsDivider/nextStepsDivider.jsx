@@ -11,6 +11,7 @@ import {
   getRiveBorderStrokeColor,
   getRivePointColor,
   hexToRiveColor,
+  RIVE_STROKE_COLOR_CHANGE_EVENT,
 } from "@/assets/rive files/riveTheme";
 import { cn } from "@/lib/utils";
 
@@ -71,7 +72,18 @@ export function NextStepsDivider({ children, className }) {
       attributes: true,
     });
 
-    return () => observer.disconnect();
+    window.addEventListener(
+      RIVE_STROKE_COLOR_CHANGE_EVENT,
+      applyStrokeColor,
+    );
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener(
+        RIVE_STROKE_COLOR_CHANGE_EVENT,
+        applyStrokeColor,
+      );
+    };
   }, [strokeColorBinding]);
 
   useEffect(() => {

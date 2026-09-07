@@ -26,7 +26,7 @@ export function ReportBreadcrumb({
         </p>
       </div>
 
-      <Badge className="shrink-0" size="default" variant="secondary">
+      <Badge className="shrink-0" size="lg" variant="secondary">
         {reportLabel}
       </Badge>
     </div>

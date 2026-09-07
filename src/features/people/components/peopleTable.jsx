@@ -83,7 +83,7 @@ const columns = [
     cell: ({ row }) => (
       <div className="flex flex-wrap items-center gap-2">
         {row.original.companies.map((company) => (
-          <Badge key={company} variant="outline">
+          <Badge size="lg" key={company} variant="outline">
             {company}
           </Badge>
         ))}
@@ -97,7 +97,7 @@ const columns = [
     cell: ({ row }) => (
       <div className="flex flex-wrap items-center gap-2">
         {row.original.tags.map((tag) => (
-          <Badge key={tag.label} variant={tag.variant}>
+          <Badge size="lg" key={tag.label} variant={tag.variant}>
             {tag.label}
           </Badge>
         ))}

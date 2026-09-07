@@ -52,6 +52,11 @@ export const navGroups: SidebarNavGroup[] = [
 				badgeVariant: "info",
 			},
 			{
+				title: "Report sections",
+				url: "#/report-sections",
+				icon: <BookOpenIcon />,
+			},
+			{
 				title: "Entities",
 				url: "#/entities",
 				icon: (

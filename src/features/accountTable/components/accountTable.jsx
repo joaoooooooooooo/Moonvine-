@@ -165,7 +165,7 @@ const columns = [
       const signal = row.getValue("signal");
 
       return (
-        <Badge
+        <Badge size="lg"
           variant={
             signal === "Active"
               ? "success"

@@ -1,16 +1,26 @@
+import { IntroSection } from "@/features/Reports/sections/Intro Section";
+import { ReportProvider } from "@/features/Reports/context";
+import { reportMock } from "@/features/Reports/report.mock";
+import { SiteCheckCard } from "@/features/Reports/components/siteCheckCard";
+import { QuestionsAsked } from "@/features/Reports/components/questionsAsked";
+import { sampleQuestions } from "@/features/Reports/components/questionsAsked/sample-questions";
+import { NewsCard } from "@/features/Reports/components/newsCard";
 import { useEffect, useMemo, useState } from "react";
-import { CopyButton } from "@/components/shared/copy-button";
 import { SideLineBackground } from "@/components/ui/line-background";
 import { ActionCard } from "@/features/Reports/components/actionItem";
+import { CompetitorCard } from "@/features/Reports/components/competitorCard";
 import { EntitySegment } from "@/features/Reports/components/entitySegment";
+import { HighlightNumber } from "@/features/Reports/components/highlightNumber/highlightNumber";
 import { ReportsMultiSeriesLineChart } from "@/features/Reports/components/line";
 import { ReportNav } from "@/features/Reports/components/nav";
-import { NextStepsDivider } from "@/features/Reports/components/nextStepsDivider";
 import { NextStepsIntro } from "@/features/Reports/components/nextStepsIntro";
 import { ReportHeading } from "@/features/Reports/components/reportHeading/reportHeading";
-import { Metric1 } from "@/features/Reports/components/metric1";
+import { ReportContact } from "@/features/Reports/components/reportContact/reportContact";
+import { RankEntities } from "@/features/Reports/components/rankEntities";
 import { ReportSection } from "@/features/Reports/components/reportSection/components/reportSection";
 import { SocialCard } from "@/features/Reports/components/social-card";
+import { SiteStatCard } from "@/features/Reports/components/siteStatCard";
+import { SourceCard } from "@/features/Reports/components/sourceCard";
 import { StatusListCard } from "@/features/Reports/components/status-list";
 import { TaskCard } from "@/features/Reports/components/taskCard/taskCard";
 import { CalendarIcon, EyeIcon } from "lucide-react";
@@ -34,7 +44,8 @@ const socialCardsByEntity = {
       metaLabel: "LinkedIn",
       name: "Superside",
       thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-      title: "Competitor visibility increased around product landing pages.",
+      title: "Product pages gain visibility",
+      description: "Competitor visibility increased around product landing pages.",
       variant: "competitor",
     },
     {
@@ -43,7 +54,8 @@ const socialCardsByEntity = {
       metaLabel: "LinkedIn",
       name: "Superside",
       thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-      title: "Superside published another high-visibility post around campaign work.",
+      title: "Campaign work in the spotlight",
+      description: "Superside published another high-visibility post around campaign work.",
       variant: "competitor",
     },
     {
@@ -52,7 +64,8 @@ const socialCardsByEntity = {
       metaLabel: "LinkedIn",
       name: "Superside",
       thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-      title: "Engagement clustered around Superside's creative production positioning.",
+      title: "Creative production draws interest",
+      description: "Engagement clustered around Superside's creative production positioning.",
       variant: "competitor",
     },
   ],
@@ -62,7 +75,8 @@ const socialCardsByEntity = {
       metaLabel: "LinkedIn",
       name: "Apta Agency",
       thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-      title: "Blank canvas to a fully built Webflow site.",
+      title: "From concept to Webflow",
+      description: "Blank canvas to a fully built Webflow site.",
       variant: "default",
     },
     {
@@ -70,7 +84,8 @@ const socialCardsByEntity = {
       metaLabel: "LinkedIn",
       name: "Apta Agency",
       thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-      title: "Apta Agency shared another product-focused post with steady engagement.",
+      title: "Steady interest in product work",
+      description: "Apta Agency shared another product-focused post with steady engagement.",
       variant: "default",
     },
     {
@@ -78,7 +93,8 @@ const socialCardsByEntity = {
       metaLabel: "LinkedIn",
       name: "Apta Agency",
       thumbnailSrc: "https://www.figma.com/api/mcp/asset/2c3fdb3f-23e5-4c05-bb02-3e76dee071cc.png",
-      title: "The week's owned updates stayed consistent across design and development themes.",
+      title: "A consistent design story",
+      description: "The week's owned updates stayed consistent across design and development themes.",
       variant: "default",
     },
   ],
@@ -123,94 +139,197 @@ const actionCards = [
   },
 ];
 
+const sourceCards = [
+  {
+    avatarSrc: "/source-card-overlay.png",
+    description: "apta.agency",
+    name: "Website",
+    status: "connected",
+  },
+  {
+    avatarFallback: "GA",
+    description: "Traffic and engagement",
+    name: "Google Analytics",
+    status: "connected",
+  },
+  {
+    avatarFallback: "SC",
+    description: "Search performance",
+    name: "Search Console",
+    status: "connected",
+  },
+  {
+    avatarFallback: "LI",
+    description: "Company activity",
+    name: "LinkedIn",
+    status: "watching",
+  },
+  {
+    avatarFallback: "IG",
+    description: "Social activity",
+    name: "Instagram",
+    status: "watching",
+  },
+  {
+    avatarFallback: "YT",
+    description: "Channel updates",
+    name: "YouTube",
+    status: "watching",
+  },
+  {
+    avatarFallback: "HS",
+    description: "Contact activity",
+    name: "HubSpot",
+    status: "not-connected",
+  },
+  {
+    avatarFallback: "AD",
+    description: "Campaign performance",
+    name: "Google Ads",
+    status: "not-connected",
+  },
+];
+
+const citationRankItems = [
+  { label: "superside.com", value: 32 },
+  { label: "curio.digital", value: 24 },
+  { label: "designstudio.com", value: 15 },
+  { label: "brandfuel.co", value: 9 },
+];
+
+const siteStatCards = [
+  {
+    "id": "performance",
+    "title": "Performance",
+    "score": 31,
+    "description": "How quickly the page loads and responds to user interactions."
+  },
+  {
+    "id": "accessibility",
+    "title": "Accessibility",
+    "score": 56,
+    "description": "How well the page passes automated accessibility checks."
+  },
+  {
+    "id": "best-practices",
+    "title": "Best Practices",
+    "score": 73,
+    "description": "How well the page follows web security and development best practices."
+  },
+  {
+    "id": "seo",
+    "title": "SEO",
+    "score": 95,
+    "description": "How well the page follows basic search engine optimization practices."
+  }
+];
+
 const fixTasks = [
   {
-    description:
-      "Create an llms.txt file that points AI crawlers to the public pages and content your organization wants surfaced.",
+    description: "Add an llms.txt file linking AI crawlers to your key public pages.",
     fixPrompt:
       "Create a concise llms.txt file for this website. Link to the key services, important articles, about page, and any public information that best explains the organization.",
-    meta: "Checked standard location",
+    meta: "Sitewide check ? Standard location",
+    scopeNote: "This is a sitewide check, not a page-specific crawl finding.",
+    priority: "high",
     title: "LLMs file not detected",
   },
   {
-    description:
-      "Review robots.txt so search and AI crawlers can access the intended public pages and locate the sitemap.",
+    description: "Review robots.txt to allow crawler access and point to the sitemap.",
     fixPrompt:
       "Audit and correct robots.txt for this website. Allow the intended public pages, confirm the sitemap location, and avoid blocking important crawler access.",
-    meta: "Checked standard location",
+    meta: "Sitewide check ? Standard location",
+    scopeNote: "This is a sitewide check, not a page-specific crawl finding.",
     title: "Robots file needs attention",
   },
   {
-    description:
-      "Add a visible FAQ section to key service or topic pages using real buyer questions and direct answers.",
+    description: "Add FAQs to key pages with real buyer questions and clear answers.",
     fixPrompt:
       "Add a concise visible FAQ section to the relevant service pages. Use real buyer questions about fit, timing, process, and next steps, with clear answers on the page.",
     meta: "Priority public pages",
     title: "Visible FAQs not detected",
   },
   {
-    description:
-      "Publish valid JSON-LD that describes the organization and the primary content types shown on key public pages.",
+    description: "Add valid JSON-LD describing your organization and key page content.",
     fixPrompt:
       "Add valid JSON-LD schema to key public pages. Include the Organization and applicable WebPage, Service, Article, Person, BreadcrumbList, and FAQPage types.",
     meta: "Priority public pages",
     title: "Structured data not detected",
   },
   {
-    description:
-      "Write unique meta descriptions for affected pages so search results clearly explain the page value and intended audience.",
+    description: "Write unique meta descriptions that explain each page?s value and audience.",
     fixPrompt:
       "Write unique, specific meta descriptions for the affected pages. State the page value and audience in plain language and keep each description useful in search results.",
     meta: "26 affected pages",
     title: "Duplicate meta descriptions",
   },
   {
-    description:
-      "Find the shared title-tag pattern across affected pages, correct it, and verify that each title is unique and relevant.",
+    description: "Replace duplicate title tags with unique, relevant page titles.",
     fixPrompt:
       "Audit duplicate title tags across the affected pages. Identify the shared template or page-copy cause, create unique titles, and verify the issue is resolved.",
     meta: "12 affected pages",
     title: "Duplicate title tag",
   },
   {
-    description:
-      "Strengthen internal links from relevant pages so affected URLs are easier for readers and crawlers to discover.",
+    description: "Fix broken internal links by updating URLs or removing obsolete links.",
     fixPrompt:
-      "Add relevant internal links from stronger pages to the affected URLs. Use descriptive anchor text and connect each page to the next useful service, article, or contact route.",
+      "Find broken internal links on the affected pages. Update each link to a relevant live URL, restore the intended destination where appropriate, or remove obsolete links. Verify that the updated destinations load successfully.",
     meta: "2 affected pages",
     title: "Broken internal links",
   },
   {
-    description:
-      "Expand thin pages with helpful visible copy and remove unnecessary template clutter that hides the main content.",
+    description: "Add useful visible copy and reduce unnecessary markup.",
     fixPrompt:
       "Improve pages with a low text-to-HTML ratio. Add useful visible copy that explains the page topic and reduce unnecessary template or markup clutter where possible.",
     meta: "50 affected pages",
     title: "Low text to HTML ratio",
   },
   {
-    description:
-      "Add one clear H1 to each affected page so the topic is unambiguous for readers, search engines, and AI crawlers.",
+    description: "Add one clear H1 that describes each page?s main topic.",
     fixPrompt:
       "Add one clear, descriptive H1 to each affected page. Make it accurately state the primary page topic and align it with the visible content.",
     meta: "30 affected pages",
-    title: "Missing h1",
+    title: "Missing H1",
   },
   {
-    description:
-      "Expand thin pages with direct explanations of the service, audience, use cases, and a useful next step.",
+    description: "Expand thin pages with service details, proof, and a clear next step.",
     fixPrompt:
       "Expand low-word-count pages with clear, useful copy about the service, intended audience, use cases, proof points, and the next step a reader can take.",
     meta: "15 affected pages",
     title: "Low word count",
   },
   {
-    description:
-      "Keep one primary H1 per page and convert additional primary headings to the appropriate lower-level heading.",
+    description: "Keep one primary H1 and change the rest to H2 or H3 headings.",
     fixPrompt:
       "Audit pages with multiple H1 tags. Keep one clear H1 that defines the page topic, then change additional H1s to suitable H2 or H3 headings.",
     meta: "5 affected pages",
-    title: "Multiple h1 tags",
+    title: "Multiple H1 tags",
+  },
+];
+
+const nextStepIntroSections = [
+  {
+    artboard: "Artboard",
+    description:
+      "Start with the LinkedIn post. It led Apta Agency's activity this week. Competitor activity was visible too, especially Superside and Curio Digital.",
+    id: "next-steps-intro",
+    title: "Here is the nexts steps for apta agency",
+  },
+  {
+    artboard: "Artboard 2",
+    description:
+      "These are website fixes that make important pages easier for search engines, AI systems, and buyers to understand.",
+    id: "onsite-search-ai-visibility",
+    title: "Onsite search and AI visibility",
+  },
+  {
+    artboard: "Artboard 3",
+    badge: "How to read this",
+    badgeVariant: "secondary",
+    description:
+      "High-priority problems are the most urgent. Warnings and notices are less severe, but they can still affect accessibility, search visibility, or site quality. The rows below group those findings into practical fixes.",
+    id: "site-check-found",
+    title: "What the site check found",
   },
 ];
 
@@ -236,23 +355,11 @@ export function Reports() {
   }, []);
 
   return (
+    <ReportProvider value={reportMock.context}>
     <main className="relative h-svh overflow-x-hidden overflow-y-auto pt-16">
       <SideLineBackground contentWidth="80rem" variant="medium" />
-      <ReportNav
-        avatarFallback="AA"
-        companyName="Apta Agency"
-        reportLabel="Aug 31 Report"
-      />
-      <ReportSection id="report-overview">
-        <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,26.5rem)_auto] xl:items-start xl:justify-between xl:gap-16">
-          <ReportHeading
-            afterDescription={<CopyButton label="Copy report link" />}
-            align="left"
-            className="max-w-[26.5rem]"
-          />
-          <Metric1 align="right" className="xl:justify-self-end" />
-        </div>
-      </ReportSection>
+      <ReportNav />
+      <IntroSection data={reportMock.intro} reportUrl={window.location.href} />
       <ReportSection id="weekly-overview">
         <div className="flex flex-col gap-12">
           <ReportHeading
@@ -267,12 +374,163 @@ export function Reports() {
           </div>
         </div>
       </ReportSection>
-      <ReportSection id="social-performance">
-        <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] xl:items-start xl:gap-16">
+      <ReportSection id="source-connections">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            badge={null}
+            className="max-w-[28rem]"
+            description="The sources that power this report, including active integrations and channels we are watching."
+            size="medium"
+            title="Source connections"
+          />
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            {sourceCards.map((source) => (
+              <SourceCard {...source} key={source.name} />
+            ))}
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection id="competitor-overview">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            badge={null}
+            className="max-w-[28rem]"
+            description="A compact competitor summary and the expanded search-performance view."
+            size="medium"
+            title="Competitor overview"
+          />
+          <div className="flex flex-col items-start gap-3">
+            <CompetitorCard
+              avatarFallback="HL"
+              name="Hlabs"
+              website="hlabs.co.uk"
+            />
+            <CompetitorCard
+              avatarFallback="HL"
+              name="Hlabs"
+              variant="highlights"
+              website="hlabs.co.uk"
+            />
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection id="citation-rankings">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            badge={null}
+            className="max-w-[30rem]"
+            description="Competitors ranked by the citations they received in tracked answers. Fill length reflects each source's share of 80 total citations."
+            size="medium"
+            title="Citation rankings"
+          />
+          <RankEntities
+            className="max-w-[27.5rem]"
+            items={citationRankItems}
+            maxValue={80}
+          />
+        </div>
+      </ReportSection>
+      <ReportSection id="website-performance">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            badge={null}
+            className="max-w-[30rem]"
+            description="A focused PageSpeed metric with a score-linked semicircle progress indicator."
+            size="medium"
+            title="Website performance"
+          />
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+            {siteStatCards.map((stat) => (
+              <SiteStatCard
+                {...stat}
+                className="max-w-none"
+                key={stat.score}
+              />
+            ))}
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection id="site-checks">
+        <div className="flex flex-col gap-8">
           <ReportHeading
             align="left"
             badge={null}
-            className="max-w-[21rem]"
+            title="Website checks"
+            description="A snapshot of the files and on-page content checked in this sample."
+          />
+          <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <SiteCheckCard
+              title="LLMs file"
+              status="missing"
+              description="No llms.txt file was found at https://apta.agency/llms.txt. This file can guide AI tools to useful public content."
+            />
+            <SiteCheckCard
+              title="Robots file"
+              status="good"
+              description="The check found robots.txt and a sitemap reference."
+            />
+            <SiteCheckCard
+              title="Visible FAQs"
+              status="missing"
+              description="No visible FAQ sections were detected on the 25 public pages in the sitemap sample."
+            />
+            <SiteCheckCard
+              title="Structured data"
+              status="missing"
+              description="Structured data was not detected on the public pages in the sitemap sample."
+            />
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection id="test-results">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <ReportHeading
+            badge="How to read this test"
+            badgeVariant="secondary"
+            className="max-w-[24rem]"
+            description="A neutral category answer asks about campaign creative without naming Apta Agency. We use those answers to measure organic discovery, rather than whether AI can confirm a firm the person already knows."
+            size="large"
+            title="We asked the questions someone asks before they know Apta Agency by name."
+          />
+          <div className="flex h-full flex-col gap-8">
+            <ReportHeading
+              className="max-w-[21rem]"
+              description={null}
+              label="bad"
+              size="medium"
+              title={
+                <>
+                  Apta Agency appeared in <span className="text-red-400">0 of 75</span>{" "}
+                  neutral category answers.
+                </>
+              }
+            />
+            <div className="mt-auto flex items-start">
+              <HighlightNumber
+                className="w-auto min-w-0 flex-1"
+                description="Answers that did not name Apta Agency"
+                value="75"
+              />
+              <HighlightNumber
+                className="w-auto min-w-0 flex-1"
+                description="Answers that did not name Apta Agency"
+                value="75"
+              />
+            </div>
+          </div>
+        </div>
+      </ReportSection>
+      <ReportSection id="questions-asked">
+        <div className="flex flex-col gap-8">
+          <ReportHeading align="left" badge="The sample" title="Questions asked" description="Explore the questions by type. Select one or more types to narrow the sample." />
+          <QuestionsAsked questions={sampleQuestions} />
+        </div>
+      </ReportSection>
+      <ReportSection id="social-performance">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            align="left"
+            badge={null}
             description={null}
             title="Weekly interactions with the client's social posts stayed close to the recent baseline."
           />
@@ -295,7 +553,7 @@ export function Reports() {
               value={activeEntity}
             />
           </div>
-          <div className="grid items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid auto-rows-fr items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
             {socialCards.map((card) => (
               <SocialCard
                 avatarSrc={card.avatarSrc}
@@ -307,23 +565,28 @@ export function Reports() {
                 name={card.name}
                 thumbnailSrc={card.thumbnailSrc}
                 title={card.title}
+                description={card.description}
                 variant={card.variant}
               />
             ))}
           </div>
         </div>
       </ReportSection>
-      <ReportSection
-        contentClassName="flex justify-center"
-        contentContainerClassName="!px-0 !py-0 md:!px-0 md:!py-0 xl:!py-0"
-        id="next-steps-divider"
-        innerClassName="md:!px-0 xl:!px-0"
-      >
-        <NextStepsDivider className="!min-h-[32rem] w-full md:!min-h-[34rem] xl:!min-h-[38rem]">
-          Your AI Visibibility
-          <br />
-          summary.
-        </NextStepsDivider>
+      <ReportSection id="news">
+        <div className="flex flex-col gap-12">
+          <ReportHeading
+            align="left"
+            badge={null}
+            title="News and articles"
+            description="Updates and ideas worth your attention."
+          />
+          <NewsCard
+            className="max-w-md"
+            title="Get your next campaign ready"
+            takeaway="Start with a clear offer and audience. Use an existing page if it already gives visitors what they need to act."
+            source={{ label: "OpenAI" }}
+          />
+        </div>
       </ReportSection>
       <ReportSection id="ai-visibility">
         <div className="flex flex-col gap-12">
@@ -457,23 +720,30 @@ export function Reports() {
           />
         </div>
       </ReportSection>
-      <ReportSection
-        contentContainerClassName="!py-0 md:!py-0 xl:!py-0"
-        id="next-steps-intro"
-        innerClassName="md:!px-0 xl:!px-0"
-      >
-        <NextStepsIntro>
-          <div className="w-full md:px-10 xl:px-[10.5rem]">
-            <ReportHeading
-              align="left"
-              badge={null}
-              className="max-w-[28rem]"
-              description="Start with the LinkedIn post. It led Apta Agency's activity this week. Competitor activity was visible too, especially Superside and Curio Digital."
-              title="Here is the nexts steps for apta agency"
-            />
-          </div>
-        </NextStepsIntro>
-      </ReportSection>
+      {nextStepIntroSections.map((section) => (
+        <ReportSection
+          contentContainerClassName="!py-0 md:!py-0 xl:!py-0"
+          id={section.id}
+          innerClassName="md:!px-0 xl:!px-0"
+          key={section.id}
+        >
+          <NextStepsIntro
+            ariaLabel={`${section.title} animation`}
+            artboard={section.artboard}
+          >
+            <div className="w-full md:px-10 xl:px-[10.5rem]">
+              <ReportHeading
+                align="left"
+                badge={section.badge ?? null}
+                badgeVariant={section.badgeVariant}
+                className="max-w-[28rem]"
+                description={section.description}
+                title={section.title}
+              />
+            </div>
+          </NextStepsIntro>
+        </ReportSection>
+      ))}
       <ReportSection id="recommended-actions">
         <div className="flex flex-col gap-12">
           <ReportHeading
@@ -482,7 +752,7 @@ export function Reports() {
             description="Priority fixes and opportunities pulled into a compact action queue for the week."
             title="What to do next"
           />
-          <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid items-stretch gap-3">
             {actionCards.map((card) => (
               <ActionCard
                 count={card.count}
@@ -510,6 +780,8 @@ export function Reports() {
           </div>
         </div>
       </ReportSection>
+      <ReportContact />
     </main>
+    </ReportProvider>
   );
 }

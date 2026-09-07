@@ -59,9 +59,9 @@ export function Metric1({
         >
           {metric.comparisonBadgeLabel ? (
             <Badge
-              className={cn("w-fit", metric.badgeTextClassName)}
+              className="w-fit"
               hideBackground
-              size={metric.badgeSize}
+              size="lg"
               variant={comparisonBadgeVariant}
             >
               {comparisonIcon}

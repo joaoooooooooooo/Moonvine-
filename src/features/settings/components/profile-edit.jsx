@@ -44,8 +44,8 @@ export function ProfileEdit() {
             <p className="text-muted-foreground text-sm">dev@moonvine.io</p>
           </div>
           <div className="flex flex-wrap gap-1.5">
-            <Badge variant="success">Signed in</Badge>
-            <Badge variant="outline">Organization admin</Badge>
+            <Badge size="lg" variant="success">Signed in</Badge>
+            <Badge size="lg" variant="outline">Organization admin</Badge>
           </div>
         </div>
       </BasicFrameHeader>

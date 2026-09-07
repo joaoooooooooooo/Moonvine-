@@ -1,4 +1,7 @@
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { ImageIcon } from "lucide-react";
+import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { cn } from "@/lib/utils";
@@ -14,6 +17,7 @@ export function SocialCard({
   badgeLabel = "Competitor",
   badgeVariant = "warning",
   className,
+  description,
   icon,
   metaLabel = "LinkedIn",
   name = "Apta Agency",
@@ -24,6 +28,7 @@ export function SocialCard({
   variant = "default",
   withFill = true,
 }) {
+  const [failedThumbnailSrc, setFailedThumbnailSrc] = useState(null);
   const card = useSocialCard({
     badge,
     badgeIcon,
@@ -41,20 +46,25 @@ export function SocialCard({
       )}
       withFill={withFill}
     >
-      <FrameCardContent className="h-fit flex-none gap-0 p-5 shadow-none before:shadow-none">
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-muted">
-          {thumbnailSrc ? (
+      <FrameCardContent className="gap-0 p-0 shadow-none before:shadow-none">
+        <div className="relative aspect-video w-full shrink-0 overflow-hidden bg-muted">
+          {thumbnailSrc && thumbnailSrc !== failedThumbnailSrc ? (
             <img
               alt={thumbnailAlt}
               className={cn("size-full object-cover", thumbnailClassName)}
               src={thumbnailSrc}
+              loading="lazy"
+              onError={() => setFailedThumbnailSrc(thumbnailSrc)}
             />
-          ) : null}
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
+              <ImageIcon aria-hidden="true" className="size-8 stroke-1" />
+              <span className="text-xs">Post image preview</span>
+            </div>
+          )}
         </div>
-      </FrameCardContent>
 
-      <div className="relative isolate flex w-full flex-col gap-0.5 overflow-clip rounded-xl p-2">
-        <div className="flex w-full flex-col gap-4 px-2 py-2">
+        <div className="flex w-full flex-col gap-4 p-5">
           <div className="flex w-full items-start justify-between gap-3">
             <div className="flex min-w-0 items-center gap-1">
               <Avatar className="size-9 bg-muted text-muted-foreground">
@@ -83,8 +93,10 @@ export function SocialCard({
 
             {card.badge || actionIcon ? (
               <div className="flex shrink-0 items-center gap-2">
-                {card.badge ? (
-                  <Badge
+                {card.badge?.label === "Competitor" ? (
+                  <ReportBadge segment="competitor" />
+                ) : card.badge ? (
+                  <Badge size="lg"
                     className="shrink-0"
                     variant={card.badge.variant ?? badgeVariant}
                   >
@@ -102,11 +114,18 @@ export function SocialCard({
             ) : null}
           </div>
 
-          <p className="w-full text-lg font-normal leading-7 tracking-[-0.18px] text-foreground [text-wrap:pretty]">
-            {title}
-          </p>
+          <div className="w-full space-y-2">
+            <h3 className="text-xl leading-7 font-medium tracking-[-0.01em] text-foreground [text-wrap:balance]">
+              {title}
+            </h3>
+            {description && (
+              <p className="text-sm leading-6 text-muted-foreground [text-wrap:pretty]">
+                {description}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </FrameCardContent>
     </FrameCard>
   );
 }

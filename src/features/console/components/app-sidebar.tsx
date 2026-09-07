@@ -31,7 +31,7 @@ function SidebarIconBadge({
 
 	return (
 		<Badge
-			className="size-6 rounded-md p-0 [&_svg]:size-3.5 [&_svg]:opacity-100"
+			className="[&_svg]:opacity-100"
 			size="lg"
 			variant={variant}
 		>
