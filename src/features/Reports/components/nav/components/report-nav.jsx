@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ThemeSwitcherDropdown } from "@/components/navigation/avatar-menu";
+import { useThemePreference } from "@/components/navigation/avatar-menu";
 import { FullWidthDivider } from "@/features/console/components/full-width-divider";
 import { Tabs, TabsList, TabsTrigger } from "@/features/Reports/components/nav/components/nav-tabs";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,10 @@ const reportNavItems = [
 ];
 
 export function ReportNav({ className, items = reportNavItems }) {
+  const { setTheme } = useThemePreference();
+  useEffect(() => {
+    setTheme("dark");
+  }, [setTheme]);
   const headerRef = useRef(null);
   const [activeSection, setActiveSection] = useState(items[0]?.value);
 
@@ -88,9 +92,6 @@ export function ReportNav({ className, items = reportNavItems }) {
                 </Tabs>
               </nav>
 
-              <div className="ml-auto flex shrink-0 items-center gap-3">
-                <ThemeSwitcherDropdown />
-              </div>
             </div>
           </div>
         </div>
