@@ -77,12 +77,7 @@ export function SourceCard({
           )}
         </div>
 
-        <div
-          className={cn(
-            "flex w-full items-center gap-2",
-            isNotConnected && "opacity-48",
-          )}
-        >
+        <div className="flex w-full items-center gap-2">
           <Avatar className="size-7 bg-muted text-xs text-muted-foreground">
             {avatarSrc ? (
               <AvatarImage alt={avatarAlt ?? `${name} source`} src={avatarSrc} />

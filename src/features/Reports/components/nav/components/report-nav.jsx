@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useThemePreference } from "@/components/navigation/avatar-menu";
+import { ThemeSwitcherDropdown } from "@/components/navigation/avatar-menu";
 import { FullWidthDivider } from "@/features/console/components/full-width-divider";
 import { Tabs, TabsList, TabsTrigger } from "@/features/Reports/components/nav/components/nav-tabs";
 import { cn } from "@/lib/utils";
@@ -18,12 +18,27 @@ const reportNavItems = [
 ];
 
 export function ReportNav({ className, items = reportNavItems }) {
-  const { setTheme } = useThemePreference();
-  useEffect(() => {
-    setTheme("dark");
-  }, [setTheme]);
   const headerRef = useRef(null);
+  const navRef = useRef(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const [activeSection, setActiveSection] = useState(items[0]?.value);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const updateOverflow = () => {
+      setCanScrollRight(nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 1);
+    };
+    const observer = new ResizeObserver(updateOverflow);
+    observer.observe(nav);
+    if (nav.firstElementChild) observer.observe(nav.firstElementChild);
+    nav.addEventListener("scroll", updateOverflow, { passive: true });
+    updateOverflow();
+    return () => {
+      observer.disconnect();
+      nav.removeEventListener("scroll", updateOverflow);
+    };
+  }, [items]);
 
   useEffect(() => {
     const scrollRoot = headerRef.current?.closest("main");
@@ -75,7 +90,8 @@ export function ReportNav({ className, items = reportNavItems }) {
         <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
           <div className="w-full px-0 md:px-10 xl:px-[10.5rem]">
             <div className="flex h-16 w-full items-center justify-between gap-4">
-              <nav aria-label="Report sections" className="h-full min-w-0 flex-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="relative h-full min-w-0 flex-1">
+              <nav ref={navRef} aria-label="Report sections" className="h-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <Tabs
                   className="flex h-full w-max"
                   onValueChange={handleSectionChange}
@@ -91,7 +107,17 @@ export function ReportNav({ className, items = reportNavItems }) {
                   </TabsList>
                 </Tabs>
               </nav>
-
+              <div
+                aria-hidden="true"
+                className={cn(
+                  "pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-background via-background/70 to-transparent transition-opacity duration-200 motion-reduce:transition-none md:hidden",
+                  canScrollRight ? "opacity-100" : "opacity-0",
+                )}
+              />
+              </div>
+              <div className="shrink-0">
+                <ThemeSwitcherDropdown />
+              </div>
             </div>
           </div>
         </div>

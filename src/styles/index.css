@@ -300,6 +300,35 @@
 }
 
 @layer components {
+  @keyframes section-enter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-section-reveal="pending"] {
+      opacity: 0;
+    }
+
+    [data-section-reveal="visible"] {
+      animation: section-enter 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) backwards;
+      animation-delay: calc(80ms * var(--reveal-stagger, 0));
+    }
+  }
+
+  @media print {
+    [data-section-reveal] {
+      opacity: 1;
+      animation: none;
+    }
+  }
+
   .report-heading-large {
     font-family: 'Nib Pro', 'Geist', sans-serif;
   }

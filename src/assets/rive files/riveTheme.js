@@ -1,6 +1,6 @@
 export const RIVE_BORDER_STROKE = {
-  dark: "#404040",
-  light: "#BFBFBF",
+  dark: "#6E6E6E",
+  light: "#B5B5B5",
 };
 
 export const RIVE_POINT_COLOR = {

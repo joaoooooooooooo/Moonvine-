@@ -1,4 +1,5 @@
 import { ReportSections } from "@/pages/ReportSections";
+import { ReportDebug } from "@/features/Reports/components/reportDebug/report-debug";
 import { useMemo } from "react";
 import { ConsoleShell } from "@/layouts/ConsoleShell";
 import { Accounts } from "@/pages/Accounts";
@@ -57,6 +58,7 @@ function App() {
   return (
     <>
       {isReportsPage ? currentPage : <ConsoleShell>{currentPage}</ConsoleShell>}
+      {currentPath === "#/reports" && <ReportDebug />}
 
       {process.env.NODE_ENV === "development" && <Agentation />}
     </>

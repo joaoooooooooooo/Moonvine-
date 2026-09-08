@@ -3,6 +3,7 @@ import { LineBackground } from "@/components/ui/line-background";
 import { FullWidthDivider } from "@/features/console/components/full-width-divider";
 import { cn } from "@/lib/utils";
 import { createContext, useContext } from "react";
+import { useSectionReveal } from "@/hooks/use-section-reveal";
 
 const ReportSectionContext = createContext(false);
 
@@ -19,6 +20,7 @@ export function ReportSection({
   variant,
 }) {
   const isNested = useContext(ReportSectionContext);
+  const revealRef = useSectionReveal();
   const isSubsection = (variant ?? (isNested ? "subsection" : "main")) === "subsection";
   if (isSubsection) {
     return (
@@ -29,7 +31,7 @@ export function ReportSection({
           {background}
           <div className={cn("w-full", contentContainerClassName)}>
             <div className={cn("w-full", innerClassName)}>
-              <div className={cn("w-full", contentClassName)}>{children}</div>
+              <div ref={revealRef} className={cn("w-full", contentClassName)}>{children}</div>
             </div>
           </div>
         </section>
@@ -68,7 +70,7 @@ export function ReportSection({
             innerClassName,
           )}
         >
-          <div className={cn("w-full", contentClassName)}>{children}</div>
+          <div ref={revealRef} className={cn("w-full", contentClassName)}>{children}</div>
         </div>
       </div>
       {(showBottomDivider ?? true) ? (

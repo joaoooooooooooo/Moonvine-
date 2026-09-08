@@ -2,6 +2,7 @@ import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ActionListItem } from "@/features/Reports/components/actionItem/components/actionListItem";
+import { ReportBadge } from "@/features/Reports/components/reportBadge";
 
 export function ActionCard({
   className,
@@ -17,10 +18,7 @@ export function ActionCard({
       <FrameCardContent className="gap-0 p-5">
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-col gap-4">
-            <span
-              aria-hidden="true"
-              className="size-1.5 shrink-0 rounded-full bg-warning"
-            />
+            <ReportBadge segment="warning" dotOnly />
             <h3 className="text-2xl leading-8 tracking-[-0.015em] text-foreground [text-wrap:balance]">
               {title}
             </h3>
