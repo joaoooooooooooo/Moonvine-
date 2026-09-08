@@ -15,7 +15,6 @@ import { ReportNav } from "@/features/Reports/components/nav";
 
 const navigation = [
   { label: "Intro", value: "report-overview" },
-  { label: "Sources", value: "report-sources" },
   { label: "Around you", value: "report-market-overview" },
   { label: "AI visibility", value: "report-ai-visibility" },
   { label: "Website audit", value: "report-website-audit" },
@@ -34,8 +33,9 @@ export function ReportSections() {
     <main className="relative h-svh overflow-x-hidden overflow-y-auto pt-16">
       <SideLineBackground contentWidth="80rem" variant="medium" />
       <ReportNav items={navigation} />
-      <IntroSection data={report.intro} reportUrl={window.location.href} />
-      <SourcesSection data={report.sources} />
+      <IntroSection data={report.intro} reportUrl={window.location.href}>
+        <SourcesSection data={report.sources} />
+      </IntroSection>
       <OverviewSection data={report.overview} />
       <AiVisibilitySection data={report.aiVisibility} />
       <WebsiteAuditSection data={report.websiteAudit} />

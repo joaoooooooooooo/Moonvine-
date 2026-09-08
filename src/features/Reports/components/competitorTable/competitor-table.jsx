@@ -8,12 +8,11 @@ import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectItem, SelectPopup, SelectValue } from "@/components/ui/select";
 import { ReportSelectTrigger } from "@/features/Reports/components/reportControls";
-import { GlobeIcon, MegaphoneIcon, LayersIcon } from "lucide-react";
+import { GlobeIcon, MegaphoneIcon } from "lucide-react";
 
 const metricViews = [
   { value: "organic", label: "Organic", icon: GlobeIcon },
   { value: "paid", label: "Paid", icon: MegaphoneIcon },
-  { value: "all", label: "All metrics", icon: LayersIcon },
 ];
 
 const metricColumns = {

@@ -8,15 +8,20 @@ import { cn } from "@/lib/utils";
 import type { IntroSectionProps } from "./intro-section.types";
 import { useReportCompany, useReportContext } from "@/features/Reports/context";
 
-export function IntroSection({ data, reportUrl, id = "report-overview", className }: IntroSectionProps) {
+export function IntroSection({ children, data, reportUrl, id = "report-overview", className }: IntroSectionProps) {
   const company = useReportCompany();
   const { period, locale } = useReportContext();
   const reportLabel = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(period.end));
   return (
     <ReportSection
         variant="main"
-        background={
-          <div className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-full max-w-7xl -translate-x-1/2 px-4 md:px-6">
+        showBottomDivider
+        className={cn("!overflow-hidden", className)}
+        contentClassName="relative z-10"
+        id={id}
+      >
+        <div className="relative isolate">
+          <div className="pointer-events-none absolute -top-16 -bottom-24 left-1/2 z-0 w-screen max-w-7xl md:-top-20 md:-bottom-28 xl:-top-28 xl:-bottom-36 -translate-x-1/2 px-4 md:px-6">
             <div className="absolute inset-y-0 right-4 left-4 overflow-hidden md:right-6 md:left-6" style={{ maskImage: "linear-gradient(to bottom, black calc(100% - 80px), transparent calc(100% - 32px))" }}>
               <div
                 className="absolute -right-[640px] -bottom-[640px] size-[1064px] opacity-75 md:size-[1186px]"
@@ -25,11 +30,7 @@ export function IntroSection({ data, reportUrl, id = "report-overview", classNam
               </div>
             </div>
           </div>
-        }
-        className={cn("!overflow-hidden", className)}
-        contentClassName="relative z-10"
-        id={id}
-      >
+        <div className="relative z-10">
         <ReportBreadcrumb
           avatarFallback={company.avatarFallback ?? company.name.slice(0, 2).toUpperCase()}
           avatarSrc={company.avatarUrl}
@@ -63,6 +64,9 @@ export function IntroSection({ data, reportUrl, id = "report-overview", classNam
             )}
           </div>
         </div>
+        </div>
+        </div>
+        {children ? <div className="relative mt-12 md:mt-16">{children}</div> : null}
       </ReportSection>
   );
 }

@@ -11,8 +11,8 @@ Supply `onConnectSource(sourceId)` to open your application's connection flow.
 Without it, connect buttons are disabled. This section does not connect services
 or optimistically change connection status; the application supplies updated data.
 
-The section has a serif main heading and bottom divider. Its nested source grid
-has no extra divider or page gutters. Empty data renders an empty state.
+The section is a subsection within Intro, with a medium serif H2 and no extra
+divider or page gutters. Empty data renders an empty state.
 The consuming application owns loading and error handling.
 
-Preview at `#/report-sections`, after the intro, or Reports/Sections/Sources in Storybook.
+Preview at `#/report-sections`, within the intro, or Reports/Sections/Sources in Storybook.

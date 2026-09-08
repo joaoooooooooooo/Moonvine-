@@ -11,15 +11,15 @@ export function SourcesSection({ data, onConnectSource, id = "report-sources", c
   const websiteLabel = company.website?.replace(/^https?:\/\//, "").replace(/\/$/, "") ?? "";
 
   return (
-    <ReportSection variant="main" id={id} className={className}>
+    <ReportSection variant="subsection" showBottomDivider={false} id={id} className={className}>
       <div className="flex flex-col gap-8">
           <ReportHeading
-            variant="intro"
+            size="medium"
             badge={data.eyebrow}
             title={data.title}
             description={`${includedCount.toLocaleString(locale)} ${includedCount === 1 ? "source" : "sources"} connected or included`}
           />
-        <ReportSection variant="subsection">
+        <div>
           {data.sources.length > 0 ? (
             <div className="grid grid-cols-2 auto-rows-fr gap-3 xl:grid-cols-3">
               {data.sources.map((source) => (
@@ -40,7 +40,7 @@ export function SourcesSection({ data, onConnectSource, id = "report-sources", c
           ) : (
             <p className="rounded-xl border p-6 text-sm text-muted-foreground">No sources are included in this report yet.</p>
           )}
-        </ReportSection>
+        </div>
       </div>
     </ReportSection>
   );

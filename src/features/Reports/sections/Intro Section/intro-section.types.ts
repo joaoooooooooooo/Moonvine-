@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type IntroSectionData = {
   title: string;
   description: string | null;
@@ -12,6 +14,7 @@ export type IntroSectionData = {
 };
 
 export type IntroSectionProps = {
+  children?: ReactNode;
   data: IntroSectionData;
   /** Absolute report URL to copy. Omit to hide the copy action. */
   reportUrl?: string;

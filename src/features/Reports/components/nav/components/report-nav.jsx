@@ -80,6 +80,7 @@ export function ReportNav({ className, items = reportNavItems }) {
 
   return (
     <header
+      ref={headerRef}
       className={cn(
         "fixed inset-x-0 top-0 z-30 bg-background",
         className,

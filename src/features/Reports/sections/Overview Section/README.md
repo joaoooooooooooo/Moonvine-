@@ -7,7 +7,7 @@ and neutral badge. The main heading uses the report's serif intro variant.
 
 Add supporting ReportSection children to this component as the overview grows.
 They inherit subsection behavior: no additional bottom borders or page gutters.
-Use the default sans-serif ReportHeading for their headings. The main section
+Use the default serif ReportHeading for their headings. The main section
 owns one bottom divider after all its content.
 
 Preview at #/report-sections after Sources, or Reports/Sections/Overview in Storybook.
