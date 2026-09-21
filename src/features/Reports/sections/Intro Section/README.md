@@ -19,7 +19,7 @@ Preview the section at `#/report-sections` or in Storybook under Reports/Section
 - `ReportSection variant="main"` owns the page gutters, vertical spacing, and bottom divider.
 - A `ReportSection` nested inside another automatically becomes a subsection: no dividers or repeated page gutters. Use a parent `flex flex-col gap-12` layout to space subsections.
 - `variant="subsection"` can also be set explicitly.
-- `ReportHeading variant="intro"` renders an H1. Other headings default to H2; use `as="h3"` for deeper nesting. All variants use serif type for the title, badge, and description, independent of heading size.
+- `ReportHeading variant="intro"` renders an H1. Other headings default to H2; use `as="h3"` for deeper nesting. Titles default to serif; badges and descriptions use sans serif. The first section uses a 48px title; other intro headings retain their 40px size.
 
 ```tsx
 <ReportSection variant="main">

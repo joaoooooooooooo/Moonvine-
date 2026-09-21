@@ -6,8 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FrameCard, FrameCardContent, FrameCardTop } from "@/components/ui/frame-card";
 import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectItem, SelectPopup, SelectValue } from "@/components/ui/select";
-import { ReportSelectTrigger } from "@/features/Reports/components/reportControls";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GlobeIcon, MegaphoneIcon } from "lucide-react";
 
 const metricViews = [
@@ -60,17 +59,16 @@ export function CompetitorTable({ rows, locale = "en-US", variant = "search" }) 
     <FrameCard className="w-full" withFill>
       {variant === "search" && (
         <FrameCardTop className="h-auto p-3">
-          <Select items={metricViews} value={metricView} onValueChange={(value) => { if (value) setMetricView(value); }}>
-            <ReportSelectTrigger aria-label="Metric columns" className="w-full sm:w-64">
-              <SelectValue>{(value) => {
-                const item = metricViews.find((item) => item.value === value);
-                if (!item) return null;
-                const Icon = item.icon;
-                return <span className="flex items-center gap-2"><Icon aria-hidden="true" /><span>{item.label}</span></span>;
-              }}</SelectValue>
-            </ReportSelectTrigger>
-            <SelectPopup>{metricViews.map(({ value, label, icon: Icon }) => <SelectItem key={value} value={value}><span className="flex items-center gap-2"><Icon aria-hidden="true" className="size-4" /><span>{label}</span></span></SelectItem>)}</SelectPopup>
-          </Select>
+          <Tabs value={metricView} onValueChange={setMetricView}>
+            <TabsList aria-label="Metric columns">
+              {metricViews.map(({ value, label, icon: Icon }) => (
+                <TabsTrigger key={value} value={value}>
+                  <Icon aria-hidden="true" className="size-4" />
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </FrameCardTop>
       )}
       <FrameCardContent className="gap-0 p-0 shadow-none before:shadow-none">

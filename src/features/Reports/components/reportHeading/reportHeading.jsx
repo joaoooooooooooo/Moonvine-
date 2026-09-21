@@ -27,6 +27,7 @@ export function ReportHeading({
   className,
   description = defaultDescription,
   titleFont = "serif",
+  titleClassName,
   label,
   size = "large",
   title = defaultTitle,
@@ -47,7 +48,7 @@ export function ReportHeading({
   return (
     <div
       className={cn(
-        "report-heading-large flex max-w-[26.5rem] flex-col gap-5",
+        "font-sans flex max-w-[26.5rem] flex-col gap-5",
         align === "right" && "items-end text-right",
         align === "center" && "items-center text-center",
         className,
@@ -74,6 +75,7 @@ export function ReportHeading({
             titleFont === "sans" ? "font-sans" : "report-heading-large",
             variant === "intro" && "text-[2.5rem]/11",
             "text-foreground [text-wrap:balance]",
+            titleClassName,
           )}
         >
           {title}

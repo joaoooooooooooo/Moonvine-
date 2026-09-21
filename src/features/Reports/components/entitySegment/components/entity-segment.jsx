@@ -2,7 +2,7 @@ import { groupChartEntities } from "./group-chart-entities";
 import { useMemo, useState } from "react";
 import { EyeIcon, UserRoundIcon } from "lucide-react";
 import { FrameCard, FrameCardContent, FrameCardTop } from "@/components/ui/frame-card";
-import { EntityChartSelect } from "@/features/Reports/components/entitySegment/components/entity-chart-select";
+import { EntityChartTabs } from "@/features/Reports/components/entitySegment/components/entity-chart-tabs";
 import { Metric1 } from "@/features/Reports/components/metric1";
 import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import {
@@ -97,7 +97,7 @@ export function EntitySegment({
     <div className={cn("flex flex-col", className)}>
       <FrameCard className="w-full" withFill>
         <FrameCardTop className="h-auto p-2">
-          <EntityChartSelect
+          <EntityChartTabs
             items={resolvedChartViews.map((item) => ({
               label: item.tabLabel,
               value: item.value,

@@ -42,6 +42,7 @@ export function IntroSection({ children, data, reportUrl, id = "report-overview"
           <div className="flex flex-col gap-12 xl:grid xl:grid-cols-[minmax(0,30rem)_auto] xl:items-start xl:justify-between xl:gap-16">
             <ReportHeading
               variant="intro"
+              titleClassName="text-5xl/13"
               afterDescription={reportUrl ? <CopyButton label="Copy report link" text={reportUrl} /> : null}
               title={data.title}
               description={data.description}
