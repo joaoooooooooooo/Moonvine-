@@ -33,7 +33,8 @@ export function BrandTools() {
     </main>;
   }
 
-  return <main aria-label="Moonvine brand tools" className="flex min-h-svh items-center justify-center bg-background px-4 py-12 text-foreground">
+  return <main aria-label="Moonvine brand tools" className="flex min-h-svh flex-col items-center justify-center gap-4 bg-background px-4 py-12 text-foreground">
+    <h1 className="report-heading-large w-full max-w-xl text-[2.5rem]/11 font-semibold tracking-[-0.022em] text-foreground [text-wrap:balance]">Tools for creating Moonvine social content</h1>
     <CommandSurface>
       <Command items={tools}>
         <CommandInput aria-label="Search brand tools" placeholder="Type a command or search..." />
