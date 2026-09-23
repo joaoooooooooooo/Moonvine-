@@ -3,7 +3,7 @@ import { reportScenarios } from "../../report-scenarios";
 import { RiveStrokeDebug } from "@/components/rive/rive-stroke-debug";
 export function ReportDebug({ value, onChange }: { value?: string; onChange?: (id: string) => void }) {
   const current = reportScenarios.find(scenario => scenario.id === value);
-  return <details className="fixed bottom-4 right-4 z-40 w-72 max-w-[calc(100vw-2rem)] rounded-xl border bg-background p-3 shadow-lg">
+  return <details className="print:hidden fixed bottom-4 right-4 z-40 w-72 max-w-[calc(100vw-2rem)] rounded-xl border bg-background p-3 shadow-lg">
     <summary className="cursor-pointer text-sm font-medium">Report debug</summary>
     <div className="mt-3 flex flex-col gap-3">
       {current && onChange && <>

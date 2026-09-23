@@ -11,16 +11,7 @@ import { ReportProvider } from "@/features/Reports/context";
 import { useState } from "react";
 import { reportScenarios } from "@/features/Reports/report-scenarios";
 import { ReportDebug } from "@/features/Reports/components/reportDebug/report-debug";
-import { ReportNav } from "@/features/Reports/components/nav";
 
-const navigation = [
-  { label: "Intro", value: "report-overview" },
-  { label: "Around you", value: "report-market-overview" },
-  { label: "AI visibility", value: "report-ai-visibility" },
-  { label: "Website audit", value: "report-website-audit" },
-  { label: "Next steps", value: "report-next-steps" },
-  { label: "Contact", value: "report-contact" },
-];
 
 /** Assembly page for the data-driven report sections. */
 export function ReportSections() {
@@ -28,12 +19,11 @@ export function ReportSections() {
   const report = reportScenarios.find(scenario => scenario.id === scenarioId)!.report;
   return (
     <>
-    <ReportDebug value={scenarioId} onChange={setScenarioId} />
+    {new URLSearchParams(window.location.search).has("debug") && <ReportDebug value={scenarioId} onChange={setScenarioId} />}
     <ReportProvider key={scenarioId} value={report.context}>
-    <main className="relative h-svh overflow-x-hidden overflow-y-auto pt-16">
+    <main className="report-document relative min-h-svh overflow-x-clip pt-16 print:pt-0">
       <SideLineBackground contentWidth="80rem" variant="medium" />
-      <ReportNav items={navigation} />
-      <IntroSection data={report.intro} reportUrl={window.location.href}>
+      <IntroSection data={report.intro}>
         <SourcesSection data={report.sources} />
       </IntroSection>
       <OverviewSection data={report.overview} />

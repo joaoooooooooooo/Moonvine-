@@ -28,7 +28,8 @@ export function useChartViewport<T extends Element>(ref: RefObject<T | null>): V
         hasEnteredView: current.hasEnteredView || isInView,
       }));
 
-    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") {
+    // Static report exports must include charts that have never been scrolled into view.
+    if (node.closest(".report-document") || typeof window === "undefined" || typeof IntersectionObserver === "undefined") {
       update(true);
       return;
     }

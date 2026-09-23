@@ -1,13 +1,15 @@
+import { editorialPosts, editorialArticles } from "./report-editorial";
 import { reportMock } from "./report.mock";
 import type { ReportData } from "./report.types";
+import { reportEntities, type ReportEntityKey } from "./report-entities";
 
-type ScenarioConfig = { id: string; label: string; company: string; competitors: number; issues: number; posts: number; articles: number; change: number; answers: number };
+type ScenarioConfig = { id: string; label: string; company: ReportEntityKey; competitors: ReportEntityKey[]; publisher: ReportEntityKey; issues: number; posts: number; articles: number; change: number; answers: number };
 const configs: ScenarioConfig[] = [
-  { id: "typical", label: "Typical week", company: "Apta Agency", competitors: 3, issues: 5, posts: 3, articles: 2, change: 4, answers: 12 },
-  { id: "growth", label: "Strong growth ? one fix", company: "Northstar Studio", competitors: 2, issues: 1, posts: 1, articles: 1, change: 32, answers: 56 },
-  { id: "decline", label: "Declining results", company: "Harbor Creative", competitors: 4, issues: 11, posts: 2, articles: 3, change: -24, answers: 0 },
-  { id: "busy", label: "Busy market ? ten competitors", company: "Fieldwork Collective", competitors: 10, issues: 8, posts: 10, articles: 6, change: 15, answers: 30 },
-  { id: "empty", label: "New report ? no data", company: "New Leaf Studio", competitors: 0, issues: 0, posts: 0, articles: 0, change: 0, answers: 0 },
+  { id: "typical", label: "Typical week", company: "apta", competitors: ["superside", "curio", "hlabs"], publisher: "itsnicethat", issues: 5, posts: 3, articles: 2, change: 4, answers: 12 },
+  { id: "growth", label: "Strong growth · one fix", company: "superside", competitors: ["collins", "pentagram"], publisher: "creativereview", issues: 1, posts: 1, articles: 1, change: 32, answers: 56 },
+  { id: "decline", label: "Declining results", company: "curio", competitors: ["apta", "hlabs", "designstudio", "workco"], publisher: "dezeen", issues: 11, posts: 2, articles: 3, change: -24, answers: 0 },
+  { id: "busy", label: "Busy market · ten competitors", company: "instrument", competitors: ["workco", "huge", "collins", "pentagram", "wolffolins", "superside", "designstudio", "apta", "curio", "hlabs"], publisher: "creativereview", issues: 8, posts: 10, articles: 6, change: 15, answers: 30 },
+  { id: "empty", label: "New report · no data", company: "hlabs", competitors: [], publisher: "itsnicethat", issues: 0, posts: 0, articles: 0, change: 0, answers: 0 },
 ];
 const interactionProfiles: Record<string, { current: number[]; previous: number[] }> = {
   typical: { current: [67, 89, 64, 74, 112, 121, 98], previous: [64, 85, 68, 71, 108, 116, 92] },
@@ -15,19 +17,18 @@ const interactionProfiles: Record<string, { current: number[]; previous: number[
   decline: { current: [180, 145, 92, 60, 48, 27, 20], previous: [160, 175, 155, 190, 168, 150, 172] },
   busy: { current: [850, 2400, 1200, 3100, 950, 2800, 1650], previous: [1300, 950, 2100, 1600, 1800, 1100, 2200] },
 };
-const competitorNames = ["Superside", "Curio Digital", "Hlabs", "Orbit Studio", "Bright Works", "Common Ground", "Form & Field", "Good Measure", "Studio Parallel", "The Long Name Creative Production Company"];
 function makeReport(config: ScenarioConfig): ReportData {
   const report: ReportData = structuredClone(reportMock);
   const empty = config.id === "empty";
   const companyId = config.id + "-company";
-  const company = { id: companyId, name: config.company, website: "https://" + config.id + ".example", avatarFallback: config.company.split(" ").map(word => word[0]).join("") };
-  const competitors = competitorNames.slice(0, config.competitors).map((name, index) => ({ id: "competitor-" + index, name, website: "https://competitor-" + index + ".example", avatarFallback: name.slice(0, 2).toUpperCase() }));
-  const publisher = { id: "publisher", name: "Design Journal", website: "https://journal.example", avatarFallback: "DJ" };
+  const company = { ...reportEntities[config.company], id: companyId };
+  const competitors = config.competitors.map((key, index) => ({ ...reportEntities[key], id: "competitor-" + index }));
+  const publisher = { ...reportEntities[config.publisher], id: "publisher" };
   report.context.companyId = companyId;
   report.context.competitorIds = competitors.map(entity => entity.id);
   report.context.entities = Object.fromEntries([company, ...competitors, publisher].map(entity => [entity.id, entity]));
   report.context.reportLabel = "Aug 31, 2026";
-  report.intro.title = empty ? "Your report is ready for its first data." : config.change < 0 ? config.company + " lost visibility this week." : config.company + " gained visibility this week.";
+  report.intro.title = empty ? "Your report is ready for its first data." : config.change < 0 ? company.name + " lost visibility this week." : company.name + " gained visibility this week.";
   report.intro.description = empty ? "Connect sources to begin tracking results." : "Compare this week's results with the previous week and review the priorities below.";
   report.intro.metric = empty ? null : { value: String(Math.abs(config.change)), prefix: config.change < 0 ? "-" : "+", suffix: "%", label: "Website impressions", comparison: { label: (config.change > 0 ? "+" : "") + config.change + "%", text: "Vs last week", sentiment: config.change < 0 ? "negative" : "positive" } };
   report.sources.sources = empty ? [] : report.sources.sources.slice(0, config.id === "growth" ? 3 : 8);
@@ -64,6 +65,9 @@ function makeReport(config: ScenarioConfig): ReportData {
   report.nextSteps.actions = report.websiteAudit.issues.map(issue => ({ id: issue.id, title: issue.title, description: issue.description, items: [{ label: "Review and resolve this finding", variant: "default" }] }));
   // The lead metric is a report-level highlight, selected from any section.
   if (config.id === "typical") {
+    report.overview.socialWatch.posts = editorialPosts;
+    report.overview.socialWatch.description = "Selected published posts from Apta Agency and Superside, gathered as examples for this report.";
+    report.overview.news.articles = editorialArticles;
     const points = report.overview.interactions?.points ?? [];
     const total = points.reduce((sum, point) => sum + point.current, 0);
     const previous = points.reduce((sum, point) => sum + point.previous, 0);

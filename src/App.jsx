@@ -8,6 +8,7 @@ import { Observatory } from "@/pages/Observatory";
 import { People } from "@/pages/People";
 import { Reports } from "@/pages/Reports";
 import { Settings } from "@/pages/Settings";
+import { BrandTools } from "@/pages/BrandTools";
 import { Agentation } from "agentation";
 import {
   getActiveNavItem,
@@ -29,7 +30,11 @@ function App() {
   const currentPath = useCurrentConsolePath();
   const activeItem = getActiveNavItem(currentPath);
   const isReportsPage = currentPath === "#/reports" || currentPath === "#/report-sections";
+  const isBrandToolsPage = currentPath === "#/brand-tools" || currentPath.startsWith("#/brand-tools/");
   const currentPage = useMemo(() => {
+    if (currentPath === "#/brand-tools" || currentPath.startsWith("#/brand-tools/")) {
+      return <BrandTools />;
+    }
     if (currentPath === "#/observatory") {
       return <Observatory />;
     }
@@ -57,10 +62,10 @@ function App() {
 
   return (
     <>
-      {isReportsPage ? currentPage : <ConsoleShell>{currentPage}</ConsoleShell>}
+      {isReportsPage || isBrandToolsPage ? currentPage : <ConsoleShell>{currentPage}</ConsoleShell>}
       {currentPath === "#/reports" && <ReportDebug />}
 
-      {process.env.NODE_ENV === "development" && <Agentation />}
+      {process.env.NODE_ENV === "development" && !isBrandToolsPage && (!isReportsPage || new URLSearchParams(window.location.search).has("debug")) && <Agentation />}
     </>
   );
 }

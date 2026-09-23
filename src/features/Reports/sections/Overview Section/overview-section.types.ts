@@ -12,6 +12,7 @@ export type OverviewSectionData = {
 };
 
 export type SocialWatchPost = {
+  sourceUrl?: string;
   id: string;
   entityId: string;
   platform: string;

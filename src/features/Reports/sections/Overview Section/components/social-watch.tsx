@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { EntitySegment } from "@/features/Reports/components/entitySegment";
 import { SocialCard } from "@/features/Reports/components/social-card";
 import { ReportCardGrid } from "@/features/Reports/components/reportCardGrid/report-card-grid";
 import { ReportHeading } from "@/features/Reports/components/reportHeading/reportHeading";
@@ -8,15 +6,13 @@ import { useReportContext } from "@/features/Reports/context";
 import type { OverviewSectionData } from "../overview-section.types";
 
 export function SocialWatch({ data }: { data: OverviewSectionData["socialWatch"] }) {
-  const [view, setView] = useState("you");
-  const { companyId, competitorIds, entities } = useReportContext();
-  const posts = data.posts.filter((post) => view === "you" ? post.entityId === companyId : competitorIds.includes(post.entityId));
+  const { competitorIds, entities } = useReportContext();
+  const posts = data.posts;
   return (
     <ReportSection variant="subsection">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col items-start gap-5">
           <ReportHeading className="min-w-0" badge="Social watch" size="medium" title={data.title} description={data.description} />
-          <EntitySegment className="self-start" value={view} onValueChange={setView} />
         </div>
         {posts.length > 0 ? <ReportCardGrid>
           {posts.map((post) => {
@@ -24,11 +20,11 @@ export function SocialWatch({ data }: { data: OverviewSectionData["socialWatch"]
             if (!entity) throw new Error(`Unknown social entity: ${post.entityId}`);
             return <SocialCard key={post.id} name={entity.name} avatarSrc={entity.avatarUrl}
               avatarFallback={entity.avatarFallback} metaLabel={post.platform}
-              title={post.title} description={post.description} thumbnailSrc={post.imageUrl} thumbnailAlt={post.imageAlt ?? ""}
+              sourceUrl={post.sourceUrl} title={post.title} description={post.description} thumbnailSrc={post.imageUrl} thumbnailAlt={post.imageAlt ?? ""}
               variant={competitorIds.includes(post.entityId) ? "competitor" : "default"}
             />;
           })}
-        </ReportCardGrid> : <p className="text-sm text-muted-foreground">No social posts are included for this view.</p>}
+        </ReportCardGrid> : <p className="text-sm text-muted-foreground">No social posts are included in this report.</p>}
       </div>
     </ReportSection>
   );

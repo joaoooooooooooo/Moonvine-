@@ -7,7 +7,7 @@ export function useSectionReveal() {
   useEffect(() => {
     const container = ref.current;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!container || !window.IntersectionObserver || preference.matches) return;
+    if (container?.closest(".report-document") || !container || !window.IntersectionObserver || preference.matches) return;
 
     const targets = [];
     function collect(parent) {

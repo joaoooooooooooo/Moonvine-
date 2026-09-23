@@ -1,16 +1,13 @@
-import { CopyButton } from "@/components/shared/copy-button";
 import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import {
   FrameCard,
   FrameCardContent,
-  FrameCardTop,
 } from "@/components/ui/frame-card";
 import { cn } from "@/lib/utils";
 
 export function TaskCard({
   className,
   description,
-  fixPrompt,
   meta,
   priority,
   scopeNote,
@@ -41,15 +38,7 @@ export function TaskCard({
         {scopeNote && <p className="text-sm leading-6 text-muted-foreground italic">{scopeNote}</p>}
       </FrameCardContent>
 
-      <FrameCardTop className="h-auto p-1">
-        <CopyButton
-          className="w-full"
-          copiedLabel="Fix prompt copied"
-          label="Copy fix prompt"
-          text={fixPrompt}
-          variant="secondary"
-        />
-      </FrameCardTop>
+
     </FrameCard>
   );
 }

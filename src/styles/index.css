@@ -333,3 +333,22 @@
     font-family: 'Nib Pro', 'Geist', sans-serif;
   }
 }
+
+/* Keep the example report complete when printing to PDF. */
+@media print {
+  .report-document {
+    height: auto !important;
+    overflow: visible !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .report-document [data-slot="frame-card"] { break-inside: avoid; }
+  .report-document [data-slot="frame-card"]:has(table) { break-inside: auto; }
+  .report-document [data-slot="frame-card-content"],
+  .report-document [data-slot="table-container"] { overflow: visible; }
+  .report-document thead { display: table-header-group; }
+  .report-document tr { break-inside: avoid; }
+  .report-document h1, .report-document h2, .report-document h3 { break-after: avoid; }
+  .report-document th, .report-document td { white-space: normal; }
+  [data-feedback-toolbar] { display: none !important; }
+}

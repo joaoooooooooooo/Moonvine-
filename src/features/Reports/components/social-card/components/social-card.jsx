@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useSocialCard } from "@/features/Reports/components/social-card/hooks/use-social-card";
 
 export function SocialCard({
+  sourceUrl,
   actionIcon,
   avatarAlt,
   avatarFallback,
@@ -47,13 +48,13 @@ export function SocialCard({
       withFill={withFill}
     >
       <FrameCardContent className="gap-0 p-0 shadow-none before:shadow-none">
-        <div className="relative aspect-video w-full shrink-0 overflow-hidden bg-muted">
+        <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-muted">
           {thumbnailSrc && thumbnailSrc !== failedThumbnailSrc ? (
             <img
               alt={thumbnailAlt}
-              className={cn("size-full object-cover", thumbnailClassName)}
+              className={cn("size-full object-contain", thumbnailClassName)}
               src={thumbnailSrc}
-              loading="lazy"
+              loading="eager"
               onError={() => setFailedThumbnailSrc(thumbnailSrc)}
             />
           ) : (
@@ -118,6 +119,7 @@ export function SocialCard({
             <h3 className="text-xl leading-7 font-medium tracking-[-0.01em] text-foreground [text-wrap:balance]">
               {title}
             </h3>
+            {sourceUrl && <a href={sourceUrl} className="block text-xs text-muted-foreground underline underline-offset-4">Source: {name} on LinkedIn</a>}
             {description && (
               <p className="text-sm leading-6 text-muted-foreground [text-wrap:pretty]">
                 {description}

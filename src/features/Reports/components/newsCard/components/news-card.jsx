@@ -27,7 +27,7 @@ export function NewsCard({
       <FrameCardContent className="gap-0 p-0 shadow-none before:shadow-none">
         <div className="aspect-video w-full shrink-0 overflow-hidden bg-muted">
           {imageSrc ? (
-            <img src={imageSrc} alt={imageAlt} loading="lazy" className="size-full object-cover" />
+            <img src={imageSrc} alt={imageAlt} loading="eager" className="size-full object-cover" />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
               <ImageIcon aria-hidden="true" className="size-8 stroke-1" />

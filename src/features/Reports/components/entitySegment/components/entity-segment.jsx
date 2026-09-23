@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 export function EntitySegment({
+  staticView = false,
   chartData,
   chartViews,
   className,
@@ -97,14 +98,14 @@ export function EntitySegment({
     <div className={cn("flex flex-col", className)}>
       <FrameCard className="w-full" withFill>
         <FrameCardTop className="h-auto p-2">
-          <EntityChartTabs
+          {staticView ? <h3 className="px-2 py-1 text-sm font-medium">{currentChartView?.tabLabel}</h3> : <EntityChartTabs
             items={resolvedChartViews.map((item) => ({
               label: item.tabLabel,
               value: item.value,
             }))}
             onValueChange={setActiveChartView}
             value={currentChartView?.value}
-          />
+          />}
         </FrameCardTop>
         <FrameCardContent className="gap-0 p-4 sm:p-5 lg:p-8">
           <div className="flex w-full flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">

@@ -1,8 +1,5 @@
-import { ReportTablePagination } from "@/features/Reports/components/reportControls";
-import { useState } from "react";
-import { getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { ChevronsUpDownIcon, ChevronUpIcon, ChevronDownIcon } from "lucide-react";
-import { FrameCard, FrameCardContent, FrameCardTop } from "@/components/ui/frame-card";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const columns = [
@@ -17,30 +14,15 @@ const columns = [
   },
 ];
 
-export function QuestionsTable({ questions, toolbar }) {
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
-  const [sorting, setSorting] = useState([]);
+export function QuestionsTable({ questions }) {
   const table = useReactTable({
     data: questions,
     columns,
     getRowId: (row) => row.id,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    enableSortingRemoval: false,
-    onSortingChange: (updater) => {
-      setSorting(updater);
-      setPagination((current) => ({ ...current, pageIndex: 0 }));
-    },
-    onPaginationChange: setPagination,
-    state: { pagination, sorting },
   });
-  const mentionsColumn = table.getColumn("mentions");
-  const mentionsOrder = mentionsColumn.getIsSorted();
-  const SortIcon = mentionsOrder === "asc" ? ChevronUpIcon : mentionsOrder === "desc" ? ChevronDownIcon : ChevronsUpDownIcon;
   return (
     <FrameCard className="w-full" withFill>
-      {toolbar && <FrameCardTop className="h-auto p-3">{toolbar}</FrameCardTop>}
       <FrameCardContent className="gap-0 p-0 shadow-none before:shadow-none">
       <Table className="[&_th]:px-5 [&_td]:px-5">
         <caption className="sr-only">Questions asked in the report sample and their mention counts</caption>
@@ -48,17 +30,7 @@ export function QuestionsTable({ questions, toolbar }) {
           <TableRow>
             <TableHead scope="col">Question</TableHead>
             <TableHead scope="col">Type</TableHead>
-            <TableHead scope="col" className="text-right" aria-sort={mentionsOrder === "asc" ? "ascending" : mentionsOrder === "desc" ? "descending" : "none"}>
-              <button
-                type="button"
-                className="inline-flex min-h-10 cursor-pointer items-center justify-end gap-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                onClick={mentionsColumn.getToggleSortingHandler()}
-                aria-label={`Mentions: sort ${mentionsOrder === "asc" ? "high to low" : "low to high"}`}
-              >
-                Mentions
-                <SortIcon aria-hidden="true" className="size-4 shrink-0" />
-              </button>
-            </TableHead>
+            <TableHead scope="col" className="text-right">Mentions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -77,9 +49,7 @@ export function QuestionsTable({ questions, toolbar }) {
         </TableBody>
       </Table>
       </FrameCardContent>
-      <FrameCardTop className="h-auto p-3">
-        <ReportTablePagination table={table} />
-      </FrameCardTop>
+
     </FrameCard>
   );
 }
