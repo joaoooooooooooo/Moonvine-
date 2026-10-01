@@ -25,10 +25,10 @@ function applyTheme(nextTheme) {
 export function useThemePreference() {
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") {
-      return "system";
+      return "dark";
     }
 
-    return window.localStorage.getItem(THEME_STORAGE_KEY) ?? "system";
+    return window.localStorage.getItem(THEME_STORAGE_KEY) ?? "dark";
   });
 
   useEffect(() => {
