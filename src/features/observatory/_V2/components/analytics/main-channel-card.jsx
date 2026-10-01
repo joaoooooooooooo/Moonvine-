@@ -17,12 +17,9 @@ export function MainChannelCard({ lens }) {
           <p className="text-xl/normal font-normal tracking-tight">{channel}</p>
           <p className="text-xs/normal text-muted-foreground">{formatMetric(visits)} visits · {share}% of total</p>
         </div>
-        <Progress value={share} aria-label={`${channel} share of visits`} className="mt-auto">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xl/normal font-normal tabular-nums">{share}%</span>
-            <span className="text-xs text-muted-foreground">Of visits</span>
-          </div>
-          <ProgressTrack className="h-2"><ProgressIndicator className="bg-white" /></ProgressTrack>
+        <Progress value={share} aria-label={`${channel} share of visits`} className="mt-auto gap-4">
+          <span className="text-[64px]/none font-normal tabular-nums tracking-tight">{share}%</span>
+          <ProgressTrack className="h-2"><ProgressIndicator className="bg-foreground" /></ProgressTrack>
         </Progress>
       </FrameCardContent>
     </FrameCard>

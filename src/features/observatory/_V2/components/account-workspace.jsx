@@ -14,7 +14,7 @@ export function AccountWorkspace({ model }) {
   const [reportOpen, setReportOpen] = useState(false);
   const latestReport = reports.find((report) => report.accountId === account.id);
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 [&>:first-child]:pb-4">
       <div className="min-w-0 space-y-4">
         <PageHeading title={account.description} />
         <div className="flex flex-wrap items-center gap-3">

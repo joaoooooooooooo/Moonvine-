@@ -1,6 +1,6 @@
 import { FileText } from 'lucide-react';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
-import { Badge } from '@/components/ui/badge';
+import { RankedMetricRow } from '../ranked-metric-row';
 import { analyticsTopPages } from '../../data/analytics-top-pages';
 
 // Adapted from Reports RankItem for landing-page paths and visit shares.
@@ -20,14 +20,7 @@ export function TopPagesChart({ total }) {
         </div>
         <ol className="flex w-full flex-col gap-2" aria-label="Pages ranked by visits">
           {pages.map(({ path, visits, share }) => (
-            <li key={path} className="relative isolate flex min-h-9 items-center justify-between gap-3 overflow-hidden rounded-md border px-3 py-1.5">
-              <div aria-hidden="true" className="absolute inset-y-0 left-0 bg-secondary" style={{ width: `${share}%` }} />
-              <span className="relative min-w-0 truncate text-sm" title={path}>{path}</span>
-              <div className="relative flex shrink-0 items-center gap-2">
-                <Badge variant="secondary">{visits.toLocaleString('en-US')} visits</Badge>
-                <span className="text-xs text-muted-foreground">{share.toFixed(0)}%</span>
-              </div>
-            </li>
+            <RankedMetricRow key={path} label={path} value={visits} share={share} unit="visits" shareLabel="Share of total visits" />
           ))}
         </ol>
       </FrameCardContent>

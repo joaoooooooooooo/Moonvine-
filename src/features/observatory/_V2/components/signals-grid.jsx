@@ -12,13 +12,13 @@ export function SignalsGrid({ account, lenses }) {
   const website = lenses.find((lens) => lens.id === 'website');
   return (
     <section aria-label="Signals" className="space-y-3">
-      <div className="v2-signals-grid grid gap-3 items-stretch sm:grid-cols-2 xl:grid-cols-5">
+      <div className="v2-signals-grid grid items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {lenses.filter((lens) => lens.id !== 'search' && lens.id !== 'website').map((lens) => <SignalCard key={lens.sourceId} accountId={account.id} lens={lens} />)}
       </div>
-      <div className="v2-signals-grid grid gap-3 items-stretch sm:grid-cols-2 xl:grid-cols-4">
-        {search && <SearchClicksChart hideAxes className="min-w-0 sm:col-span-2" data={searchClicksSeries(search)} href={accountHref(account.id, search.sourceId)} />}
-        {website && <SiteStatCard variant="full" className="h-full min-w-0 max-w-none" chartClassName="max-w-[24rem] self-center" title="Performance" description={scoreDescriptions.Performance} score={website.value} metric={website.metric} change={`${website.delta > 0 ? '+' : ''}${website.delta} pts`} negative={website.delta < 0} href={accountHref(account.id, website.sourceId)} />}
-        <SourcePresenceCard account={account} />
+      <div className="v2-signals-grid grid items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-6">
+        {search && <SearchClicksChart hideAxes className="min-w-0 sm:col-span-2 lg:col-span-6" data={searchClicksSeries(search)} href={accountHref(account.id, search.sourceId)} />}
+        {website && <SiteStatCard variant="full" className="h-full min-w-0 max-w-none lg:col-span-3" chartClassName="max-w-[24rem] self-center" title="Performance" description={scoreDescriptions.Performance} score={website.value} metric={website.metric} change={`${website.delta > 0 ? '+' : ''}${website.delta} pts`} negative={website.delta < 0} href={accountHref(account.id, website.sourceId)} />}
+        <SourcePresenceCard account={account} className="lg:col-span-3" />
       </div>
     </section>
   );

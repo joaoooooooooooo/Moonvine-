@@ -36,8 +36,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const LEGEND = [
-  { key: "current", label: "This week", swatch: "border-[#171717] dark:border-[#fafafa]" },
-  { key: "previous", label: "Last week", swatch: "border-[#d4d4d4] dark:border-[#525252]" },
+  { key: "current", label: "This week", swatch: "bg-[#171717] dark:bg-[#fafafa]" },
+  { key: "previous", label: "Last week", swatch: "bg-[#d4d4d4] dark:bg-[#525252]" },
 ];
 
 const TOTAL = chartData.reduce((sum, { current }) => sum + current, 0);
@@ -61,7 +61,7 @@ export function EChartsShipmentsLineChart() {
               key={key}
               className="text-muted-foreground flex items-center gap-1.5 text-[11px] sm:text-xs"
             >
-              <span className={cn("size-2.5 shrink-0 rounded-full border-2", swatch)} />
+              <span className={cn("size-2.5 shrink-0 rounded-full", swatch)} />
               {label}
             </span>
           ))}

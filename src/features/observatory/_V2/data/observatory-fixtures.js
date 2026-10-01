@@ -45,6 +45,13 @@ export const lensDefinitions = [{
   value: 68,
   unit: "%",
   delta: 8,
+  sampleQuestions: 25,
+  websiteCitations: 0,
+  providerCoverage: [
+    { name: "ChatGPT", completed: 25, planned: 25 },
+    { name: "Gemini", completed: 25, planned: 25 },
+    { name: "Perplexity", completed: 25, planned: 25 }
+  ],
   description: "How often AI answers include your brand in relevant recommendations.",
 
   evidence: [

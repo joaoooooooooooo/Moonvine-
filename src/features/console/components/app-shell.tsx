@@ -13,8 +13,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 				<AppSidebar />
 				<SidebarInset>
 					<AppHeader />
-					<div className="flex min-w-0 flex-1 flex-col gap-4 overflow-y-auto p-4 md:p-6">
-						{children}
+					<div className="min-w-0 flex-1 overflow-y-auto p-4 md:p-6">
+						<div className="mx-auto flex w-full max-w-4xl min-w-0 flex-col gap-4">
+							{children}
+						</div>
 					</div>
 				</SidebarInset>
 			</SidebarProvider>

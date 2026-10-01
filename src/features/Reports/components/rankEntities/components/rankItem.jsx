@@ -11,6 +11,7 @@ export function RankItem({
   label = "superside.com",
   value = 12,
   valueLabel = "Citations",
+  percentageLabel,
 }) {
   const boundedFill = Math.min(Math.max(fillPercentage, 0), 100);
 
@@ -45,6 +46,7 @@ export function RankItem({
         {isCompetitor && <ReportBadge segment="competitor" size="sm" desktopSize="default" />}
         </div>
       </div>
+      <div className="relative z-10 flex shrink-0 items-center gap-2">
       <Badge
         className="z-10 tracking-[0.12px]"
         size="default"
@@ -52,6 +54,8 @@ export function RankItem({
       >
         {value} {valueLabel}
       </Badge>
+      {percentageLabel && <span className="text-xs tabular-nums text-muted-foreground">{percentageLabel}</span>}
+      </div>
     </li>
   );
 }

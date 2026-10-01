@@ -24,7 +24,7 @@ export function DirectoryPage({ type }) {
     : accounts.flatMap((account) => Array.from({ length: account.entities }, (_, i) => ({ id: account.id + i, name: i === 0 ? account.name : 'Watched organization ' + (i + 1), domain: account.name, accountId: account.id })));
   const filtered = rows.filter((row) => (row.name + ' ' + row.domain).toLowerCase().includes(query.toLowerCase())).sort((a, b) => a.name.localeCompare(b.name) * (ascending ? 1 : -1));
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 [&>:first-child]:pb-4">
       <PageHeading title={surface.detail} />
       <ObservatoryTable label={surface.label} totalRows={rows.length} pagination={{ total: filtered.length, pageIndex, pageSize, onPageChange: setPageIndex }} toolbar={
           <div className="flex flex-wrap items-center gap-3">

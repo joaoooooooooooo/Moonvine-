@@ -17,8 +17,10 @@ export function AppShell({ model, children }) {
         <SidebarInset className="bg-card">
           <AppHeader model={model} />
           <ScrollArea ref={scrollArea} className="h-auto min-w-0 flex-1" overscrollContain>
-            <div className="flex min-w-0 flex-col gap-4 p-5 md:p-8" data-v2-page-content>
-              {children}
+            <div className="p-5 pt-8 md:p-8 md:pt-12">
+              <div className="mx-auto flex w-full max-w-4xl min-w-0 flex-col gap-4" data-v2-page-content>
+                {children}
+              </div>
             </div>
           </ScrollArea>
         </SidebarInset>

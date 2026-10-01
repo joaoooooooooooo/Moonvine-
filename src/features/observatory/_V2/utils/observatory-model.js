@@ -18,7 +18,18 @@ export function buildLenses(account, period = 'current') {
       const amount = period === 'previous' ? lens.unit ? current - lens.delta : current / (1 + lens.delta / 100) : current;
       return Math.max(0, Math.round(lens.unit ? Math.min(amount, 100) : amount));
     };
-    return { ...lens, value: scale(lens.value), rows: lens.rows.map(([label, amount]) => [label, scale(amount)]),
+    // The demo provider percentages and check totals supply the displayed mention counts.
+    const providerCoverage = lens.providerCoverage?.map((provider) => {
+      const providerRate = lens.rows.find(([name]) => name === provider.name)?.[1];
+      if (providerRate == null) return provider;
+      const currentRate = scale(providerRate);
+      const previousRate = Math.max(0, Math.min(100, currentRate - lens.delta));
+      return { ...provider,
+        mentions: Math.round(provider.completed * currentRate / 100),
+        previousMentions: Math.round(provider.completed * previousRate / 100),
+      };
+    });
+    return { ...lens, providerCoverage, value: scale(lens.value), rows: lens.rows.map(([label, amount]) => [label, scale(amount)]),
       summary: formatMetric(scale(lens.value), lens.unit) + ' ' + lens.metric.toLowerCase() + '.' };
   });
 }

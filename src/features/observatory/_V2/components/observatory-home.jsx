@@ -6,10 +6,10 @@ import './signals-grid.css';
 
 export function ObservatoryHome() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 [&>:first-child]:pb-4">
       <PageHeading title="Welcome back to Observatory." />
       <nav aria-label="Observatory directory" className="space-y-3">
-        <div className="v2-signals-grid grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="v2-signals-grid grid gap-3 sm:grid-cols-2">
         {directorySurfaces.map(({ id, label, detail, icon: Icon }) => (
           <FrameCard key={id} render={<a href={'#/console/' + id} />} withFill className="h-full min-w-0 outline-none">
             <FrameCardContent className="h-full min-h-60 items-start justify-start gap-7 p-6 text-start">

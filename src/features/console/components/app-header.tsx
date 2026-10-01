@@ -21,17 +21,19 @@ export function AppHeader() {
 				"sticky top-0 z-50 flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-background px-4 md:px-6"
 			)}
 		>
-			<div className="flex items-center gap-2">
-				<SidebarTrigger className="md:hidden" />
-				<Separator
-					className="mr-2 data-[orientation=vertical]:h-4 md:hidden"
-					orientation="vertical"
-				/>
-				<AppBreadcrumbs page={activeItem} />
-			</div>
-			<div className="flex items-center gap-2">
-				<AvatarMenuSearchCommand />
-				<ThemeSwitcherDropdown />
+			<div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-2">
+				<div className="flex items-center gap-2">
+					<SidebarTrigger className="md:hidden" />
+					<Separator
+						className="mr-2 data-[orientation=vertical]:h-4 md:hidden"
+						orientation="vertical"
+					/>
+					<AppBreadcrumbs page={activeItem} />
+				</div>
+				<div className="flex items-center gap-2">
+					<AvatarMenuSearchCommand />
+					<ThemeSwitcherDropdown />
+				</div>
 			</div>
 		</header>
 	);

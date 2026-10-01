@@ -5,11 +5,12 @@ import { Eye } from 'lucide-react';
 import { CardCaret } from './card-caret';
 import { sourcePresenceData } from '../data/source-presence';
 import { accountHref } from '../utils/observatory-model';
+import { cn } from '@/lib/utils';
 
-export function SourcePresenceCard({ account }) {
+export function SourcePresenceCard({ account, className }) {
   const data = sourcePresenceData(account);
   return (
-    <FrameCard render={<a href={accountHref(account.id, 'insight:ai-visibility')} />} className="h-full min-w-0 w-full" withFill>
+    <FrameCard render={<a href={accountHref(account.id, 'insight:ai-visibility')} />} className={cn('h-full min-w-0 w-full', className)} withFill>
       <FrameCardContent className="h-full gap-7 p-6">
         <div className="v2-card-tagline flex items-center justify-between gap-3"><h2 className="flex items-center gap-2 text-sm/normal font-normal">
           <Eye aria-hidden="true" className="size-4 shrink-0" />

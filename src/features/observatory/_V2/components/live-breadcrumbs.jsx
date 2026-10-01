@@ -6,11 +6,11 @@ export function LiveBreadcrumbs({ account, accounts, route, current }) {
     <Breadcrumb aria-label="Breadcrumb" className="min-w-0">
       <BreadcrumbList className="flex-nowrap">
         {(account || current !== 'Observatory') && <><BreadcrumbItem className="hidden sm:inline-flex"><BreadcrumbLink href="#/console">Observatory</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator className="hidden sm:block" /></>}
+        {current && <BreadcrumbItem className="min-w-0"><BreadcrumbPage className="truncate">{current}</BreadcrumbPage></BreadcrumbItem>}
         {account && <>
-          <BreadcrumbItem className="min-w-0"><ClientPeriodSwitcher account={account} accounts={accounts} route={route} /></BreadcrumbItem>
           {current && <BreadcrumbSeparator className="hidden md:block" />}
+          <BreadcrumbItem className="min-w-0"><ClientPeriodSwitcher account={account} accounts={accounts} route={route} /></BreadcrumbItem>
         </>}
-        {current && <BreadcrumbItem className={account ? 'hidden min-w-0 md:inline-flex' : 'min-w-0'}><BreadcrumbPage className="truncate">{current}</BreadcrumbPage></BreadcrumbItem>}
       </BreadcrumbList>
     </Breadcrumb>
   );

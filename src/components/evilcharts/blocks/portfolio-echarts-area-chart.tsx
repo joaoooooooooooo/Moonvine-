@@ -53,8 +53,8 @@ export function EChartsPortfolioAreaChart() {
           <div key={key} className="flex flex-col gap-1">
             <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <span
-                className="size-3 shrink-0 rounded-full border-2"
-                style={{ borderColor: color }}
+                className="size-3 shrink-0 rounded-full"
+                style={{ backgroundColor: color }}
               />
               {label}
             </div>

@@ -19,27 +19,8 @@ export function VisitorSourcesChart({ lens }) {
           <Route aria-hidden="true" className="size-4 shrink-0" />
           <h2 className="text-sm/normal font-normal">Where visitors come from</h2>
         </div>
-        <div className="grid w-full items-start justify-items-start gap-6 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-          <div className="w-full min-w-0 max-w-sm space-y-6">
-            <div className="space-y-2">
-              <h2 className="text-xl/normal font-normal">Where visits came from</h2>
-              <p className="text-sm text-muted-foreground">The channels people used to reach your website.</p>
-            </div>
-            <Table aria-label="Visits by channel">
-              <TableBody>
-              {data.map(({ channel, label, value, color, share }) => (
-                <TableRow key={channel}>
-                  <TableCell className="whitespace-normal py-3"><span className="flex items-center gap-2">
-                  <span aria-hidden="true" className="size-2.5 shrink-0 rounded-sm" style={{ background: color }} />
-                  <span>{label}</span>
-                  </span></TableCell>
-                  <TableCell className="py-3 text-right tabular-nums text-muted-foreground">{formatMetric(value)}<span className="sr-only"> visits</span></TableCell>
-                  <TableCell className="py-3 text-right tabular-nums">{share.toFixed(0)}%</TableCell>
-                </TableRow>
-              ))}
-              </TableBody>
-            </Table>
-          </div>
+        <div className="flex w-full min-w-0 flex-col gap-6">
+          <h2 className="text-xl/normal font-normal">Where visits came from</h2>
           <div className="relative mx-auto aspect-square w-full max-w-96 [--background:var(--card)]">
             <EChartsPieChart className="h-full w-full" config={config} data={data} dataKey="value" nameKey="channel">
               <EChartsPieChart.Tooltip />
@@ -50,6 +31,20 @@ export function VisitorSourcesChart({ lens }) {
               <span className="text-xs text-muted-foreground">Total visits</span>
             </div>
           </div>
+          <Table aria-label="Visits by channel" className="w-full">
+            <TableBody>
+            {data.map(({ channel, label, value, color, share }) => (
+              <TableRow key={channel}>
+                <TableCell className="whitespace-normal py-3"><span className="flex items-center gap-2">
+                <span aria-hidden="true" className="size-2.5 shrink-0 rounded-sm" style={{ background: color }} />
+                <span>{label}</span>
+                </span></TableCell>
+                <TableCell className="py-3 text-right tabular-nums text-muted-foreground">{formatMetric(value)}<span className="sr-only"> visits</span></TableCell>
+                <TableCell className="py-3 text-right tabular-nums">{share.toFixed(0)}%</TableCell>
+              </TableRow>
+            ))}
+            </TableBody>
+          </Table>
         </div>
       </FrameCardContent>
     </FrameCard>
