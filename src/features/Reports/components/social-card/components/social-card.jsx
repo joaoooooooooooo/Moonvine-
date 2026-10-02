@@ -13,12 +13,17 @@ export function SocialCard({
   avatarAlt,
   avatarFallback,
   avatarSrc,
+  authorPosition = "top",
+  headingBadge,
+  header,
+  thumbnailFrameClassName,
   badge,
   badgeIcon,
   badgeLabel = "Competitor",
   badgeVariant = "warning",
   className,
   description,
+  footer,
   icon,
   metaLabel = "LinkedIn",
   name = "Apta Agency",
@@ -48,7 +53,8 @@ export function SocialCard({
       withFill={withFill}
     >
       <FrameCardContent className="gap-0 p-0 shadow-none before:shadow-none">
-        <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-muted">
+        {header}
+        <div className={cn("relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-muted", thumbnailFrameClassName)}>
           {thumbnailSrc && thumbnailSrc !== failedThumbnailSrc ? (
             <img
               alt={thumbnailAlt}
@@ -66,9 +72,9 @@ export function SocialCard({
         </div>
 
         <div className="flex w-full flex-col gap-4 p-5">
-          <div className="flex w-full items-start justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-1">
-              <Avatar className="size-9 bg-muted text-muted-foreground">
+          {!header && <div className={cn("flex w-full items-start justify-between gap-3", authorPosition === "bottom" && "order-last mt-auto")}>
+            <div className={cn("flex min-w-0 items-center gap-1", authorPosition === "bottom" && "items-stretch gap-2")}>
+              <Avatar className="aspect-square size-9 bg-muted text-muted-foreground">
                 {avatarSrc ? (
                   <AvatarImage alt={avatarAlt || `${name} avatar`} src={avatarSrc} />
                 ) : null}
@@ -113,9 +119,10 @@ export function SocialCard({
                 ) : null}
               </div>
             ) : null}
-          </div>
+          </div>}
 
           <div className="w-full space-y-2">
+            {headingBadge}
             <h3 className="text-xl leading-7 font-medium tracking-[-0.01em] text-foreground [text-wrap:balance]">
               {title}
             </h3>
@@ -126,6 +133,7 @@ export function SocialCard({
               </p>
             )}
           </div>
+          {footer}
         </div>
       </FrameCardContent>
     </FrameCard>

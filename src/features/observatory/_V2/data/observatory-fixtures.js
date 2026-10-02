@@ -1,6 +1,7 @@
 // Synthetic, deterministic fixtures. Never read production credentials or services.
 export const accounts = [{
   id: "northstar",
+  imageSrc: "/entity-profiles/northstar.svg",
   name: "Northstar Studio",
   domain: "northstar.example",
   initials: "NS",
@@ -10,6 +11,7 @@ export const accounts = [{
   description: "Independent strategy and design studio."
 }, {
   id: "canopy",
+  imageSrc: "/entity-profiles/canopy.svg",
   name: "Canopy Living",
   domain: "canopy.example",
   initials: "CL",
@@ -19,6 +21,7 @@ export const accounts = [{
   description: "Thoughtful products for everyday living."
 }, {
   id: "meridian",
+  imageSrc: "/entity-profiles/meridian.svg",
   name: "Meridian Group",
   domain: "meridian.example",
   initials: "MG",

@@ -1,0 +1,31 @@
+import { intelligenceItems } from '../../data/intelligence-navigation';
+import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { accountHref } from '../../utils/observatory-model';
+import { useReportReadState } from '../../hooks/use-report-read-state';
+import { ReportStatusDot } from '../report-status-dot';
+
+export function IntelligenceNavigation({ model, onNavigate }) {
+  const { hasUnread } = useReportReadState(model.account.id);
+  return (
+    <SidebarGroup>
+      <SidebarMenu className="gap-2">
+        {intelligenceItems.map(({ label, lens, icon: Icon }) => {
+          const active = (model.route.lensId ?? '') === lens;
+          return (
+            <SidebarMenuItem key={lens}>
+              <SidebarMenuButton className="h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5" isActive={active}
+                render={<a href={accountHref(model.account.id, lens, model.route.period)} aria-current={active ? 'page' : undefined} />}
+                onClick={onNavigate} tooltip={label}>
+                <Icon aria-hidden="true" /><span>{label}</span>
+                {lens === 'report:history' && hasUnread && <ReportStatusDot unread />}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          );
+        })}
+      </SidebarMenu>
+    </SidebarGroup>
+  );
+}
+
+
+

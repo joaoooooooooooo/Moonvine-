@@ -14,7 +14,7 @@ export function AnalyticsCharts({ lens, account }) {
   const visits = searchClicksSeries(lens);
   const engagement = engagementSeries(visits);
   return (
-    <section aria-label="Google Analytics charts" className="space-y-10">
+    <section aria-label="Google Analytics charts" className="v2-page-sections">
       <section aria-label="Traffic and engagement">
         <div className="v2-signals-grid grid items-stretch gap-3 md:grid-cols-2">
           <MetricLineChart compact className="min-w-0" title="Visits" metricLabel="Website visits" icon={ChartNoAxesCombined} data={visits} />
@@ -40,3 +40,4 @@ export function AnalyticsCharts({ lens, account }) {
     </section>
   );
 }
+

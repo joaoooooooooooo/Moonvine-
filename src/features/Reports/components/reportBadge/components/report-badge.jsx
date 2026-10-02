@@ -8,7 +8,7 @@ const segments = {
     label: "Fix",
   },
   competitor: {
-    className: "bg-competitor/8 text-competitor-foreground dark:bg-competitor/16",
+    className: "bg-transparent text-foreground",
     dotClassName: "bg-competitor",
     label: "Competitor",
   },
@@ -21,7 +21,7 @@ export function ReportBadge({
   dotOnly = false,
   icon,
   segment = "warning",
-  size = "lg",
+  size = "default",
   ...props
 }) {
   const config = segments[segment] ?? segments.warning;

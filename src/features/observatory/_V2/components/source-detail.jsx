@@ -1,4 +1,5 @@
 import { SourceOverview } from './source-pages/source-overview';
+import { SocialMediaPage } from './social-media/social-media-page';
 import { PagesToReview } from './site-health/pages-to-review';
 import { PageHeading } from './page-heading';
 import { SiteHealth } from './site-health/site-health';
@@ -13,9 +14,10 @@ import { AiVisibilityProcess } from './ai-visibility/ai-visibility-process';
 
 export function SourceDetail({ model }) {
   const { account, lens, route } = model;
+  if (lens.id === 'social') return <SocialMediaPage account={account} period={route.period} lens={lens} />;
   if (lens.id === 'ai') {
     return (
-      <div className="space-y-14">
+      <div className="v2-page-sections">
         <AiVisibilitySummary account={account} lens={lens} period={route.period} />
         <AiVisibilityMethod lens={lens} />
         <AiVisibilityQuestions account={account} surfaced={Math.round(lens.sampleQuestions * lens.value / 100)} />
@@ -26,13 +28,13 @@ export function SourceDetail({ model }) {
     );
   }
   return (
-    <div className="space-y-10">
+    <div className="v2-page-sections">
       <div className="space-y-2">
         <PageHeading title={lens.description} />
-        {lens.id !== 'website' && <p className="max-w-[45ch] text-base leading-6 text-muted-foreground">{lens.summary}</p>}
+        {lens.id !== 'website' && <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">{lens.summary}</p>}
       </div>
       {lens.id === 'analytics' ? <AnalyticsCharts lens={lens} account={account} /> : lens.id === 'website' ? (
-        <div className="space-y-10">
+        <div className="v2-page-sections">
           <SiteHealth lens={lens} account={account} />
           <SectionDivider />
           <PagesToReview key={account.id + route.period} account={account} />
@@ -41,3 +43,5 @@ export function SourceDetail({ model }) {
     </div>
   );
 }
+
+

@@ -4,8 +4,8 @@ import { MetricComparison } from '../metric-comparison';
 import '../signals-grid.css';
 
 export function ProviderCoverage({ providers, period = 'current' }) {
-  const currentLabel = period === 'previous' ? 'last week' : 'this week';
-  const previousLabel = period === 'previous' ? 'the week before' : 'last week';
+  const currentLabel = period === 'current' ? 'this week' : period === 'previous' ? 'last week' : 'this report week';
+  const previousLabel = period === 'current' ? 'last week' : 'the week before';
   return (
     <section aria-label="Provider coverage" className="v2-signals-grid grid items-stretch gap-3 sm:grid-cols-3">
       {providers.map(({ name, completed, planned, mentions, previousMentions }) => (

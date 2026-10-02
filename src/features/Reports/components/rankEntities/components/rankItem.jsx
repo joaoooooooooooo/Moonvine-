@@ -43,7 +43,7 @@ export function RankItem({
         <p className="truncate text-lg/normal font-normal text-foreground">
           {label}
         </p>
-        {isCompetitor && <ReportBadge segment="competitor" size="sm" desktopSize="default" />}
+        {isCompetitor && <ReportBadge segment="competitor" size="default" />}
         </div>
       </div>
       <div className="relative z-10 flex shrink-0 items-center gap-2">

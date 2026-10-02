@@ -12,7 +12,7 @@ export function AccountProfile({ model }) {
   const [name, setName] = useState(account.name);
   const [domain, setDomain] = useState(account.domain);
   return (
-    <div className="space-y-6 [&>:first-child]:pb-4">
+    <div className="v2-page-sections">
       <PageHeading title="Manage the organization name and domain." />
       <Card>
         <Form className="contents" onSubmit={(event) => { event.preventDefault(); saveProfile({ name: name.trim(), domain: domain.trim() }); }}>
@@ -26,3 +26,4 @@ export function AccountProfile({ model }) {
     </div>
   );
 }
+

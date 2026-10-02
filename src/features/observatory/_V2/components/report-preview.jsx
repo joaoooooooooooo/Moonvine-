@@ -1,8 +1,11 @@
 import { Dialog, DialogPopup, DialogHeader, DialogTitle, DialogDescription, DialogPanel, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useEffect } from 'react';
+import { markReportOpened } from '../hooks/use-report-read-state';
 
 export function ReportPreview({ report, onClose }) {
+  useEffect(() => { if (report) markReportOpened(report.id); }, [report]);
   return (
     <Dialog open={Boolean(report)} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogPopup>

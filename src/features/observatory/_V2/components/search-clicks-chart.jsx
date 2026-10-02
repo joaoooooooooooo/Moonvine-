@@ -28,7 +28,7 @@ const LEGEND = [
   { key: "previous", label: "Last week", swatch: "bg-[#d4d4d4] dark:bg-[#525252]" },
 ];
 
-function ReportsLineChartCanvas({ className, data = chartData, curveType = 'linear', color, percentage = false, compact = false, hideAxes = compact }) {
+function ReportsLineChartCanvas({ className, data = chartData, curveType = 'linear', color, percentage = false, compact = false, hideAxes = compact, hideYAxis = false }) {
   return (
     <div className={cn("min-h-0 w-full", compact ? "h-40" : "h-[16rem] sm:h-[18rem] lg:h-[20rem]", className)}>
       <EChartsLineChart
@@ -39,7 +39,7 @@ function ReportsLineChartCanvas({ className, data = chartData, curveType = 'line
         xDataKey="day"
       >
         <EChartsLineChart.Grid />
-        {!hideAxes && <EChartsLineChart.YAxis tickFormatter={percentage ? (value) => `${value}%` : undefined} />}
+        {!hideAxes && !hideYAxis && <EChartsLineChart.YAxis tickFormatter={percentage ? (value) => `${value}%` : undefined} />}
         {!hideAxes && <EChartsLineChart.XAxis dataKey="day" />}
         <EChartsLineChart.Tooltip />
         <EChartsLineChart.Line
@@ -55,7 +55,7 @@ function ReportsLineChartCanvas({ className, data = chartData, curveType = 'line
   );
 }
 
-export function MetricLineChart({ className, variant = "default", data = chartData, href, title = 'Google Search', metricLabel = 'Google Search clicks', icon: Icon = Search, curveType = 'linear', color, percentage = false, metricValue, comparisonLabel, compact = false, hideAxes = compact }) {
+export function MetricLineChart({ className, variant = "default", data = chartData, href, title = 'Google Search', metricLabel = 'Google Search clicks', icon: Icon = Search, curveType = 'linear', color, percentage = false, metricValue, comparisonLabel, compact = false, hideAxes = compact, hideYAxis = false }) {
 const TOTAL = data.reduce((sum, { current }) => sum + current, 0);
 const PREVIOUS_TOTAL = data.reduce((sum, { previous }) => sum + previous, 0);
 const CHANGE_PERCENT = PREVIOUS_TOTAL ? ((TOTAL - PREVIOUS_TOTAL) / PREVIOUS_TOTAL) * 100 : 0;
@@ -63,7 +63,7 @@ const COMPARISON_LABEL = `${CHANGE_PERCENT >= 0 ? "+" : ""}${CHANGE_PERCENT.toFi
 
 
   if (variant === "lines") {
-    return <ReportsLineChartCanvas className={className} data={data} curveType={curveType} color={color} percentage={percentage} compact={compact} hideAxes={hideAxes} />;
+    return <ReportsLineChartCanvas className={className} data={data} curveType={curveType} color={color} percentage={percentage} compact={compact} hideAxes={hideAxes} hideYAxis={hideYAxis} />;
   }
 
   return (
@@ -95,7 +95,7 @@ const COMPARISON_LABEL = `${CHANGE_PERCENT >= 0 ? "+" : ""}${CHANGE_PERCENT.toFi
                 </span>
               ))}
             </div>
-          <ReportsLineChartCanvas className="grow" data={data} curveType={curveType} color={color} percentage={percentage} compact={compact} hideAxes={hideAxes} />
+          <ReportsLineChartCanvas className="grow" data={data} curveType={curveType} color={color} percentage={percentage} compact={compact} hideAxes={hideAxes} hideYAxis={hideYAxis} />
   
         </div>
       </FrameCardContent>

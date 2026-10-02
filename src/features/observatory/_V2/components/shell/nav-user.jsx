@@ -9,7 +9,7 @@ export function NavUser({ model }) {
   const { isMobile, setOpenMobile } = useSidebar();
   const { theme, setTheme } = useThemePreference();
   return (
-    <SidebarMenu className="h-14 border-b px-2 py-2"><SidebarMenuItem>
+    <SidebarMenu className="h-14 border-b px-3 py-2"><SidebarMenuItem>
       <Menu>
         <MenuTrigger render={<SidebarMenuButton className="h-10 text-muted-foreground" aria-label="Open workspace menu" />}>
           <Avatar className="size-5"><AvatarFallback>A</AvatarFallback></Avatar>

@@ -17,7 +17,7 @@ export function AiVisibilitySummary({ account, lens, period }) {
           <h1 id="ai-visibility-heading" className="max-w-[32rem] font-heading text-3xl font-normal leading-tight tracking-tight sm:text-4xl">
             {account.name} surfaced in <span className={visibilityColors[tone]}>{surfaced} of {total}</span> focused AI questions.
           </h1>
-        <p className="max-w-[45ch] text-base leading-6 text-muted-foreground">
+        <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">
           We checked focused questions across ChatGPT, Gemini, and Perplexity to see how often {account.name} appeared in the answers.
         </p>
       </div>
@@ -25,3 +25,4 @@ export function AiVisibilitySummary({ account, lens, period }) {
     </section>
   );
 }
+

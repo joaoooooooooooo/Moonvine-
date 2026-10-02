@@ -1,15 +1,20 @@
 import { accounts } from './observatory-fixtures';
+import { reportWeeks, weekDate, weekLabel } from './report-weeks';
+import { reportRecipients } from './report-recipients';
 
 // Local sample reports; no production reports or delivery actions.
-const weeks = ['Sep 21–27, 2026', 'Sep 14–20, 2026', 'Sep 7–13, 2026', 'Aug 31–Sep 6, 2026', 'Aug 24–30, 2026', 'Aug 17–23, 2026'];
+const weeks = reportWeeks.map(({ start }) => `${weekLabel(start)}, ${weekDate(start).getFullYear()}`);
 export const reports = weeks.flatMap((week, index) => accounts.map((account) => ({
   id: `${account.id}-week-${index}`,
   accountId: account.id,
   accountName: account.name,
+  accountImageSrc: account.imageSrc,
+  recipients: reportRecipients.slice(0, index % 2 === 0 ? 3 : 2),
   initials: account.initials,
-  name: `Weekly report · ${week}`,
+  name: week,
   week,
   status: 'Published',
+  opened: index > 1,
   summary: `A weekly review of ${account.name}'s visibility, website activity, and site health.`,
   highlights: [
     'Review how the brand appears in AI answers and organic search.',
@@ -17,3 +22,4 @@ export const reports = weeks.flatMap((week, index) => accounts.map((account) => 
     'Prioritize website fixes and review coverage from social and media sources.',
   ],
 })));
+

@@ -5,7 +5,9 @@ import { useThemePreference } from '@/components/navigation/avatar-menu/hooks/us
 
 function readRoute() {
   const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
-  const match = url.pathname.match(/^\/console\/client\/([^/]+)\/current$/);
+  const chat = url.pathname.match(/^\/chat\/([^/]+)\/([^/]+)$/);
+  if (chat) return { path: url.pathname, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), lensId: 'intelligence:chat', period: 'current' };
+  const match = url.pathname.match(/^\/(?:intelligence|console)\/client\/([^/]+)\/current$/);
   return { path: url.pathname, accountId: match?.[1] || null, lensId: url.searchParams.get('lens'), period: url.searchParams.get('period') || 'current' };
 }
 
@@ -31,7 +33,9 @@ export function useObservatory() {
   const lens = lenses.find((item) => item.sourceId === route.lensId);
   function saveProfile(values) {
     setProfiles((current) => ({ ...current, [account.id]: values }));
-    window.location.hash = '/console/client/' + account.id + '/current';
+    window.location.hash = '/intelligence/client/' + account.id + '/current';
   }
   return { route, account: currentAccount, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile };
 }
+
+

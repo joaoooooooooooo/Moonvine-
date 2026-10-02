@@ -1,0 +1,12 @@
+.report-week-calendar .week-preview:not([data-selected]) > button {
+  background: var(--accent);
+  border-radius: 0;
+}
+.report-week-calendar tr > .week-preview:first-child > button {
+  border-start-start-radius: var(--radius-lg);
+  border-end-start-radius: var(--radius-lg);
+}
+.report-week-calendar tr > .week-preview:last-child > button {
+  border-start-end-radius: var(--radius-lg);
+  border-end-end-radius: var(--radius-lg);
+}

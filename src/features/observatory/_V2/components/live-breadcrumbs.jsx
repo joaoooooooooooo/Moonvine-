@@ -1,16 +1,11 @@
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { ClientPeriodSwitcher } from './client-period-switcher';
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
-export function LiveBreadcrumbs({ account, accounts, route, current }) {
+export function LiveBreadcrumbs({ account, route, current }) {
   return (
     <Breadcrumb aria-label="Breadcrumb" className="min-w-0">
       <BreadcrumbList className="flex-nowrap">
-        {(account || current !== 'Observatory') && <><BreadcrumbItem className="hidden sm:inline-flex"><BreadcrumbLink href="#/console">Observatory</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator className="hidden sm:block" /></>}
+        {(account || current !== 'Observatory') && <><BreadcrumbItem><span>{route.lensId === 'intelligence:chat' ? 'Chat' : account ? 'Intelligence' : 'Observatory'}</span></BreadcrumbItem><BreadcrumbSeparator /></>}
         {current && <BreadcrumbItem className="min-w-0"><BreadcrumbPage className="truncate">{current}</BreadcrumbPage></BreadcrumbItem>}
-        {account && <>
-          {current && <BreadcrumbSeparator className="hidden md:block" />}
-          <BreadcrumbItem className="min-w-0"><ClientPeriodSwitcher account={account} accounts={accounts} route={route} /></BreadcrumbItem>
-        </>}
       </BreadcrumbList>
     </Breadcrumb>
   );

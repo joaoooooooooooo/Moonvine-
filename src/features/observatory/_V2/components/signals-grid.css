@@ -1,10 +1,14 @@
 @reference "../../../../styles/index.css";
 
 .v2-signals-grid > [data-slot="frame-card"] {
-  @apply bg-card text-card-foreground shadow-xs/5 not-dark:bg-clip-padding;
+  @apply bg-card text-card-foreground shadow-xs/5 not-dark:bg-clip-padding not-dark:border-border/64;
   border-radius: var(--radius-md);
   border-width: 1px;
   padding: 0;
+}
+
+.v2-signals-grid > [data-slot="frame-card"] > [data-slot="frame-card-content"].p-6 {
+  padding: 1.25rem;
 }
 
 /* Match CardFrame's edge treatment used by ObservatoryTable. */
@@ -33,22 +37,22 @@
 }
 
 .v2-signals-grid > a[data-slot="frame-card"] {
-  transition: background-color 150ms ease, border-color 150ms ease;
+  transition: border-color 150ms ease;
 }
 
 @media (hover: hover) {
   .v2-signals-grid > a[data-slot="frame-card"]:hover {
-    background: var(--accent);
     border-color: var(--input);
   }
 }
 
 .v2-card-tagline {
   border-bottom: 1px solid var(--border);
+  @apply not-dark:border-border/64;
   --tagline-overlay: color-mix(in srgb, var(--muted) 72%, transparent);
-  width: calc(100% + 3rem);
-  margin: -1.5rem -1.5rem 0;
-  padding: 0.75rem 1.5rem;
+  width: calc(100% + 2.5rem);
+  margin: -1.25rem -1.25rem 0;
+  padding: 0.75rem 1rem;
   background: linear-gradient(var(--tagline-overlay), var(--tagline-overlay)), var(--card);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }

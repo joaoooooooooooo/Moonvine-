@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { ChevronUp, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { TableProfileAvatar } from './table-profile-avatar';
 import { Badge } from '@/components/ui/badge';
 import { ObservatoryInput as Input } from './observatory-input';
 import { Button } from '@/components/ui/button';
 import { Empty, EmptyHeader, EmptyTitle, EmptyContent } from '@/components/ui/empty';
-import { accounts } from '../data/observatory-fixtures';
+import { directoryRows } from '../data/directory-rows';
 import { directorySurfaces } from '../data/navigation';
 import { accountHref } from '../utils/observatory-model';
 import { PageHeading } from './page-heading';
@@ -19,12 +19,10 @@ export function DirectoryPage({ type }) {
   const pageSize = 10;
   const SortIcon = ascending ? ChevronUp : ChevronDown;
   const surface = directorySurfaces.find((item) => item.id === type);
-  const rows = type === 'accounts' ? accounts : type === 'people'
-    ? accounts.flatMap((account) => Array.from({ length: account.people }, (_, i) => ({ id: account.id + i, name: i === 0 ? 'Jordan Davis' : 'Team member ' + (i + 1), domain: account.name, accountId: account.id })))
-    : accounts.flatMap((account) => Array.from({ length: account.entities }, (_, i) => ({ id: account.id + i, name: i === 0 ? account.name : 'Watched organization ' + (i + 1), domain: account.name, accountId: account.id })));
+  const rows = directoryRows(type);
   const filtered = rows.filter((row) => (row.name + ' ' + row.domain).toLowerCase().includes(query.toLowerCase())).sort((a, b) => a.name.localeCompare(b.name) * (ascending ? 1 : -1));
   return (
-    <div className="space-y-6 [&>:first-child]:pb-4">
+    <div className="v2-page-sections">
       <PageHeading title={surface.detail} />
       <ObservatoryTable label={surface.label} totalRows={rows.length} pagination={{ total: filtered.length, pageIndex, pageSize, onPageChange: setPageIndex }} toolbar={
           <div className="flex flex-wrap items-center gap-3">
@@ -45,14 +43,14 @@ export function DirectoryPage({ type }) {
               <TableRow key={row.id} className="cursor-pointer focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring">
                 <TableCell className="whitespace-normal">
                   <div className="flex items-center gap-3">
-                    <Avatar><AvatarFallback>{row.initials || row.name.split(' ').slice(0, 2).map((part) => part[0]).join('')}</AvatarFallback></Avatar>
+                    <TableProfileAvatar src={row.imageSrc} person={type === 'people'} />
                     <div className="min-w-0">
                       {type === 'accounts' ? <a href={accountHref(row.id)} className="relative z-10 font-medium leading-5 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-ring">{row.name}</a> : <span className="leading-5">{row.name}</span>}
                       <span className="mt-1 block text-xs leading-5 text-muted-foreground sm:hidden">{row.domain}</span>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="hidden text-muted-foreground sm:table-cell">{row.domain}</TableCell>
+                <TableCell className="hidden text-muted-foreground sm:table-cell">{type === 'accounts' ? row.domain : <div className="flex items-center gap-3"><TableProfileAvatar src={row.accountImageSrc} /><span>{row.domain}</span></div>}</TableCell>
                 {type === 'accounts' && <TableCell className="hidden sm:table-cell"><Badge variant="success">Sources available</Badge></TableCell>}
                 <TableCell><a href={accountHref(row.accountId || row.id)} className="inline-flex items-center justify-center text-muted-foreground outline-none after:absolute after:inset-0" aria-label={'Open ' + row.name + ' account'}><ChevronRight aria-hidden="true" className="size-4" /></a></TableCell>
               </TableRow>
@@ -65,3 +63,4 @@ export function DirectoryPage({ type }) {
     </div>
   );
 }
+

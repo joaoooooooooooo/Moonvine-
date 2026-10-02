@@ -1,0 +1,5 @@
+@reference "../../../../styles/index.css";
+
+.v2-page-sections {
+  @apply space-y-16;
+}

@@ -13,7 +13,7 @@ export function SourceOverview({ lens, account }) {
   const presentation = sourcePresentation[lens.id];
   const Icon = lensIcons[lens.id];
   return (
-    <div className="space-y-14">
+    <div className="v2-page-sections">
       <section aria-label={`${lens.label} overview`} className="v2-signals-grid grid items-stretch gap-3 lg:grid-cols-2">
         {lens.id === 'competitors' ? (
           <FrameCard className="h-full min-w-0" withFill>
@@ -33,3 +33,4 @@ export function SourceOverview({ lens, account }) {
     </div>
   );
 }
+

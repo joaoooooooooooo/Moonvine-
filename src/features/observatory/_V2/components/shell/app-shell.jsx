@@ -3,6 +3,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { AppSidebar } from './app-sidebar';
 import { AppHeader } from './app-header';
+import '../page-sections.css';
 
 // Local adaptation of the prototype Console AppShell; page routes stay inside V2.
 export function AppShell({ model, children }) {
@@ -12,7 +13,7 @@ export function AppShell({ model, children }) {
 
   return (
     <div className="relative overflow-hidden">
-      <SidebarProvider open={true} onOpenChange={() => {}} className="relative h-svh w-full" style={{ '--sidebar-width': '14rem' }}>
+      <SidebarProvider open={true} onOpenChange={() => {}} className="relative h-svh w-full" style={{ '--sidebar-width': '15rem' }}>
         <AppSidebar model={model} />
         <SidebarInset className="bg-card">
           <AppHeader model={model} />

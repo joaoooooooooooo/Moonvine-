@@ -7,8 +7,9 @@ export function SourceInsights({ lens, presentation }) {
       <SectionDivider />
       <SectionHeading id={`${lens.id}-insights`} title={presentation.insights} description={presentation.description} />
       <ul className="space-y-6">
-        {lens.evidence.map((text) => <li key={text} className="max-w-[45ch] text-base leading-6 text-muted-foreground">{text}</li>)}
+        {lens.evidence.map((text) => <li key={text} className="max-w-[36ch] text-base leading-6 text-muted-foreground">{text}</li>)}
       </ul>
     </section>
   );
 }
+

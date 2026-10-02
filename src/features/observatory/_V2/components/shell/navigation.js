@@ -1,10 +1,12 @@
-import { LayoutGrid, SatelliteDish, Blocks, Network, Users } from 'lucide-react';
+import { LayoutGrid, SatelliteDish, Blocks, Network, Users, Brain, MessageCircle } from 'lucide-react';
 
 export const shellGroups = [
   { label: 'Console', items: [
     { label: 'Observatory', href: '#/console', icon: LayoutGrid, variant: 'success' },
     { label: 'Reports', href: '#/console/reports', icon: SatelliteDish, variant: 'info' },
     { label: 'Entities', href: '#/console/entities', icon: Blocks, variant: 'warning' },
+    { label: 'Intelligence', href: '#/intelligence/client/canopy/current', icon: Brain },
+    { label: 'Chat', href: '#/chat/canopy/new', icon: MessageCircle },
   ] },
   { label: 'Administration', items: [
     { label: 'Accounts', href: '#/console/accounts', icon: Network },
@@ -18,3 +20,4 @@ export function activeShellItem(route) {
   if (route.lensId === 'report:history') return shellItems.find((item) => item.label === 'Reports');
   return shellItems.find((item) => item.href === '#' + route.path) ?? shellItems[0];
 }
+

@@ -5,8 +5,8 @@ export function RankedSourcesList({ title, items, competitorNames = [], accountN
   const total = items.reduce((sum, { count }) => sum + count, 0);
   return (
     <FrameCard className="h-full min-w-0" withFill>
-      <FrameCardContent className="h-full gap-7 p-6">
-        <div className="v2-card-tagline"><h3 className="text-sm/normal font-normal">{title}</h3></div>
+      <FrameCardContent className="h-full gap-4 p-4">
+        <div className="v2-card-tagline -mx-4! -mt-4! w-[calc(100%+2rem)]!"><h3 className="text-sm/normal font-normal">{title}</h3></div>
         <ol aria-label={title} className="flex w-full flex-col gap-2">
           {items.map(({ name, count, imageSrc }) => {
             const share = total ? count / total * 100 : 0;
