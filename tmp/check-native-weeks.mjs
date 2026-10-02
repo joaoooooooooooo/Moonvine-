@@ -1,0 +1,15 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch({headless:true});const p=await b.newPage();
+await p.goto('http://127.0.0.1:5180/observatory-v2#/intelligence/client/canopy/current');
+await p.getByRole('button',{name:/Report week:/}).click();
+const day=p.locator('[data-day="2026-09-08"] button');
+await day.hover();
+console.log('Hovered days:',await p.locator('.week-preview').count());
+if(await p.locator('.week-preview').count()!==7)throw Error('Expected seven highlighted days');
+await p.screenshot({path:'output/week-calendar-native.png'});
+await day.click();
+await p.waitForURL(/period=2026-09-07/);
+await p.getByRole('button',{name:/Report week:/}).click();
+console.log('Selected days:',await p.locator('.report-week-calendar [data-selected]').count());
+if(await p.locator('.report-week-calendar [data-selected]').count()!==7)throw Error('Expected seven selected days');
+await b.close();

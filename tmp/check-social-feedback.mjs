@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch({headless:true});const p=await b.newPage({viewport:{width:390,height:945}});
+await p.goto('http://127.0.0.1:5180/observatory-v2#/intelligence/client/canopy/current?lens=source%3Asocial');
+await p.getByRole('heading',{name:'1 post captured this week'}).waitFor();
+await p.getByRole('button',{name:'You',exact:true}).click();
+await p.getByRole('heading',{name:'0 posts captured this week'}).waitFor();
+await p.getByRole('button',{name:'All',exact:true}).click();
+await p.getByRole('button',{name:'Connect Instagram',exact:true}).click();
+const table=p.getByRole('table',{name:'Your social handles',exact:true});
+console.log('Connected rows',await table.getByText('Connected',{exact:true}).count());
+await p.waitForFunction(()=>[...document.querySelectorAll('img')].every(i=>i.complete&&i.naturalWidth>0));
+console.log('All images loaded; page overflow',await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth));
+await table.screenshot({path:'output/social-handles-feedback.png'});
+await b.close();

@@ -1,0 +1,407 @@
+[
+  {
+    "label": "Orbit",
+    "union": {
+      "left": 56,
+      "top": 35,
+      "right": 1048,
+      "bottom": 851
+    },
+    "frames": [
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9940
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9930
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9895
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9960
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9950
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9941
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9962
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9966
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9934
+      },
+      {
+        "left": 56,
+        "top": 35,
+        "right": 1048,
+        "bottom": 851,
+        "count": 9964
+      }
+    ]
+  },
+  {
+    "label": "Stepper 01",
+    "union": {
+      "left": 287,
+      "top": 396,
+      "right": 1083,
+      "bottom": 1029
+    },
+    "frames": [
+      {
+        "left": 287,
+        "top": 541,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 18393
+      },
+      {
+        "left": 430,
+        "top": 578,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 18377
+      },
+      {
+        "left": 465,
+        "top": 410,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 18005
+      },
+      {
+        "left": 465,
+        "top": 396,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 18381
+      },
+      {
+        "left": 465,
+        "top": 405,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 18352
+      },
+      {
+        "left": 465,
+        "top": 411,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 17627
+      },
+      {
+        "left": 465,
+        "top": 411,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 17627
+      },
+      {
+        "left": 465,
+        "top": 411,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 17627
+      },
+      {
+        "left": 465,
+        "top": 411,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 17627
+      },
+      {
+        "left": 465,
+        "top": 411,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 17627
+      }
+    ]
+  },
+  {
+    "label": "Stepper 02",
+    "union": {
+      "left": 398,
+      "top": 337,
+      "right": 1083,
+      "bottom": 1029
+    },
+    "frames": [
+      {
+        "left": 475,
+        "top": 339,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 14797
+      },
+      {
+        "left": 475,
+        "top": 368,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 14810
+      },
+      {
+        "left": 475,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 14921
+      },
+      {
+        "left": 475,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 15283
+      },
+      {
+        "left": 398,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 15676
+      },
+      {
+        "left": 475,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 14115
+      },
+      {
+        "left": 475,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 13911
+      },
+      {
+        "left": 475,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 13726
+      },
+      {
+        "left": 475,
+        "top": 420,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 13624
+      },
+      {
+        "left": 475,
+        "top": 337,
+        "right": 1083,
+        "bottom": 1029,
+        "count": 14772
+      }
+    ]
+  },
+  {
+    "label": "Stepper 03",
+    "union": {
+      "left": 532,
+      "top": 478,
+      "right": 1083,
+      "bottom": 1030
+    },
+    "frames": [
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16375
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16329
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16355
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16361
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16278
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16344
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16318
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16303
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16374
+      },
+      {
+        "left": 532,
+        "top": 478,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 16240
+      }
+    ]
+  },
+  {
+    "label": "Stepper 04",
+    "union": {
+      "left": 532,
+      "top": 479,
+      "right": 1083,
+      "bottom": 1030
+    },
+    "frames": [
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17307
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17274
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17277
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17297
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17159
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17263
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17283
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17262
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17272
+      },
+      {
+        "left": 532,
+        "top": 479,
+        "right": 1083,
+        "bottom": 1030,
+        "count": 17210
+      }
+    ]
+  }
+]

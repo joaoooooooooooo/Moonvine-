@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch({headless:true});const p=await b.newPage();
+await p.goto('http://127.0.0.1:5180/observatory-v2#/intelligence/client/canopy/current');
+await p.getByRole('button',{name:/Report week:/}).click();
+console.log('Latest month next disabled:',await p.getByRole('button',{name:/next month/i}).isDisabled());
+await p.getByRole('button',{name:/previous month/i}).click();
+console.log('Earliest month previous disabled:',await p.getByRole('button',{name:/previous month/i}).isDisabled());
+await p.keyboard.press('Escape');
+const card=p.locator('.v2-signals-grid > a').first();
+const before=await card.evaluate(e=>getComputedStyle(e).backgroundColor);await card.hover();
+const after=await card.evaluate(e=>getComputedStyle(e).backgroundColor);
+console.log({before,after});
+if(before!==after)throw Error('Background changed');
+await b.close();

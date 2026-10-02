@@ -1,0 +1,16 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch({headless:true});const p=await b.newPage({viewport:{width:1440,height:945}});
+const errors=[];p.on('pageerror',e=>errors.push(e.message));
+await p.goto('http://127.0.0.1:5180/observatory-v2#/intelligence/client/canopy/current?lens=source%3Aga4');
+await p.getByRole('button',{name:/Report week:/}).click();
+await p.getByRole('button',{name:'Previous month'}).click();
+await p.screenshot({path:'output/week-picker.png'});
+console.log('August weeks:',await p.getByRole('group',{name:'Reports for August 2026'}).getByRole('button').count());
+await p.getByRole('button',{name:/Week 5 Aug 31/}).click();
+await p.waitForURL(/period=2026-08-31/);
+await p.reload();
+await p.getByRole('button',{name:/Report week: Aug 31/}).waitFor();
+await p.getByRole('button',{name:/Report week:/}).click();
+await p.keyboard.press('Escape');
+console.log({url:p.url(),errors});
+await b.close();
