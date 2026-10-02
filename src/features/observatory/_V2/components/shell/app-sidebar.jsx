@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SquarePen } from 'lucide-react';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
 import { SidebarGroupTransition } from './sidebar-group-transition';
 import { NavUser } from './nav-user';
 import { SearchCommand } from './search-command';
-import { shellGroups, activeShellItem } from './navigation';
+import { shellGroups, activeShellItem, chatShellItem } from './navigation';
 import { accountHref } from '../../utils/observatory-model';
 import { ChatNavigation } from './chat-navigation';
 import { IntelligenceNavigation } from './intelligence-navigation';
 import { useReportReadState } from '../../hooks/use-report-read-state';
 import { ReportStatusDot } from '../report-status-dot';
+import { chatHref } from '../../hooks/use-chat-threads';
 
 export function AppSidebar({ model }) {
   const { hasUnread } = useReportReadState();
@@ -41,6 +42,7 @@ export function AppSidebar({ model }) {
                 <item.icon aria-hidden="true" />
                 <span>{item.label}</span>
                 {item.label === 'Reports' && hasUnread && <ReportStatusDot unread />}
+                {(item.label === 'Chat' || item.label === 'Intelligence') && <ChevronRight aria-hidden="true" className="ml-auto size-4 shrink-0" />}
               </SidebarMenuButton>
             </SidebarMenuItem>)}</SidebarMenu>
           </SidebarGroup>)}
@@ -48,6 +50,12 @@ export function AppSidebar({ model }) {
         </nav>
       </SidebarContent>
       <SidebarFooter className="gap-3 border-t px-3 py-3">
+        <a href={chatHref(model.account?.id ?? 'canopy')} onClick={() => setOpenMobile(false)}
+          className="flex h-9.5 items-center gap-2 rounded-lg bg-foreground px-[calc(--spacing(3)-1px)] text-sm text-background transition-colors hover:bg-foreground/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:h-8.5">
+          {group === 'chat' ? <SquarePen aria-hidden="true" className="size-4 shrink-0" /> : <chatShellItem.icon aria-hidden="true" className="size-4 shrink-0" />}
+          <span>{group === 'chat' ? 'New Chat' : 'Chat'}</span>
+          {group !== 'chat' && <ChevronRight aria-hidden="true" className="ml-auto size-4 shrink-0" />}
+        </a>
         <SearchCommand model={model} />
       </SidebarFooter>
     </Sidebar>

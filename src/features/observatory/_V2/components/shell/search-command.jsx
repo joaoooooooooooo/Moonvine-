@@ -35,12 +35,12 @@ export function SearchCommand({ model }) {
   }
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandDialogTrigger aria-label="Search commands" className="inline-flex h-9 w-fit items-center rounded-md border border-input bg-background px-3 py-2 text-foreground text-sm shadow-xs outline-none hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 placeholder:text-muted-foreground/70">
+      <CommandDialogTrigger aria-label="Search commands" className="inline-flex h-9 w-full items-center rounded-lg bg-sidebar-accent/50 px-3 py-2 text-sm text-sidebar-accent-foreground outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring">
         <span className="flex grow items-center">
           <Search aria-hidden="true" className="text-muted-foreground/80 sm:-ms-1 sm:me-3" size={16} />
           <span className="hidden font-normal text-muted-foreground/70 sm:inline">Search</span>
         </span>
-        <KbdGroup className="-me-1 ms-12 hidden lg:flex"><Kbd>{modifier}</Kbd><Kbd>K</Kbd></KbdGroup>
+        <KbdGroup className="ms-auto hidden lg:flex"><Kbd className="border border-border bg-transparent">{modifier}</Kbd><Kbd className="border border-border bg-transparent">K</Kbd></KbdGroup>
       </CommandDialogTrigger>
       <CommandDialogPopup aria-label="Search Observatory">
         <Command items={items}>

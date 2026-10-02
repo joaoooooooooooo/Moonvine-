@@ -30,3 +30,7 @@ export function getSiteFixes(domain) {
     issues: keys.map((key) => ({ ...findings[key], severity: 'warning' })),
   }));
 }
+
+export function getSiteFixCount(domain) {
+  return getSiteFixes(domain).reduce((total, page) => total + page.issues.length, 0);
+}

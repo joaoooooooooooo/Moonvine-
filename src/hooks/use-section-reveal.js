@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 // Each shared section owns its content; nested sections manage their own reveal.
-export function useSectionReveal() {
+export function useSectionReveal({ includeSections = false } = {}) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -12,7 +12,8 @@ export function useSectionReveal() {
     const targets = [];
     function collect(parent) {
       for (const child of parent.children) {
-        if (child.matches('section, [aria-hidden="true"], [hidden], script, style')) continue;
+        if (child.matches('[aria-hidden="true"], [hidden], script, style')) continue;
+        if (child.matches('section') && !includeSections) continue;
 
         // Walk through layout wrappers so individual headings and grid cards
         // stagger, but keep cards, widgets, and animation canvases together.
@@ -75,7 +76,7 @@ export function useSectionReveal() {
       container.removeEventListener("focusin", revealFocused);
       preference.removeEventListener("change", onPreferenceChange);
     };
-  }, []);
+  }, [includeSections]);
 
   return ref;
 }
