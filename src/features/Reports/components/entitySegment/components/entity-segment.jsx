@@ -1,6 +1,6 @@
 import { groupChartEntities } from "./group-chart-entities";
 import { useMemo, useState } from "react";
-import { EyeIcon, UserRoundIcon } from "lucide-react";
+import { EyeIcon, UserRoundIcon } from "@/components/ui/icons";
 import { FrameCard, FrameCardContent, FrameCardTop } from "@/components/ui/frame-card";
 import { EntityChartTabs } from "@/features/Reports/components/entitySegment/components/entity-chart-tabs";
 import { Metric1 } from "@/features/Reports/components/metric1";

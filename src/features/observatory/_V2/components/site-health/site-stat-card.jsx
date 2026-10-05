@@ -2,7 +2,7 @@ import { EChartsRadialChart } from "@/components/evilcharts/charts/echarts-radia
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { cn } from "@/lib/utils";
 import { SignalMetric } from '../signal-metric';
-import { Globe } from 'lucide-react';
+import { Globe } from '@/components/ui/icons';
 import { CardCaret } from '../card-caret';
 
 const scoreColors = {
@@ -53,7 +53,7 @@ export function SiteStatCard({
     <FrameCard render={href ? <a href={href} /> : undefined} className={cn("w-full max-w-[31rem]", className)} withFill>
       <FrameCardContent className={cn("flex-1 gap-3 px-5 py-4", metric && "gap-7 p-6")}>
         <div className="flex w-full flex-col gap-1.5">
-          <div className={cn("flex items-center justify-between gap-3", metric ? "v2-card-tagline" : "w-full")}><h2 className={cn("max-w-[13rem] text-xl/normal font-normal tracking-[-0.36px] text-foreground [text-wrap:balance]", metric && "max-w-none text-sm/normal tracking-normal")}>
+          <div className={cn("flex items-center justify-between gap-3", metric ? "v2-card-tagline" : "w-full")}><h2 className={cn("max-w-[13rem] text-xl/normal font-normal tracking-[-0.36px] [text-wrap:balance]", metric ? "max-w-none text-sm/normal tracking-normal" : "text-foreground")}>
             {href ? <span className="flex items-center gap-2"><Globe aria-hidden="true" className="size-4 shrink-0" />{title}</span> : title}
           </h2>{href && <CardCaret />}</div>
           {!metric && <p className="text-sm/5 font-normal text-muted-foreground">

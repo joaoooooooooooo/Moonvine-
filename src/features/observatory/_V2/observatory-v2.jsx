@@ -9,7 +9,6 @@ import { AccountProfile } from './components/account-profile';
 import { ReportHistory } from './components/report-history';
 import { IntelligenceEmptyPage } from './components/intelligence-empty-page';
 import { IntelligenceChatPage } from './components/intelligence-chat/intelligence-chat-page';
-import { IntelligenceReveal } from './components/intelligence-reveal';
 
 export function ObservatoryV2() {
   const model = useObservatory();
@@ -30,9 +29,7 @@ export function ObservatoryV2() {
   return (
     <div className="min-h-dvh bg-background font-sans text-foreground antialiased" data-observatory-live-recreation>
       <AppShell model={model}>
-        {route.path.startsWith('/intelligence/')
-          ? <IntelligenceReveal key={`${route.path}:${route.lensId}:${route.period}`}>{page}</IntelligenceReveal>
-          : page}
+        {page}
       </AppShell>
       {import.meta.env.DEV && <Agentation />}
     </div>

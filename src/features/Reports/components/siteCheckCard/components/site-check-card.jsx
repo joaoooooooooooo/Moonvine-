@@ -1,4 +1,4 @@
-import { CircleAlertIcon, CircleCheckIcon } from "lucide-react";
+import { CircleAlertIcon, CircleCheckIcon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { cn } from "@/lib/utils";

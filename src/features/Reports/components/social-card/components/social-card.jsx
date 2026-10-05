@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon } from "@/components/ui/icons";
 import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";

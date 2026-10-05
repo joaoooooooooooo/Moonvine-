@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import {
 	Sidebar,

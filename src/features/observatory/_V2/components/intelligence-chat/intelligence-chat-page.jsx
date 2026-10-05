@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MessageGroup } from '@/components/agents/message';
 import { ChatSuggestions } from './chat-suggestions';
 import { PageHeading } from '../page-heading';
+import { ClientPeriodSwitcher } from '../client-period-switcher';
 import { ChatMessage } from './chat-message';
 import { ChatComposer } from './chat-composer';
 import { chatHref, saveChatThread, useChatThreads } from '../../hooks/use-chat-threads';
@@ -38,8 +39,9 @@ export function IntelligenceChatPage({ model }) {
     }, 3600);
   }
   return (
-    <div className="flex min-h-[calc(100svh-10rem)] flex-col gap-10 pb-28">
+    <div className="flex min-h-[calc(100svh-10rem)] flex-col gap-10 pb-28" data-chat-started={messages.length > 0 || isReplying}>
       {!messages.length && <div className="flex flex-col items-center gap-2 text-center">
+        <div className="mb-4 min-w-0"><ClientPeriodSwitcher account={model.account} accounts={model.accounts} route={model.route} /></div>
         <PageHeading title="Talk through your intelligence." />
         <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Explore {model.account.name}’s selected report week.</p>
       </div>}

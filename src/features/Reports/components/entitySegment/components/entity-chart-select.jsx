@@ -1,4 +1,4 @@
-import { EyeIcon, GlobeIcon, MegaphoneIcon } from "lucide-react";
+import { EyeIcon, GlobeIcon, MegaphoneIcon } from "@/components/ui/icons";
 import { Select, SelectItem, SelectPopup, SelectValue } from "@/components/ui/select";
 import { ReportSelectTrigger } from "@/features/Reports/components/reportControls";
 

@@ -1,4 +1,4 @@
-import { LayoutGrid, SatelliteDish, Blocks, Network, Users, Brain, MessageCircle } from 'lucide-react';
+import { LayoutGrid, SatelliteDish, Blocks, Network, Users, Brain, MessageCircle } from '@/components/ui/icons';
 
 export const shellGroups = [
   { label: 'Console', items: [

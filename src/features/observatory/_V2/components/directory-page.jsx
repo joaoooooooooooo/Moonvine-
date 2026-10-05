@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronUp, ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronRight, Plus } from '@/components/ui/icons';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TableProfileAvatar } from './table-profile-avatar';
 import { Badge } from '@/components/ui/badge';

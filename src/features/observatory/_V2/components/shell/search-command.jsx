@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, Building2, Sun, Moon } from 'lucide-react';
+import { Search, Building2, Sun, Moon } from '@/components/ui/icons';
 import { Command, CommandDialog, CommandDialogTrigger, CommandDialogPopup, CommandEmpty, CommandInput, CommandItem, CommandList, CommandPanel } from '@/components/ui/command';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { accounts } from '../../data/observatory-fixtures';

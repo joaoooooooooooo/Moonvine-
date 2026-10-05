@@ -1,4 +1,4 @@
-import { LayoutGrid, Sparkles, Activity, ChartNoAxesCombined, Search, MessageCircle, Newspaper, Globe, ScanSearch, FileText, Plug } from 'lucide-react';
+import { LayoutGrid, Sparkles, Activity, ChartNoAxesCombined, Search, MessageCircle, Newspaper, Globe, ScanSearch, FileText, Plug } from '@/components/ui/icons';
 
 export const intelligenceItems = [
   { label: 'Overview', lens: '', icon: LayoutGrid },

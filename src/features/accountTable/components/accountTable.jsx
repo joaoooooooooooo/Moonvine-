@@ -15,7 +15,7 @@ import {
   ChevronRightIcon,
   ChevronUpIcon,
   SearchIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { useId, useState } from "react";
 import { useAccountSignalFilter } from "@/features/accountTable/hooks/use-account-signal-filter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";

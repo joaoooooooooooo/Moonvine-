@@ -23,7 +23,7 @@ import { SiteStatCard } from "@/features/Reports/components/siteStatCard";
 import { SourceCard } from "@/features/Reports/components/sourceCard";
 import { StatusListCard } from "@/features/Reports/components/status-list";
 import { TaskCard } from "@/features/Reports/components/taskCard/taskCard";
-import { CalendarIcon, EyeIcon } from "lucide-react";
+import { CalendarIcon, EyeIcon } from "@/components/ui/icons";
 
 const statusListItems = [
   { label: "Client social", badge: "7 Posts", variant: "info" },

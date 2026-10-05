@@ -4,7 +4,7 @@ import {
   ShieldCheckIcon,
   UserRoundIcon,
   UsersIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 
 export const settingsNavItems = [
   {

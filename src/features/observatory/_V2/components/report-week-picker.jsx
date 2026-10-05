@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { WeekCalendar } from './week-calendar';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays } from '@/components/ui/icons';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverTrigger, PopoverPopup, PopoverTitle } from '@/components/ui/popover';
 import { reportWeeks, weekDate, weekLabel } from '../data/report-weeks';

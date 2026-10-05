@@ -10,7 +10,7 @@ export function SourceBreakdown({ lens, presentation, account }) {
     <FrameCard className="h-full min-w-0" withFill>
       <FrameCardContent className="h-full gap-7 p-6">
         <div className="v2-card-tagline flex items-center gap-2">
-          {Icon && <Icon aria-hidden="true" className="size-4 shrink-0" />}
+          {Icon && <Icon aria-hidden="true" weight="regular" className="size-4 shrink-0" />}
           <h2 className="text-sm/normal font-normal">{presentation.breakdown}</h2>
         </div>
         <h3 className="max-w-[32rem] font-heading text-xl font-normal leading-tight tracking-tight">Percentages show each item’s share of the listed {presentation.unit}.</h3>

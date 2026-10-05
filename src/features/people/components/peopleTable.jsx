@@ -14,7 +14,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { useId } from "react";
 import { people } from "@/features/people/config/people-data";
 import { usePeopleTable } from "@/features/people/hooks/use-people-table";

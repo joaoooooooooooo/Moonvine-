@@ -3,7 +3,7 @@
 import { EChartsLineChart } from "@/components/evilcharts/charts/echarts-line-chart";
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { SignalMetric } from './signal-metric';
-import { Search } from 'lucide-react';
+import { Search } from '@/components/ui/icons';
 import { CardCaret } from './card-caret';
 import { cn } from "@/lib/utils";
 
@@ -74,7 +74,7 @@ const COMPARISON_LABEL = `${CHANGE_PERCENT >= 0 ? "+" : ""}${CHANGE_PERCENT.toFi
       <FrameCardContent className="gap-0 p-6">
         <div className="flex w-full flex-1 flex-col gap-7">
             <div className="v2-card-tagline flex items-center justify-between gap-3"><h2 className="flex items-center gap-2 text-sm/normal font-normal">
-              <Icon aria-hidden="true" className="size-4 shrink-0" />
+              <Icon aria-hidden="true" weight="regular" className="size-4 shrink-0" />
               {title}
             </h2>{href && <CardCaret />}</div>
           <SignalMetric

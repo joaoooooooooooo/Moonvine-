@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronRight, ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronRight, ChevronUp, ChevronDown } from '@/components/ui/icons';
 import { TableHeader, TableHead, TableRow, TableBody, TableCell } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ReportRecipients } from './report-recipients';

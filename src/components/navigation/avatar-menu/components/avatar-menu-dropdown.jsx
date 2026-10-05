@@ -6,7 +6,7 @@ import {
   LogOutIcon,
   PinIcon,
   UserPenIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {

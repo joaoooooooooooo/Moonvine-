@@ -1,4 +1,4 @@
-import { ArrowUpRightIcon, ImageIcon } from "lucide-react";
+import { ArrowUpRightIcon, ImageIcon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { cn } from "@/lib/utils";

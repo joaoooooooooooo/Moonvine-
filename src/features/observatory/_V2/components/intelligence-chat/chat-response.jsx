@@ -1,4 +1,4 @@
-﻿import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@/components/ui/icons';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { ObservatoryTable } from '../observatory-table';

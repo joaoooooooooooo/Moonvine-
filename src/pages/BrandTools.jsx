@@ -1,6 +1,6 @@
-﻿import { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { lazy, Suspense } from "react";
-import { LayoutTemplateIcon, QuoteIcon } from "lucide-react";
+import { LayoutTemplateIcon, QuoteIcon } from "@/components/ui/icons";
 import { Command, CommandCollection, CommandEmpty, CommandGroup, CommandGroupLabel, CommandInput, CommandItem, CommandList, CommandPanel, CommandSurface } from "@/components/ui/command";
 import { useCurrentConsolePath } from "@/features/console/components/app-shared";
 import { CitationEditor } from "@/features/brand-tools/CitationEditor";

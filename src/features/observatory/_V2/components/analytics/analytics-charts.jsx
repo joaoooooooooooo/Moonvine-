@@ -1,4 +1,4 @@
-import { ChartNoAxesCombined, Activity } from 'lucide-react';
+import { ChartNoAxesCombined, Activity } from '@/components/ui/icons';
 import { engagementSeries } from '../../utils/engagement-series';
 import { TopPagesChart } from './top-pages-chart';
 import { MainChannelCard } from './main-channel-card';

@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { UserRound } from 'lucide-react';
+import { UserRound } from '@/components/ui/icons';
 
 export function TableProfileAvatar({ src, person = false }) {
   return (

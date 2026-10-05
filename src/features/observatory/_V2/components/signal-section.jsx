@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight } from '@/components/ui/icons';
 import { Frame, FrameHeader, FrameTitle, FramePanel } from '@/components/ui/frame';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

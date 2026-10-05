@@ -18,7 +18,7 @@ export function SourceOverview({ lens, account }) {
         {lens.id === 'competitors' ? (
           <FrameCard className="h-full min-w-0" withFill>
             <FrameCardContent className="h-full gap-7 p-6">
-              <div className="v2-card-tagline flex items-center gap-2"><Icon aria-hidden="true" className="size-4" /><h2 className="text-sm/normal font-normal">{lens.metric}</h2></div>
+              <div className="v2-card-tagline flex items-center gap-2"><Icon aria-hidden="true" weight="regular" className="size-4" /><h2 className="text-sm/normal font-normal">{lens.metric}</h2></div>
               <div className="space-y-2">
                 <p className="font-heading text-[80px]/none font-normal tabular-nums tracking-tight">{formatMetric(lens.value)}</p>
                 <p className="text-sm/normal text-muted-foreground">Shared search terms</p>

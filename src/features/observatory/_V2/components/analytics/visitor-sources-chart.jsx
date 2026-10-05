@@ -1,4 +1,4 @@
-import { Route } from 'lucide-react';
+import { Route } from '@/components/ui/icons';
 import { EChartsPieChart } from '@/components/evilcharts/charts/echarts-pie-chart';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { Table, TableBody, TableRow, TableCell } from '@/components/ui/table';
@@ -16,7 +16,7 @@ export function VisitorSourcesChart({ lens }) {
     <FrameCard className="min-w-0" withFill>
       <FrameCardContent className="gap-7 p-6">
         <div className="v2-card-tagline flex items-center gap-2">
-          <Route aria-hidden="true" className="size-4 shrink-0" />
+          <Route aria-hidden="true" weight="regular" className="size-4 shrink-0" />
           <h2 className="text-sm/normal font-normal">Where visitors come from</h2>
         </div>
         <div className="flex w-full min-w-0 flex-col gap-6">

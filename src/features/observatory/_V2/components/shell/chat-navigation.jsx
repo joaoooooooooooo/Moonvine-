@@ -1,4 +1,4 @@
-﻿import { SquarePen } from 'lucide-react';
+import { SquarePen, ChevronDown, ChevronUp } from '@/components/ui/icons';
 import { SidebarGroup, SidebarMenuButton } from '@/components/ui/sidebar';
 import { AccountSelectLabel } from '../account-select-label';
 import { chatHref, useChatThreads } from '../../hooks/use-chat-threads';
@@ -9,10 +9,12 @@ export function ChatNavigation({ model, onNavigate }) {
     {model.accounts.map((account) => <details key={account.id} open className="group/chat-account">
       <summary className="flex cursor-pointer list-none items-center gap-2 rounded-lg px-2 py-2 text-sm hover:bg-sidebar-accent [&::-webkit-details-marker]:hidden">
         <AccountSelectLabel account={account} />
+        <ChevronDown aria-hidden="true" className="ml-auto size-3.5 shrink-0 group-open/chat-account:hidden" />
+        <ChevronUp aria-hidden="true" className="ml-auto hidden size-3.5 shrink-0 group-open/chat-account:block" />
       </summary>
       <div className="ml-7 mt-1 space-y-1">
         <SidebarMenuButton render={<a href={chatHref(account.id)} />} onClick={onNavigate} isActive={model.account.id === account.id && !model.route.threadId}>
-          <SquarePen aria-hidden="true" /><span>New chat</span>
+          <SquarePen aria-hidden="true" className="size-4.5" /><span>New chat</span>
         </SidebarMenuButton>
         {threads.filter((thread) => thread.accountId === account.id).map((thread) => <SidebarMenuButton key={thread.id} render={<a href={chatHref(account.id, thread.id)} />} onClick={onNavigate} isActive={model.route.threadId === thread.id} title={thread.title}>
           <span>{thread.title}</span>

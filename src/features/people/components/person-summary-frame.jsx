@@ -1,4 +1,4 @@
-import { CopyIcon, SendIcon } from "lucide-react";
+import { CopyIcon, SendIcon } from "@/components/ui/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -10,7 +10,7 @@ import {
   SendIcon,
   SettingsIcon,
   UsersIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import type { BadgeProps } from "@/components/ui/badge";
 import { settingsNavItems } from "@/features/settings/config/settings-nav";
 

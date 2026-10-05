@@ -1,4 +1,4 @@
-import { UserRoundIcon } from "lucide-react";
+import { UserRoundIcon } from "@/components/ui/icons";
 import {
   Breadcrumb,
   BreadcrumbItem,

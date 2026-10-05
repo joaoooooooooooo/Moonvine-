@@ -19,7 +19,7 @@ export function IntelligenceNavigation({ model, onNavigate }) {
               <SidebarMenuButton className={`h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5${lens === 'source:site' ? ' group/site-health' : ''}`} isActive={active}
                 render={<a href={accountHref(model.account.id, lens, model.route.period)} aria-current={active ? 'page' : undefined} />}
                 onClick={onNavigate} tooltip={label}>
-                <Icon aria-hidden="true" /><span>{label}</span>
+                <Icon aria-hidden="true" className="size-4.5" /><span>{label}</span>
                 {lens === 'report:history' && hasUnread && <ReportStatusDot unread />}
                 {lens === 'source:site' && <SiteFixStatus count={siteFixCount} />}
               </SidebarMenuButton>

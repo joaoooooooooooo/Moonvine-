@@ -1,4 +1,4 @@
-import { ChevronsUpDown, Settings, Building2, Monitor, Moon, Sun } from 'lucide-react';
+import { ChevronsUpDown, Settings, Building2, Monitor, Moon, Sun } from '@/components/ui/icons';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Menu, MenuTrigger, MenuPopup, MenuGroup, MenuGroupLabel, MenuLinkItem, MenuSeparator, MenuSub, MenuSubTrigger, MenuSubPopup, MenuRadioGroup, MenuRadioItem } from '@/components/ui/menu';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar';
@@ -13,7 +13,7 @@ export function NavUser({ model }) {
       <Menu>
         <MenuTrigger render={<SidebarMenuButton className="h-10 text-muted-foreground" aria-label="Open workspace menu" />}>
           <Avatar className="size-5"><AvatarFallback>A</AvatarFallback></Avatar>
-          <span className="text-sm font-medium">Apta</span><ChevronsUpDown className="ml-auto size-3!" />
+          <span className="text-sm font-medium">Apta</span><ChevronsUpDown className="ml-auto size-3.5!" />
         </MenuTrigger>
         <MenuPopup align="start" side={isMobile ? 'bottom' : 'right'} sideOffset={4} className="min-w-56">
           <MenuGroup><MenuGroupLabel>Apta workspace</MenuGroupLabel>

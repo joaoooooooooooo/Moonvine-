@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { UserRound } from 'lucide-react';
+import { UserRound } from '@/components/ui/icons';
 
 export function ReportRecipients({ recipients }) {
   return (

@@ -14,7 +14,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { useId } from "react";
 import { useEntitiesTable } from "@/features/entitiesTable/hooks/use-entities-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

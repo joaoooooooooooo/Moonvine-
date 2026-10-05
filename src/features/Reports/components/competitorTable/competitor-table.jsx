@@ -4,7 +4,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FrameCard, FrameCardContent, FrameCardTop } from "@/components/ui/frame-card";
 import { ReportBadge } from "@/features/Reports/components/reportBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { GlobeIcon, MegaphoneIcon } from "lucide-react";
+import { GlobeIcon, MegaphoneIcon } from "@/components/ui/icons";
 
 const metricViews = [
   { value: "organic", label: "Organic", icon: GlobeIcon },

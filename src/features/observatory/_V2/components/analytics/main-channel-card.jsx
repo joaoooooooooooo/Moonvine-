@@ -1,4 +1,4 @@
-import { Route } from 'lucide-react';
+import { Route } from '@/components/ui/icons';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { Progress, ProgressTrack, ProgressIndicator } from '@/components/ui/progress';
 import { formatMetric } from '../../utils/observatory-model';
@@ -10,7 +10,7 @@ export function MainChannelCard({ lens }) {
     <FrameCard className="h-full min-w-0" withFill>
       <FrameCardContent className="gap-7 p-6">
         <div className="v2-card-tagline flex items-center gap-2">
-          <Route aria-hidden="true" className="size-4 shrink-0" />
+          <Route aria-hidden="true" weight="regular" className="size-4 shrink-0" />
           <h2 className="text-sm/normal font-normal">Main channel</h2>
         </div>
         <div className="flex flex-col gap-2">

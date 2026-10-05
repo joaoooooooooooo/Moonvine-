@@ -3,3 +3,13 @@
 .v2-page-sections {
   @apply space-y-16;
 }
+
+.v2-shell:has([data-chat-started="true"]) .v2-chat-background {
+  display: none;
+}
+
+.v2-sidebar-content {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 20%, transparent) transparent;
+  overscroll-behavior-y: contain;
+}

@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { accountHref } from '../utils/observatory-model';

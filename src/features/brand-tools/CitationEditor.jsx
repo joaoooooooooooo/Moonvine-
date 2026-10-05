@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Alignment, Fit, Layout, Rive, RuntimeLoader } from "@rive-app/react-webgl2";
 import riveWasmUrl from "@rive-app/webgl2/rive.wasm?url";
-import { ArrowLeftIcon, ImageIcon, PauseIcon, PlayIcon, RotateCcwIcon, VideoIcon } from "lucide-react";
+import { ArrowLeftIcon, ImageIcon, PauseIcon, PlayIcon, RotateCcwIcon, VideoIcon } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";

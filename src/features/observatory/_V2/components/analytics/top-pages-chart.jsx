@@ -1,4 +1,4 @@
-import { FileText } from 'lucide-react';
+import { FileText } from '@/components/ui/icons';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { RankedMetricRow } from '../ranked-metric-row';
 import { analyticsTopPages } from '../../data/analytics-top-pages';
@@ -11,7 +11,7 @@ export function TopPagesChart({ total }) {
     <FrameCard className="h-full min-w-0" withFill>
       <FrameCardContent className="gap-7 p-6">
         <div className="v2-card-tagline flex items-center gap-2">
-          <FileText aria-hidden="true" className="size-4 shrink-0" />
+          <FileText aria-hidden="true" weight="regular" className="size-4 shrink-0" />
           <h2 className="text-sm/normal font-normal">Top pages</h2>
         </div>
         <div className="space-y-2">

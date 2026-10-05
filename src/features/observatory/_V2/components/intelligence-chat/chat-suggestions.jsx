@@ -1,4 +1,4 @@
-﻿import { Table2, Link2, ChartNoAxesCombined, Hash, MessageCircle, Sparkles } from 'lucide-react';
+import { Table2, Link2, ChartNoAxesCombined, Hash, MessageCircle, Sparkles } from '@/components/ui/icons';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { chatSuggestions } from '../../data/intelligence-chat';
 

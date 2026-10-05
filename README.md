@@ -31,7 +31,7 @@ These are the main libraries and tools currently present in the project:
 
 - `@base-ui/react` for accessible low-level UI primitives
 - `coss` via the `@coss` registry for reusable UI components and patterns
-- `lucide-react` for icons
+- `@phosphor-icons/react` for icons
 - `@daypicker/react` for calendar behavior
 - `@tanstack/react-table` for table architecture
 - `echarts` and local `evilcharts` wrappers for charts and data visualization

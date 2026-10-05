@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
 export function ActionListItem({

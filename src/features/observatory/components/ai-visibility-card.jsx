@@ -1,7 +1,7 @@
 import competitorIcon from "@/assets/observatory-competitor-icon.svg";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon } from "@/components/ui/icons";
 
 const VISIBILITY_BARS = Array.from({ length: 38 }, (_, index) => index);
 

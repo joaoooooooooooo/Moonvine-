@@ -1,4 +1,4 @@
-import { FileText } from 'lucide-react';
+import { FileText } from '@/components/ui/icons';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { analyticsTopPages } from '../../data/analytics-top-pages';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +10,7 @@ export function LandingPagesCard({ lens, account }) {
     <FrameCard className="min-w-0" withFill>
       <FrameCardContent className="gap-7 p-6">
         <div className="v2-card-tagline flex items-center gap-2">
-          <FileText aria-hidden="true" className="size-4 shrink-0" />
+          <FileText aria-hidden="true" weight="regular" className="size-4 shrink-0" />
           <h2 className="text-sm/normal font-normal">Where people landed</h2>
         </div>
         <h2 className="text-xl/normal font-normal">The first pages people reached this week.</h2>

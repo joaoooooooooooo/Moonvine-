@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FrameCard, FrameCardContent } from "@/components/ui/frame-card";
 import { cn } from "@/lib/utils";
-import { CheckIcon, EyeIcon } from "lucide-react";
+import { CheckIcon, EyeIcon } from "@/components/ui/icons";
 
 const statusOptions = {
   connected: {

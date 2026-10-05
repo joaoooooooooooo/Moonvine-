@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon } from "@/components/ui/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Select,

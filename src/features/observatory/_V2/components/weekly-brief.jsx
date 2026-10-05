@@ -1,4 +1,4 @@
-import { FileText, ChevronRight } from 'lucide-react';
+import { FileText, ChevronRight } from '@/components/ui/icons';
 import { accountHref } from '../utils/observatory-model';
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from '@/components/ui/card';
 import { SourceIcon } from './source-icon';

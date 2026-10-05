@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle } from '@/components/ui/icons';
 import { MetricLineChart } from '../search-clicks-chart';
 import { searchClicksSeries } from '../../utils/search-clicks-series';
 

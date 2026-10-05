@@ -40,6 +40,27 @@
   transition: border-color 150ms ease;
 }
 
+.v2-interactive-card .v2-card-tagline :is(h2, h3),
+.v2-interactive-card .v2-card-tagline [data-card-caret] {
+  transition: color 150ms ease;
+}
+
+.v2-interactive-card:is(:hover, :focus-within) .v2-card-tagline :is(h2, h3),
+.v2-interactive-card:is(:hover, :focus-within) .v2-card-tagline [data-card-caret] {
+  color: var(--foreground);
+}
+
+@keyframes v2-caret-nudge {
+  0%, 50%, 100% { transform: translateX(0); }
+  25%, 75% { transform: translateX(2px); }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .v2-interactive-card:hover [data-card-caret] svg {
+    animation: v2-caret-nudge 600ms ease-in-out 1;
+  }
+}
+
 @media (hover: hover) {
   .v2-signals-grid > a[data-slot="frame-card"]:hover {
     border-color: var(--input);
@@ -47,6 +68,7 @@
 }
 
 .v2-card-tagline {
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
   border-bottom: 1px solid var(--border);
   @apply not-dark:border-border/64;
   --tagline-overlay: color-mix(in srgb, var(--muted) 72%, transparent);
