@@ -2,6 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     { "source": "/observatory-v2", "destination": "/index.html" },
-    { "source": "/observatory-v2/", "destination": "/index.html" }
+    { "source": "/observatory-v2/", "destination": "/index.html" },
+    { "source": "/website", "destination": "/index.html" },
+    { "source": "/website/", "destination": "/index.html" }
   ]
 }
