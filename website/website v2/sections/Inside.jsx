@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ChartLineUp, CheckCircle, FileArrowDown, Globe, Lightbulb, MagnifyingGlass, Megaphone, Sparkle } from '@phosphor-icons/react'
 import { Badge } from '../../../src/components/ui/badge'
 import { MetricLineChart } from '../../../src/features/observatory/_V2/components/search-clicks-chart'
-import { RankItem } from '../../../src/features/reports/components/rankEntities/components/rankItem'
+import { RankItem } from '../../../src/features/Reports/components/rankEntities/components/rankItem'
 import { WebsiteSection, SectionIntro, WireframeBlock, WIREFRAME_MODE } from '../components/website-primitives'
 
 const topics = [
