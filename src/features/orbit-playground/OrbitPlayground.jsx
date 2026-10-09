@@ -22,7 +22,7 @@ const solarRings = [
   { tilt: 52, angle: -18, speed: 4, size: 100, visible: true, dashed: true },
 ]
 
-const defaultConnectors = { enabled: true, thickness: 0.5, opacity: 0.3, dashed: true }
+const defaultConnectors = { enabled: true, thickness: 0.5, opacity: 0.45, dashed: true }
 const logos = [
   { name: 'AIO / GEO', src: '/provider-logos/openai.svg' },
   { name: 'Search insights', src: '/orbit-logos/googletrends.png' },
@@ -38,7 +38,7 @@ const logos = [
   { name: 'Perplexity', src: '/provider-logos/perplexity.svg' },
   { name: 'X', src: '/report-logos/x.svg' },
 ]
-const defaultAppearance = { logoSize: 1, logos: true, names: false, fade: true, fadeSize: 1.5, fadeOpacity: 0.85, fadeSoftness: 65 }
+const defaultAppearance = { logoSize: 0.75, logos: true, names: true, fade: true, fadeSize: 2, fadeOpacity: 0.75, fadeSoftness: 20 }
 // Shared by forward and reverse transitions; editable in the Motion panel.
 const ringTransition = { duration: 2, ease: [0.113, 0.517, 0.567, 0.832] }
 const lineTransition = { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
@@ -47,8 +47,9 @@ const outletTransition = { duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }
 const ringStagger = 0.16
 const lineStagger = 0.12
 const defaultHitbox = { width: 72, outerWidth: 104, visible: false, followWobble: true, releaseDelay: 120 }
-const defaultFog = { enabled: true, strength: 0.8, start: 50, reach: 115 }
-const defaultSignals = { enabled: true, count: 2, duration: 1.5, outward: false, size: 1, color: '#ffffff', themeColor: true }
+const defaultFog = { enabled: true, strength: 0.85, start: 80, reach: 70 }
+const defaultSignals = { enabled: true, count: 9, duration: 4.5, outward: false, size: 1.25, color: '#a9ff9e', themeColor: false }
+const SHOW_DEBUG_CONTROLS = false
 
 function OrbitBody({ ring, wobble, flatten, lineAlignment, logoProgress, dotAlignment, index, phase, logo, clock, viewX, viewY, solar, bodies, connectors, appearance, signals, signalClock, fadeId }) {
   const logoMaskId = useId()
@@ -300,15 +301,16 @@ export default function OrbitPlayground({ embedded = false }) {
   const [connectors, setConnectors] = useSavedSetting('connectors', defaultConnectors)
   const updateConnector = (key, value) => setConnectors(current => ({ ...current, [key]: value }))
   const [selected, setSelected] = useSavedSetting('selected', 0)
-  const [speed, setSpeed] = useSavedSetting('speed', 1)
-  const [zoom, setZoom] = useSavedSetting('zoom', 85)
-  const [thickness, setThickness] = useSavedSetting('thickness', 1)
-  const [opacity, setOpacity] = useSavedSetting('opacity', 0.65)
-  const [guides, setGuides] = useSavedSetting('guides', true)
-  const [dark, setDark] = useSavedSetting('dark', true)
+  const [speed, setSpeed] = useSavedSetting('speed', 0.7)
+  const [zoom, setZoom] = useSavedSetting('zoom', 131)
+  const [thickness, setThickness] = useSavedSetting('thickness', 0.5)
+  const [opacity, setOpacity] = useSavedSetting('opacity', 0.5)
+  const [guides, setGuides] = useSavedSetting('guides', false)
+  const dark = true
   const [phase, setPhase] = useState('idle')
-  const [panelOpen, setPanelOpen] = useSavedSetting('home-panel-open', true)
-  const [scrollDistance, setScrollDistance] = useSavedSetting('scroll-distance', 600)
+  const [copyStatus, setCopyStatus] = useState('')
+  const [panelOpen, setPanelOpen] = useSavedSetting('home-panel-open', false)
+  const [scrollDistance, setScrollDistance] = useSavedSetting('scroll-distance', 300)
   const scrollDriven = useRef(false)
   const scrollTarget = useRef(0)
   const smoothScroll = useRef(0)
@@ -396,7 +398,7 @@ export default function OrbitPlayground({ embedded = false }) {
   }, [])
   const clock = useMotionValue(0)
   const signalClock = useMotionValue(0)
-  const [savedView] = useState(() => ({ x: readSetting('viewX', 0), y: readSetting('viewY', 0) }))
+  const [savedView] = useState(() => ({ x: readSetting('viewX', -101), y: readSetting('viewY', 51) }))
   const viewX = useMotionValue(savedView.x)
   const viewY = useMotionValue(savedView.y)
   useEffect(() => {
@@ -445,8 +447,27 @@ export default function OrbitPlayground({ embedded = false }) {
     setFog(defaultFog)
     setHitbox(defaultHitbox)
     setAppearance(defaultAppearance); setSignals(defaultSignals); signalClock.set(0)
-    setRings(solar ? solarRings : initialRings); setBodies(true); setSpeed(1); setZoom(85); setThickness(1); setOpacity(0.65); setGuides(true); setPlaying(true)
-    clock.set(0); viewX.set(0); viewY.set(0)
+    setRings(solar ? solarRings : initialRings); setBodies(true); setSpeed(0.7); setZoom(131); setThickness(0.5); setOpacity(0.5); setGuides(false); setPlaying(true)
+    clock.set(0); viewX.set(-101); viewY.set(51)
+  }
+  async function copyAllProperties() {
+    const properties = {
+      scene: { solar, playing, speed, zoom, viewX: viewX.get(), viewY: viewY.get(), thickness, opacity, guides, dark, scrollDistance },
+      rings,
+      bodies,
+      connectors,
+      interaction,
+      fog,
+      hitbox,
+      appearance,
+      signals,
+    }
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(properties, null, 2))
+      setCopyStatus('All properties copied')
+    } catch {
+      setCopyStatus('Could not copy properties')
+    }
   }
   function handleKey(event) {
     const directions = { ArrowUp: [-5, 0], ArrowDown: [5, 0], ArrowLeft: [0, -5], ArrowRight: [0, 5] }
@@ -472,7 +493,8 @@ export default function OrbitPlayground({ embedded = false }) {
         <ScrollArea className="og-panel-scroll" overscrollContain>
         <div className="og-panel-content">
         <div className="og-panel-heading"><h2>Debug panel</h2>{embedded && <Button variant="ghost" size="sm" onClick={() => setPanelOpen(false)}>Close</Button>}<span>01—04</span></div>
-        <div className="og-actions"><Button variant="ghost" onClick={reset}>Reset all</Button>{!embedded && <Button variant="outline" onClick={() => setDark(value => !value)}>{dark ? 'Light canvas' : 'Dark canvas'}</Button>}</div>
+        <div className="og-actions"><Button variant="ghost" onClick={reset}>Reset all</Button><Button variant="outline" onClick={copyAllProperties}>Copy all properties</Button></div>
+        {copyStatus && <p className="og-note" role="status">{copyStatus}</p>}
         <div className="og-actions"><Button onClick={playTransition} disabled={phase !== 'idle' && phase !== 'complete'}>{phase === 'complete' ? 'Replay transition' : 'Play transition'}</Button><Button variant="outline" onClick={resetTransition} disabled={phase === 'idle'}>Reset</Button></div>
         <p className="og-note" role="status">{phase === 'rings' ? '1 / 2 · Turning rings face-on and hiding logos' : phase === 'signals' ? '2 / 2 · Drawing outward signal line' : phase === 'complete' ? 'Transition complete' : phase === 'resetting' ? 'Restoring orbit' : 'Ready to test transition'}</p>
         {reducedMotion && <p className="og-note">Autoplay is off to respect your reduced motion setting. All controls still work.</p>}
@@ -568,7 +590,7 @@ export default function OrbitPlayground({ embedded = false }) {
       <OrbitGimbal pageOutlet rings={rings} clock={clock} thickness={thickness} opacity={opacity} zoom={zoom} guides={guides} viewX={viewX} viewY={viewY} solar={solar} bodies={bodies} connectors={connectors} appearance={appearance} signals={signals} signalClock={signalClock} interaction={interaction} transitioning={phase !== 'idle' && phase !== 'resetting'} transition={transition} fog={fog} hitbox={hitbox} />
     </div>
     <PageSignalOutlet strokeOpacity={opacity} homeRef={homeRef} transition={transition} signals={signals} connectors={connectors} zoom={zoom} />
-      {panelOpen ? <div className="og-home-panel">{controls}</div> : <Button className="og-home-panel-toggle" variant="outline" onClick={() => setPanelOpen(true)}>Orbit controls</Button>}
+      {SHOW_DEBUG_CONTROLS && (panelOpen ? <div className="og-home-panel">{controls}</div> : <Button className="og-home-panel-toggle" variant="outline" onClick={() => setPanelOpen(true)}>Orbit controls</Button>)}
   </div>
   return <main className={`og-page ${dark ? 'dark' : ''}`}>
     <h1 className="sr-only">Orbit playground</h1>
@@ -578,7 +600,7 @@ export default function OrbitPlayground({ embedded = false }) {
           <OrbitGimbal rings={rings} clock={clock} thickness={thickness} opacity={opacity} zoom={zoom} guides={guides} viewX={viewX} viewY={viewY} solar={solar} bodies={bodies} connectors={connectors} appearance={appearance} signals={signals} signalClock={signalClock} interaction={interaction} transitioning={phase !== 'idle' && phase !== 'resetting'} transition={transition} fog={fog} hitbox={hitbox} />
         </motion.div>
       </section>
-{controls}
+{SHOW_DEBUG_CONTROLS && controls}
     </div>
   </main>
 }

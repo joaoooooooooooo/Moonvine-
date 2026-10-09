@@ -1,8 +1,8 @@
 ﻿import { useSyncExternalStore } from 'react'
 import './asset-fade.css'
 
-export const fadeDefaults = { mode: 'overlay', direction: 'edges', right: 85, bottom: 70, start: 25, angle: 135, grain: 0.1 }
-const key = 'moonvine:website:shell-fade:v2'
+export const fadeDefaults = { mode: 'mask', direction: 'edges', right: 24, bottom: 42, start: 25, angle: 135, grain: 0.8 }
+const key = 'moonvine:website:shell-fade:v3'
 let snapshot
 const listeners = new Set()
 function getSnapshot() {

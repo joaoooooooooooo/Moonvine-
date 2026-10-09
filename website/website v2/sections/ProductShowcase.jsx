@@ -23,6 +23,7 @@ const analytics = lenses.find(item => item.id === 'analytics')
 const visits = searchClicksSeries(analytics)
 const engagement = engagementSeries(visits)
 const metricLenses = ['news', 'search', 'analytics'].map(id => lenses.find(item => item.id === id))
+const SHOW_DEBUG_CONTROLS = false
 
 function FadeSlider({ label, value, onChange, min = 0, max = 100, step = 1, unit = '%' }) {
   return <label className="og-control"><span>{label}<output>{value}{unit}</output></span><input type="range" min={min} max={max} step={step} value={value} onChange={event => onChange(Number(event.target.value))} /></label>
@@ -36,9 +37,18 @@ export function ProductShowcase() {
   const chartsInView = useInView(chartsRef, { once: true, amount: 0.15 })
   const [fade, setFade] = useAssetFade()
   const [controlsOpen, setControlsOpen] = useState(false)
+  const [copyStatus, setCopyStatus] = useState('')
   const [portal, setPortal] = useState(null)
   useEffect(() => { setPortal(document.querySelector('.mv-website')) }, [])
   const update = (key, value) => setFade(current => ({ ...current, [key]: value }))
+  async function copyFadeProperties() {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(fade, null, 2))
+      setCopyStatus('Fade properties copied')
+    } catch {
+      setCopyStatus('Could not copy fade properties')
+    }
+  }
 
   return <WebsiteSection className="mv-delivery-band mv-product-band" labelledBy="delivery-title">
     <div className="mv-product-layout">
@@ -58,7 +68,7 @@ export function ProductShowcase() {
         </motion.div>
       </div>
     </div>
-    {portal && createPortal(<div className="mv-fade-debug">
+    {SHOW_DEBUG_CONTROLS && portal && createPortal(<div className="mv-fade-debug">
       {controlsOpen ? <aside className="og-panel" aria-label="Chart fade controls">
         <ScrollArea className="mv-fade-debug-scroll" overscrollContain>
           <div className="mv-fade-debug-content">
@@ -74,6 +84,8 @@ export function ProductShowcase() {
             </>}
             <FadeSlider label="Grain opacity" value={fade.grain} max={10} step={0.1} onChange={v => update('grain', v)} />
             <Button variant="outline" onClick={() => setFade(fadeDefaults)}>Reset fade</Button>
+            <Button variant="outline" onClick={copyFadeProperties}>Copy all properties</Button>
+            {copyStatus && <p className="og-note" role="status">{copyStatus}</p>}
           </div>
         </ScrollArea>
       </aside> : <Button variant="outline" onClick={() => setControlsOpen(true)}>Chart fade</Button>}

@@ -1,6 +1,6 @@
 // Damped torsional links transfer pressure between adjacent rings.
 // No ring receives a target angle; only the touched ring receives force.
-export const defaultInteraction = { enabled: true, strength: 7, sensitivity: 5, mass: 2, damping: 18, stiffness: 18, coupling: 24, response: 7, release: 180, cascade: 0, counter: true }
+export const defaultInteraction = { enabled: true, strength: 4, sensitivity: 1, mass: 3, damping: 5, stiffness: 18, coupling: 24, response: 7, release: 325, cascade: 0, counter: false }
 
 export function stepRingDynamics(state, order, hovered, strength, dt, settings = defaultInteraction) {
   state.pressure += ((hovered === null ? 0 : strength * 42) - state.pressure) * (1 - Math.exp(-dt * settings.response))

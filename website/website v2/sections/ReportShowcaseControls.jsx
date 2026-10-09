@@ -4,8 +4,8 @@ import { createPortal } from 'react-dom'
 import { Button } from '../../../src/components/ui/button'
 import { ScrollArea } from '../../../src/components/ui/scroll-area'
 
-export const reportVisualDefaults = { pageBackground: 'background', assetBackground: 'card', fadeRight: 48, fadeBottom: 55, size: 100, assetBlur: 32, assetY: 12, assetOpacity: 35, cardBlur: 64, cardSpread: 24, cardY: 16, cardOpacity: 100 }
-const storageKey = 'moonvine:website:report-visual:v1'
+export const reportVisualDefaults = { pageBackground: 'background', assetBackground: 'background', fadeRight: 32, fadeBottom: 57, size: 100, assetBlur: 0, assetY: -13, assetOpacity: 100, cardBlur: 58, cardSpread: 0, cardY: -40, cardOpacity: 8 }
+const storageKey = 'moonvine:website:report-visual:v2'
 export function useReportVisualSettings() {
   const [settings, setSettings] = useState(() => {
     try { return { ...reportVisualDefaults, ...JSON.parse(localStorage.getItem(storageKey) || '{}') } } catch { return reportVisualDefaults }
@@ -19,8 +19,17 @@ function Slider({ label, setting, value, onChange, min = 0, max = 120, step = 1,
 export function ReportShowcaseControls({ value, onChange }) {
   const [fade, setFade] = useAssetFade()
   const [open, setOpen] = useState(false)
+  const [copyStatus, setCopyStatus] = useState('')
   const [portal, setPortal] = useState(null)
   useEffect(() => setPortal(document.querySelector('.mv-website')), [])
+  async function copyAllProperties() {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify({ report: value, fade }, null, 2))
+      setCopyStatus('All properties copied')
+    } catch {
+      setCopyStatus('Could not copy properties')
+    }
+  }
   if (!portal) return null
   return createPortal(<div className="mv-report-debug">{open ? <aside className="og-panel" aria-label="Report asset controls">
     <ScrollArea className="mv-report-debug-scroll" overscrollContain>
@@ -44,6 +53,8 @@ export function ReportShowcaseControls({ value, onChange }) {
         <Slider label="Asset size" setting="size" value={value} onChange={onChange} min={60} max={150} unit="%" />
 
         <Button variant="outline" onClick={() => onChange(reportVisualDefaults)}>Reset report appearance</Button>
+        <Button variant="outline" onClick={copyAllProperties}>Copy all properties</Button>
+        {copyStatus && <p className="og-note" role="status">{copyStatus}</p>}
       </div>
     </ScrollArea>
   </aside> : <Button variant="outline" onClick={() => setOpen(true)}>Report controls</Button>}</div>, portal)

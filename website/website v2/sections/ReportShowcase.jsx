@@ -14,7 +14,7 @@ import { ReportStatusDot } from '../../../src/features/observatory/_V2/component
 import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
 import { Button } from '../../../src/components/ui/button'
 import { CalendarBlank } from '@phosphor-icons/react'
-import { ReportShowcaseControls, useReportVisualSettings } from './ReportShowcaseControls'
+import { useReportVisualSettings } from './ReportShowcaseControls'
 import { WebsiteSection } from '../components/website-primitives'
 import './report-showcase.css'
 
@@ -67,7 +67,7 @@ export function ReportHeroPreview() {
   </div>
 }
 export function ReportShowcase() {
-  const [visual, setVisual] = useReportVisualSettings()
+  const [visual] = useReportVisualSettings()
   const [fade] = useAssetFade()
   const assetRef = useRef(null)
   const frameRef = useRef(null)
@@ -115,6 +115,5 @@ export function ReportShowcase() {
         <span className="sr-only" role="status">Showing {sections.find(item => item.id === section).label} report preview</span>
       </div>
     </div>
-    <ReportShowcaseControls value={visual} onChange={setVisual} />
   </WebsiteSection>
 }

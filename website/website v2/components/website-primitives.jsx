@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react'
-import { ArrowRight, List, Moon, Sun, X } from '@phosphor-icons/react'
+import { ArrowRight, List, X } from '@phosphor-icons/react'
 import { Button } from '../../../src/components/ui/button'
 import { useSectionReveal } from '../../../src/hooks/use-section-reveal'
 import wordmark from '../../../src/assets/Logo type - Light.svg'
@@ -27,12 +27,11 @@ export function WireframeBlock({ label, className = '' }) {
 
 function Wordmark() { return <a className="mv-wordmark" href="#top" aria-label="Moonvine home"><img src={wordmark} alt="Moonvine" /></a> }
 
-function Header({ dark, onThemeChange }) {
+function Header() {
   const [open, setOpen] = useState(false)
-  return <header className="mv-site-header"><div className="mv-container mv-header-inner"><Wordmark /><nav aria-label="Main navigation" className={`mv-nav${open ? ' is-open' : ''}`}><a href="#inside" onClick={() => setOpen(false)}>What’s inside</a><a href="#connections" onClick={() => setOpen(false)}>Connections</a><a href="#how-it-works" onClick={() => setOpen(false)}>How it works</a><a href="#pricing" onClick={() => setOpen(false)}>Pricing</a></nav><div className="mv-header-actions"><Button variant="ghost" size="icon" onClick={onThemeChange} aria-label={`Switch to ${dark ? 'light' : 'dark'} mode`}>{dark ? <Sun /> : <Moon />}</Button><Button render={<a href={APP_URL} />} variant="outline">Sign in</Button><Button render={<a href="#pricing" />}>Start free <ArrowRight /></Button></div><Button className="mv-menu-button" variant="outline" size="icon" onClick={() => setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}>{open ? <X /> : <List />}</Button></div></header>
+  return <header className="mv-site-header"><div className="mv-container mv-header-inner"><Wordmark /><nav aria-label="Main navigation" className={`mv-nav${open ? ' is-open' : ''}`}><a href="#inside" onClick={() => setOpen(false)}>What’s inside</a><a href="#connections" onClick={() => setOpen(false)}>Connections</a><a href="#how-it-works" onClick={() => setOpen(false)}>How it works</a><a href="#pricing" onClick={() => setOpen(false)}>Pricing</a></nav><div className="mv-header-actions"><Button render={<a href={APP_URL} />} variant="outline">Sign in</Button><Button render={<a href="#pricing" />}>Start free <ArrowRight /></Button></div><Button className="mv-menu-button" variant="outline" size="icon" onClick={() => setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}>{open ? <X /> : <List />}</Button></div></header>
 }
 
 export function WebsiteShell({ children }) {
-  const [dark, setDark] = useState(true)
-  return <div id="top" className={`mv-website${dark ? ' dark' : ''}${WIREFRAME_MODE ? ' is-wireframe' : ''}`}><a className="mv-skip" href="#main">Skip to content</a><div className="mv-page"><Header dark={dark} onThemeChange={() => setDark(!dark)} /><main id="main">{children}</main><footer className="mv-footer"><div className="mv-container mv-footer-inner"><Wordmark /><span>A clearer read on the marketing universe.</span><a href="#top">Back to top ↑</a></div></footer></div></div>
+  return <div id="top" className={`mv-website dark${WIREFRAME_MODE ? ' is-wireframe' : ''}`}><a className="mv-skip" href="#main">Skip to content</a><div className="mv-page"><Header /><main id="main">{children}</main><footer className="mv-footer"><div className="mv-container mv-footer-inner"><Wordmark /><span>A clearer read on the marketing universe.</span><a href="#top">Back to top ↑</a></div></footer></div></div>
 }
