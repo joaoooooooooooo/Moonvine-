@@ -8,39 +8,7 @@ import anthropicCover from '../assets/proto-anthropic.png'
 import worldCupCover from '../assets/proto-worldcup.png'
 import taylorCover from '../assets/proto-taylor.png'
 
-const sourceGroups = [
-  { title: 'Your data', detail: 'First-party', icon: ChartLineUp, items: 'Analytics, Search Console, site health' },
-  { title: 'The open web', detail: 'Third-party', icon: Globe, items: 'AI answers, search, earned media' },
-  { title: 'Social + rivals', detail: 'Your category', icon: Megaphone, items: 'Channels, competitors, conversations' },
-]
-const delivery = [
-  { title: 'Chat', description: 'Ask anything, get a read', icon: ChatCircleDots },
-  { title: 'Dashboard', description: 'Every channel, explained', icon: ChartLineUp },
-  { title: 'Weekly email', description: 'The week in your inbox', icon: EnvelopeSimple },
-]
-
-const flowPaths = [
-  'M340 64 C405 64 405 180 455 180',
-  'M340 180 C405 180 405 180 455 180',
-  'M340 296 C405 296 405 180 455 180',
-  'M545 180 C595 180 595 64 660 64',
-  'M545 180 C595 180 595 180 660 180',
-  'M545 180 C595 180 595 296 660 296',
-]
-
-function FlowConnections() {
-  return <svg className="mv-flow-lines" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-hidden="true">
-    {flowPaths.map((path, index) => <g key={path}>
-      <path className="mv-flow-track" d={path} />
-      <path className="mv-flow-signal" d={path} pathLength="100" style={{ animationDelay: `${index * -0.65}s` }} />
-      <circle className="mv-flow-dot" r="3.5">
-        <animateMotion dur="3.9s" begin={`${index * 0.65}s`} repeatCount="indefinite" path={path} />
-      </circle>
-    </g>)}
-  </svg>
-}
-
-export function Connections() { return <WebsiteSection id="connections" className="mv-connections-band" labelledBy="connections-heading"><SectionIntro id="connections-heading" title="Plug and play" description={<><span className="mv-description-line">Moonvine pulls from your analytics, social channels,</span>{' '}<span className="mv-description-line">competitors, and the open web,</span>{' '}<span className="mv-description-line">reads it all together, then</span>{' '}<strong className="mv-description-line">answers through chat, dashboard, and email.</strong></>} /><div className="mv-flow" aria-label="Sources are combined into one read, then delivered in chat, dashboard, and email"><FlowConnections /><div className="mv-flow-column">{sourceGroups.map(({ title, detail, icon: Icon, items }) => <FrameCard key={title} withFill className="mv-flow-card"><FrameCardContent><div className="mv-flow-card-heading"><Icon size={19} /><span>{title}</span><Badge variant="secondary">{detail}</Badge></div><p>{items}</p></FrameCardContent></FrameCard>)}</div><div className="mv-flow-center"><div className="mv-flow-orbit" aria-hidden="true"><Sparkle size={32} /></div></div><div className="mv-flow-column">{delivery.map(({ title, description, icon: Icon }) => <FrameCard key={title} withFill className="mv-flow-card"><FrameCardContent><div className="mv-flow-card-heading"><Icon size={19} /><span>{title}</span></div><p>{description}</p></FrameCardContent></FrameCard>)}</div></div><div className="mv-coverage"><h3>Coverage</h3><div className="mv-coverage-grid">{['AI visibility','Google Analytics','Google Search','News + media','Social media','Competitor intelligence'].map((label, i) => <div key={label}><span className="mv-coverage-icon">{React.createElement([Sparkle,ChartLineUp,MagnifyingGlass,Globe,Megaphone,Globe][i], { size: 22 })}</span><span>{label}</span></div>)}</div></div></WebsiteSection> }
+export { Connections } from './Connections'
 
 const steps = [
   { number: '01', title: 'Today', detail: "Start with the domain you want to watch. Explore the dashboard and add sources when you're ready." },

@@ -1,0 +1,55 @@
+.movi-study{min-height:100dvh;background:var(--background);color:var(--foreground);font-family:var(--font-sans);padding:40px clamp(20px,5vw,80px)}
+.movi-study-header{max-width:1080px;margin:0 auto 32px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.movi-study-header h1{font-size:24px;font-weight:500;letter-spacing:-.03em}.movi-study-header p{margin-top:8px;color:var(--muted-foreground);font-size:14px}
+.movi-study-layout{display:grid;grid-template-columns:minmax(0,720px) 280px;align-items:start;gap:32px;max-width:1080px;margin:auto}
+.movi-showcase{position:relative;isolation:isolate;height:760px;max-height:calc(100dvh - 180px);min-height:460px;min-width:0;overflow:hidden;border:1px solid var(--border);border-radius:var(--radius-2xl);background:var(--card);color:var(--card-foreground);font-family:var(--font-sans)}
+.movi-thread-scroll{height:100%;min-height:0}.movi-thread{display:flex;flex-direction:column;gap:32px;padding:32px 28px 120px;min-width:0}
+.movi-thread [data-from=user]{margin-left:auto;max-width:85%}.movi-thread [data-from=assistant]{width:100%}
+.movi-intro{display:grid;place-items:center;gap:16px;min-height:320px;color:var(--muted-foreground)}.movi-avatar{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--border);border-radius:var(--radius-xl);color:var(--foreground);font-size:20px}
+.movi-response-title{font-family:var(--font-sans);font-size:22px;font-weight:600;line-height:1.35;max-width:32ch;text-wrap:balance}.movi-read{font-size:16px;line-height:1.6;max-width:52ch;text-wrap:pretty}
+.movi-sources{font-size:14px;color:var(--muted-foreground)}.movi-sources summary{cursor:pointer;width:fit-content}.movi-sources ul{padding:12px 0 0 20px;display:grid;gap:6px}
+.movi-comparison{display:grid;gap:16px;width:100%;min-width:0}.movi-comparison th,.movi-comparison td{white-space:normal;font-size:14px}
+.movi-showcase .v2-card-tagline{padding-bottom:12px;border-bottom:1px solid var(--border)}
+.movi-stream-word{animation:movi-word-in .22s ease-out both}.movi-stream-cursor{display:inline-block;width:2px;height:1em;margin-left:2px;background:currentColor;vertical-align:-2px}
+@keyframes movi-word-in{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:blur(0)}}
+.movi-study-controls{border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;background:var(--card);font-size:14px;display:grid;gap:20px}.movi-study-controls h2{font-size:16px;font-weight:500}.movi-study-controls p{color:var(--muted-foreground);line-height:1.6}.movi-study-actions{display:flex;gap:8px}.movi-speed{display:grid;grid-template-columns:1fr auto;gap:12px}.movi-speed input{grid-column:1/-1;width:100%;accent-color:var(--foreground)}.movi-loop{display:flex;gap:8px;align-items:center}
+@media(max-width:900px){.movi-study-layout{grid-template-columns:minmax(0,1fr);max-width:680px}.movi-study-controls{order:-1}.movi-showcase{max-height:none;height:720px}.movi-study-header{max-width:680px}}
+@media(max-width:480px){.movi-study{padding:24px 12px}.movi-thread{padding:24px 16px 120px}.movi-response-title{font-size:20px}.movi-showcase{height:660px}.movi-study-header{align-items:start}}
+@media(prefers-reduced-motion:reduce){.movi-stream-word{animation:none}}
+
+@keyframes movi-pop-in{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes movi-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes movi-fade-up{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.movi-showcase [style*="animation"]{animation:none!important}}
+
+/* Compact chat response: one message-sized type scale throughout. */
+.movi-showcase{height:620px}
+.movi-intro{min-height:240px}
+.movi-read{max-width:none;font-size:1rem;line-height:1.5}
+.movi-read p,.movi-read button,.movi-read a,.movi-read span{font-size:inherit}
+.movi-read p{line-height:1.5}
+
+.movi-exchange{display:flex;flex-direction:column;gap:28px;min-width:0}
+
+.movi-reasoned-label{font-size:1rem;line-height:1.5;color:var(--muted-foreground)}
+
+.movi-meeting-recap{display:grid;gap:12px;width:100%;font-size:1rem;line-height:1.5;margin-top:8px}
+.movi-meeting-recap th,.movi-meeting-recap td{font-size:inherit;white-space:normal;vertical-align:top}
+.movi-meeting-recap th:nth-child(1){width:27%}.movi-meeting-recap th:nth-child(2){width:24%}
+
+.movi-meeting-recap th{vertical-align:middle;line-height:1.5;padding-block:10px}
+
+.movi-history-response .movi-response-actions{opacity:0!important;pointer-events:none!important}
+.movi-history-response:hover .movi-response-actions,.movi-history-response:focus-within .movi-response-actions{opacity:1!important;pointer-events:auto!important}
+@media(hover:none){.movi-history-response .movi-response-actions{opacity:1!important;pointer-events:auto!important}}
+
+.movi-composer-entrance{position:absolute;inset-inline:0;bottom:0;height:120px;z-index:20;pointer-events:none;transform-origin:50% 100%}
+.movi-composer-entrance{width:auto}.movi-composer-entrance form{max-width:none;border-radius:var(--movi-composer-radius,48px);align-items:center}
+
+.movi-composer-entrance [role="textbox"]{font-size:var(--movi-prompt-size,16px);line-height:1.4}
+
+/* Editable-style prompt text must wrap greedily, not rebalance as letters arrive. */
+.movi-composer-entrance [role="textbox"]{text-wrap:wrap;overflow-wrap:normal;word-break:normal}
+
+.movi-thread-scroll [data-slot="scroll-area-viewport"]{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){.movi-thread-scroll [data-slot="scroll-area-viewport"]{scroll-behavior:auto}}

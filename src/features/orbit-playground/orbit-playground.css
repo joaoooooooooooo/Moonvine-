@@ -1,0 +1,60 @@
+.og-page{min-height:100dvh;background:var(--background);color:var(--foreground);font-family:var(--font-sans);padding:32px clamp(20px,4vw,72px);font-size:14px}
+.og-page p{text-wrap:pretty}.og-page h1,.og-page h2{text-wrap:balance}.og-header{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1920px;margin:0 auto 32px}.og-header p{color:var(--muted-foreground);margin:0 0 8px}.og-header h1{font-size:28px;font-weight:500;margin:0;letter-spacing:-.04em}.og-workspace{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;max-width:1920px;margin:auto;align-items:start}.og-canvas{border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;background:var(--card);min-width:0}.og-canvas-caption,.og-canvas-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;color:var(--muted-foreground)}.og-canvas-caption span:last-child{font-size:12px;letter-spacing:.12em}.og-stage{height:min(68vw,720px);min-height:320px;display:grid;place-items:center;cursor:grab;touch-action:none;overflow:hidden}.og-stage:active{cursor:grabbing}.og-stage:focus-visible{outline:2px solid var(--ring);outline-offset:-4px}.og-gimbal-bounds{position:relative;aspect-ratio:1;max-width:1000px;max-height:90%;display:grid;place-items:center}.og-gimbal{position:absolute;inset:0;transform-style:preserve-3d}.og-ring{position:absolute;left:50%;top:50%;translate:-50% -50%;transform-origin:center;pointer-events:none}.og-ring svg{display:block}.og-center{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--foreground);pointer-events:none}.og-guides{position:absolute;inset:0;opacity:.3;pointer-events:none}.og-guides i{position:absolute;left:0;top:50%;width:100%;border-top:1px dashed currentColor}.og-guides i:nth-child(2){transform:rotate(90deg)}.og-guides span{position:absolute;left:50%;top:50%;width:24px;height:24px;border:1px solid currentColor;border-radius:50%;translate:-50% -50%}.og-guides b{position:absolute;font-size:22px;font-weight:400;translate:-50% -50%;line-height:1}.og-guides b:nth-of-type(1){left:0;top:50%}.og-guides b:nth-of-type(2){left:100%;top:50%}.og-guides b:nth-of-type(3){left:50%;top:0}.og-guides b:nth-of-type(4){left:50%;top:100%}.og-panel{border:1px solid var(--border);background:var(--card);border-radius:var(--radius-xl);padding:24px}.og-panel-heading{display:flex;justify-content:space-between;align-items:center}.og-panel h2{font-size:16px;font-weight:500;margin:0}.og-panel-heading>span,.og-note{color:var(--muted-foreground)}.og-actions{display:flex;gap:8px;margin-top:20px}.og-panel fieldset{border:0;border-top:1px solid var(--border);padding:20px 0 0;margin:24px 0 0;min-width:0}.og-panel legend{padding-right:12px;font-weight:500}.og-control{display:block;margin:0 0 20px}.og-control>span{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px}.og-control output{color:var(--muted-foreground);font-variant-numeric:tabular-nums}.og-control input{display:block;width:100%;accent-color:var(--foreground);cursor:pointer;height:20px}.og-check{display:flex;align-items:center;gap:10px;margin:4px 0 20px;cursor:pointer}.og-check input{accent-color:var(--foreground);width:16px;height:16px}.og-ring-picker{display:flex;gap:8px;margin-bottom:20px}.og-ring-picker>*{flex:1}.og-note{font-size:14px;line-height:1.5;margin:20px 0 0}
+@media(max-width:1000px){.og-workspace{grid-template-columns:minmax(0,1fr) 280px}.og-panel{padding:20px}.og-canvas-footer{flex-wrap:wrap}.og-stage{height:55vw}}
+@media(max-width:760px){.og-workspace{grid-template-columns:1fr}.og-stage{height:85vw;min-height:280px}.og-page{padding:24px 16px}.og-header{margin-bottom:24px}.og-canvas-caption,.og-canvas-footer{padding:16px}.og-canvas-caption span:last-child{display:none}}
+
+.og-sun{width:32px;height:32px;border:1px solid color-mix(in srgb,var(--foreground) 65%,transparent);background:radial-gradient(circle at 32% 30%,var(--foreground),color-mix(in srgb,var(--foreground) 30%,var(--background)));box-shadow:0 0 36px color-mix(in srgb,var(--foreground) 10%,transparent)}
+
+/* Keep the preview and controls within the desktop viewport. */
+@media(min-width:761px){
+  .og-page{height:100dvh;min-height:0;display:flex;flex-direction:column;padding:24px clamp(20px,3vw,48px);overflow:hidden}
+  .og-header{width:100%;flex:none;margin-bottom:24px}
+  .og-workspace{width:100%;flex:1;min-height:0;align-items:stretch;margin-block:0}
+  .og-canvas{display:flex;flex-direction:column;min-height:0}
+  .og-canvas-caption,.og-canvas-footer{flex:none}
+  .og-stage{flex:1;height:auto;min-height:0}
+  .og-panel{height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable}
+}
+@media(max-width:760px){
+  .og-panel{max-height:55dvh;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+}
+/* Unframed orbit canvas; oversized geometry remains visible. */
+.og-canvas{border:0;border-radius:0;background:transparent;overflow:visible}
+.og-stage{overflow:visible}
+.og-gimbal-bounds{max-width:none;max-height:none;flex:none}
+.og-header{position:relative;z-index:2}
+.og-panel{position:relative;z-index:3}
+@media(min-width:761px){
+  .og-page{overflow:visible}
+  .og-workspace{position:relative}
+  .og-canvas-caption,.og-canvas-footer{position:relative;z-index:1;pointer-events:none}
+  .og-canvas-footer button{pointer-events:auto}
+}
+
+/* The orbit is a page-level study, so scale is measured against the viewport. */
+.og-stage{position:fixed;inset:0;width:100vw;height:100dvh;min-height:0;z-index:0}
+.og-gimbal-bounds{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.og-page{isolation:isolate}
+.og-header h1{font-family:'Nib Pro',Georgia,serif}
+
+.og-panel{padding:0;overflow:hidden;scrollbar-gutter:auto}
+.og-panel-scroll{position:relative;height:100%;min-height:0}
+.og-panel-content{padding:24px}
+@media(max-width:1000px){.og-panel-content{padding:20px}}
+@media(max-width:760px){.og-panel{height:55dvh}}
+.og-control-group{border-top:1px solid var(--border);margin-top:16px}
+.og-control-group>summary{padding:16px 0;cursor:pointer;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.og-control-group>summary::-webkit-details-marker{display:none}
+.og-control-group>summary::after{content:'+';color:var(--muted-foreground);font-size:18px}
+.og-control-group[open]>summary::after{content:'−'}
+.og-control-group>summary:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border-radius:4px}
+.og-group-content{padding:4px 0 0}
+.og-control select{width:100%;background:var(--background);color:var(--foreground);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px;font:inherit}
+.og-orbit-brand{pointer-events:none}
+.og-signal-color{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.og-signal-color input{width:40px;height:28px;padding:2px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer}
+
+.og-stage,.og-stage *{user-select:none;-webkit-user-select:none;-webkit-user-drag:none}.og-orbit-brand,.og-orbit-brand *{pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
+
+/* Explicit host theme overrides also work when an ancestor app uses dark mode. */
+.mv-website,.og-page{--og-logo-invert:0}
+.mv-website.dark,.og-page.dark{--og-logo-invert:1}

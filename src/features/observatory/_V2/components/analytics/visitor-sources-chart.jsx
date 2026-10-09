@@ -4,9 +4,10 @@ import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { Table, TableBody, TableRow, TableCell } from '@/components/ui/table';
 import { formatMetric } from '../../utils/observatory-model';
 
-export function VisitorSourcesChart({ lens }) {
-  const total = lens.rows.reduce((sum, [, value]) => sum + value, 0);
-  const data = lens.rows.map(([label, value], index) => ({
+export function VisitorSourcesChart({ lens, dataReady = true }) {
+  const rows = dataReady ? lens.rows : lens.rows.map(([label]) => [label, 0]);
+  const total = rows.reduce((sum, [, value]) => sum + value, 0);
+  const data = rows.map(([label, value], index) => ({
     channel: `channel-${index}`, label, value,
     color: `var(--chart-${index + 1})`,
     share: total ? value / total * 100 : 0,
@@ -22,10 +23,10 @@ export function VisitorSourcesChart({ lens }) {
         <div className="flex w-full min-w-0 flex-col gap-6">
           <h2 className="text-xl/normal font-normal">Where visits came from</h2>
           <div className="relative mx-auto aspect-square w-full max-w-96 [--background:var(--card)]">
-            <EChartsPieChart className="h-full w-full" config={config} data={data} dataKey="value" nameKey="channel">
+            {dataReady && <EChartsPieChart className="h-full w-full" config={config} data={data} dataKey="value" nameKey="channel">
               <EChartsPieChart.Tooltip />
               <EChartsPieChart.Pie variant="gradient" innerRadius="62%" outerRadius="92%" cornerRadius={8} paddingAngle={4} startAngle={90} endAngle={-270} isClickable={false} />
-            </EChartsPieChart>
+            </EChartsPieChart>}
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-xl/normal">{formatMetric(total)}</span>
               <span className="text-xs text-muted-foreground">Total visits</span>

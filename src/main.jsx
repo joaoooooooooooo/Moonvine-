@@ -3,7 +3,10 @@ import { createRoot } from 'react-dom/client'
 import './styles/index.css'
 import App from './App.jsx'
 import { ObservatoryV2 } from './features/observatory/_V2'
+import { ReportHeroPreview } from '../website/website v2/sections/ReportShowcase'
 import WebsiteHome from '../website/website v2/main.jsx'
+import OrbitPlayground from './features/orbit-playground/OrbitPlayground'
+import MoviShowcasePage from './features/movi-showcase/MoviShowcasePage'
 import { Agentation } from 'agentation'
 
 // A separate app entry: this recreation never renders the MVDS prototype shell.
@@ -16,15 +19,19 @@ window.addEventListener('hashchange', () => {
   }
 })
 const pathname = window.location.pathname.replace(/\/$/, '')
-const Page = pathname === '/observatory-v2'
+const Page = pathname === '/website/report-preview' ? ReportHeroPreview : pathname === '/observatory-v2'
   ? ObservatoryV2
   : pathname === '/website'
     ? WebsiteHome
-    : App
+    : pathname === '/orbit-playground'
+      ? OrbitPlayground
+      : pathname === '/movi-showcase'
+        ? MoviShowcasePage
+        : App
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Page />
-    {process.env.NODE_ENV === 'development' && pathname === '/website' && <Agentation />}
+    {process.env.NODE_ENV === 'development' && ['/website', '/movi-showcase'].includes(pathname) && <Agentation />}
   </StrictMode>,
 )

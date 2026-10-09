@@ -12,7 +12,7 @@ export function useSectionReveal({ includeSections = false } = {}) {
     const targets = [];
     function collect(parent) {
       for (const child of parent.children) {
-        if (child.matches('[aria-hidden="true"], [hidden], script, style')) continue;
+        if (child.matches('[aria-hidden="true"], [hidden], [data-reveal-skip], script, style')) continue;
         if (child.matches('section') && !includeSections) continue;
 
         // Walk through layout wrappers so individual headings and grid cards

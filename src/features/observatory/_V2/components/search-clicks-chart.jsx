@@ -55,7 +55,8 @@ function ReportsLineChartCanvas({ className, data = chartData, curveType = 'line
   );
 }
 
-export function MetricLineChart({ className, variant = "default", data = chartData, href, title = 'Google Search', metricLabel = 'Google Search clicks', icon: Icon = Search, curveType = 'linear', color, percentage = false, metricValue, comparisonLabel, compact = false, hideAxes = compact, hideYAxis = false }) {
+export function MetricLineChart({ className, variant = "default", data: sourceData = chartData, dataReady = true, href, title = 'Google Search', metricLabel = 'Google Search clicks', icon: Icon = Search, curveType = 'linear', color, percentage = false, metricValue, comparisonLabel, compact = false, hideAxes = compact, hideYAxis = false }) {
+const data = dataReady ? sourceData : sourceData.map(item => ({ ...item, current: 0, previous: 0 }));
 const TOTAL = data.reduce((sum, { current }) => sum + current, 0);
 const PREVIOUS_TOTAL = data.reduce((sum, { previous }) => sum + previous, 0);
 const CHANGE_PERCENT = PREVIOUS_TOTAL ? ((TOTAL - PREVIOUS_TOTAL) / PREVIOUS_TOTAL) * 100 : 0;
@@ -79,10 +80,10 @@ const COMPARISON_LABEL = `${CHANGE_PERCENT >= 0 ? "+" : ""}${CHANGE_PERCENT.toFi
             </h2>{href && <CardCaret />}</div>
           <SignalMetric
             align="top"
-            change={comparisonLabel ?? COMPARISON_LABEL}
+            change={dataReady ? (comparisonLabel ?? COMPARISON_LABEL) : "0%"}
             negative={CHANGE_PERCENT < 0}
             label={metricLabel}
-            value={metricValue ?? TOTAL.toLocaleString('en-US')}
+            value={dataReady ? (metricValue ?? TOTAL.toLocaleString('en-US')) : (percentage ? '0%' : '0')}
           />
             <div className="flex w-full flex-wrap items-center gap-3">
               {LEGEND.map(({ key, label, swatch }) => (
@@ -95,7 +96,7 @@ const COMPARISON_LABEL = `${CHANGE_PERCENT >= 0 ? "+" : ""}${CHANGE_PERCENT.toFi
                 </span>
               ))}
             </div>
-          <ReportsLineChartCanvas className="grow" data={data} curveType={curveType} color={color} percentage={percentage} compact={compact} hideAxes={hideAxes} hideYAxis={hideYAxis} />
+          {dataReady ? <ReportsLineChartCanvas className="grow" data={data} curveType={curveType} color={color} percentage={percentage} compact={compact} hideAxes={hideAxes} hideYAxis={hideYAxis} /> : <div className="h-40 w-full grow" aria-hidden="true" />}
   
         </div>
       </FrameCardContent>

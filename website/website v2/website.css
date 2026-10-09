@@ -88,3 +88,112 @@
 
 .mv-band.mv-delivery-band{border-top:0}
 .mv-website .mv-step h3{font-family:var(--font-sans)}
+
+/* Homepage orbit shares the playground engine, within the hero's normal flow. */
+.mv-website .mv-hero-layout,.mv-website.is-wireframe .mv-hero-layout{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.og-home-orbit{min-width:0;width:100%;align-self:center;color:var(--foreground);isolation:isolate}
+.og-home-stage{position:relative;width:100%;aspect-ratio:1;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:pan-y}
+.og-home-stage:focus-visible{outline:2px solid var(--ring);outline-offset:4px;border-radius:var(--radius-lg)}
+.og-home-stage .og-gimbal-bounds{max-width:100%}
+@media(max-width:1000px){.mv-website .mv-hero-layout,.mv-website.is-wireframe .mv-hero-layout{grid-template-columns:minmax(0,1fr)}.og-home-orbit{max-width:600px;margin-inline:auto}}
+.og-home-panel{position:fixed;right:20px;top:96px;bottom:20px;width:320px;z-index:60;color:var(--foreground);font-family:var(--font-sans);font-size:14px}
+.og-home-panel .og-panel{height:100%;max-height:100%;box-shadow:0 12px 40px #0003}
+.og-home-panel-toggle{position:fixed;right:20px;bottom:20px;z-index:60}
+@media(max-width:760px){.og-home-panel{top:auto;right:12px;bottom:12px;width:min(320px,calc(100vw - 24px));height:55dvh}}
+
+/* Anchor the orbit to the hero without constraining its visual scale. */
+.mv-website .mv-hero-band{position:relative;overflow:visible}
+.mv-website .mv-hero-layout{position:static;min-height:460px}
+.mv-website .mv-hero-copy{position:relative;z-index:2}
+.mv-website .og-home-orbit{position:absolute;left:52%;top:50%;width:46%;max-width:none;margin:0;translate:0 -50%;z-index:1;overflow:visible}
+.og-home-stage .og-gimbal-bounds{max-width:none}
+@media(max-width:1000px){.mv-website .mv-hero-layout{padding-bottom:clamp(300px,65vw,600px)}.mv-website .og-home-orbit{left:10%;top:auto;bottom:20px;width:80%;translate:none}}
+
+/* Keep transforms off the panel's ancestors so its fixed position stays viewport-based. */
+.mv-website .og-home-orbit{top:0;bottom:0;translate:none;pointer-events:none}
+.og-home-stage{position:absolute;top:50%;translate:0 -50%;pointer-events:auto}
+.og-home-panel,.og-home-panel-toggle{pointer-events:auto}
+@media(max-width:1000px){.mv-website .og-home-orbit{top:0;bottom:20px}.og-home-stage{top:auto;bottom:0;translate:none}}
+
+/* Keep the oversized artwork behind page content, with controls above it. */
+.mv-website .mv-hero-band{background:transparent}
+.mv-website .og-home-orbit{z-index:auto;isolation:auto}
+.mv-website .og-home-stage{z-index:0}
+
+/* Opaque side rails mask orbit artwork that extends beyond the page edges. */
+.mv-website > [data-slot="side-line-background"]{z-index:3}
+.mv-website [data-slot="side-line-background-left"],
+.mv-website [data-slot="side-line-background-right"]{background-color:var(--background)}
+
+/* Shared stacking context: orbit, content, side rails, then debug controls. */
+.mv-website{isolation:isolate}
+.mv-website .mv-page{z-index:auto}
+.mv-website .mv-band:not(.mv-hero-band),
+.mv-website .mv-site-header,
+.mv-website .mv-footer{position:relative;z-index:1}
+.mv-website .og-home-panel,
+.mv-website .og-home-panel-toggle{z-index:60}
+
+.og-home-stage{cursor:default}
+
+/* The orbit outlet belongs to the page, between section fills and content. */
+.mv-website{position:relative}
+.mv-website .mv-band:not(.mv-hero-band){z-index:auto;background:transparent}
+.mv-website .mv-band:not(.mv-hero-band)::before{content:'';position:absolute;inset:0;background:var(--background);z-index:0;pointer-events:none}
+.mv-website .mv-band:not(.mv-hero-band)>.mv-container{position:relative;z-index:2}
+
+/* Keep the orbit visible behind the first product composition. */
+.mv-website .mv-band.mv-product-band::before{display:none}
+
+@font-face{font-family:'Nib Pro Website';src:url('/NibPro-SemiBold.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap}
+.mv-website .mv-hero-copy h1{font-family:'Nib Pro Website',Georgia,serif;font-weight:400;font-size:40px;line-height:1.1;letter-spacing:1px}
+
+/* Shared website headline style, including all section introductions. */
+.mv-website .mv-hero-copy h1,
+.mv-website .mv-product-heading,
+.mv-website .mv-section-intro h2,
+.mv-website .mv-pricing-copy h2{
+  font-family:'Nib Pro Website',Georgia,serif;
+  font-size:40px;
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:1px;
+}
+
+/* Solid page margins mask overflowing artwork without the diagonal pattern. */
+.mv-website::before,.mv-website::after{content:'';position:fixed;inset-block:0;width:max(0px,calc((100vw - 1280px) / 8));background:var(--background);pointer-events:none;z-index:50}
+.mv-website::before{left:0}.mv-website::after{right:0}
+
+html.mv-home-scroll{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html.mv-home-scroll{scroll-behavior:auto}}
+
+.mv-website .mv-hero-copy h1{font-size:48px}
+
+/* Empty composition space must not intercept the oversized orbit's hit paths. */
+.mv-website .mv-product-band,
+.mv-website .mv-product-band > .mv-container,
+.mv-website .mv-product-layout,
+.mv-website .mv-product-stage,
+.mv-website .mv-hero-copy{pointer-events:none}
+.mv-website .mv-product-heading,
+.mv-website .mv-product-chat,
+.mv-website .mv-hero-copy > *{pointer-events:auto}
+.mv-website .mv-hero-copy > .mv-domain-scan{margin-top:24px}
+.og-home-stage .og-gimbal{overflow:visible}
+
+.mv-website .mv-hero-copy > p:not(.mv-kicker){max-width:36ch}
+
+/* Full viewport hero, with a tighter handoff to the product section. */
+.mv-website .mv-hero-band{min-height:100vh;display:flex;align-items:center}
+.mv-website .mv-hero-band > .mv-section-inner{padding-block:64px}
+.mv-website .mv-hero-layout{min-height:0}
+
+.mv-website .mv-band,.mv-website .mv-footer{border-top:0}
+.mv-website .mv-site-header{border-bottom:0}
+
+.mv-website{--mv-page-background:var(--background);background:var(--mv-page-background)}
+.mv-website .mv-site-header,
+.mv-website .mv-footer,
+.mv-website .mv-band:not(.mv-hero-band)::before,
+.mv-website::before,
+.mv-website::after{background:var(--mv-page-background)}

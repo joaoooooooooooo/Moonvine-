@@ -1,0 +1,58 @@
+.mv-website{--mv-page-background:var(--background)}
+.mv-delivery-band.mv-product-band > .mv-section-inner{padding-block:56px 56px}
+.mv-product-layout{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:64px;align-items:start}
+.mv-website .mv-product-heading{position:relative;z-index:2;margin:36px 0 0;font-size:40px;font-weight:400;line-height:1.1;letter-spacing:1px;max-width:18ch;text-wrap:balance}
+.mv-product-stage{position:relative;min-width:0;min-height:680px;isolation:isolate;--shell-scale:.68;--shell-offset:44%;--page-gutter:max(24px,calc((100vw - 1280px) * .375))}
+.mv-product-chat{position:relative;z-index:2;width:62%;min-width:360px;box-shadow:0 12px 36px -4px color-mix(in srgb,var(--mv-page-background) 95%,transparent),0 32px 72px -8px color-mix(in srgb,var(--mv-page-background) 85%,transparent);border-radius:var(--radius-2xl)}
+.mv-product-chat .movi-showcase{height:560px;min-height:0;max-height:none}
+.mv-product-chat .movi-thread{padding:24px 20px 120px;gap:24px}
+.mv-product-intelligence{position:absolute;z-index:0;top:90px;left:var(--shell-offset);width:calc((100% - var(--shell-offset) + var(--page-gutter)) / var(--shell-scale));height:820px;overflow:hidden;transform:scale(var(--shell-scale));transform-origin:top left;pointer-events:none;user-select:none;border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--card);font-family:var(--font-sans)}
+.mv-product-intelligence [data-slot=sidebar-wrapper]{height:820px;min-height:0}
+.mv-website .mv-product-stage :is(h1,h2,h3,h4){font-family:var(--font-sans);letter-spacing:normal}
+@media(max-width:1100px){.mv-product-layout{grid-template-columns:minmax(0,.7fr) minmax(0,1fr);gap:32px}.mv-product-chat{width:80%;min-width:0}.mv-product-stage{--shell-offset:36%;--shell-scale:.58}}
+@media(max-width:820px){.mv-product-layout{grid-template-columns:minmax(0,1fr);gap:40px}.mv-website .mv-product-heading{max-width:18ch;margin:0;font-size:40px}.mv-product-stage{min-height:660px}.mv-product-chat{width:70%;max-width:460px}.mv-product-stage{--shell-offset:38%}.mv-delivery-band.mv-product-band > .mv-section-inner{padding-block:48px 48px}}
+@media(max-width:520px){.mv-product-chat{width:100%;max-width:none}.mv-product-stage{--shell-offset:0%;--shell-scale:.42;--page-gutter:16px}.mv-product-intelligence{top:100px}.mv-product-stage{min-height:600px}.mv-product-chat .movi-showcase{height:560px}}
+
+.mv-product-intelligence{border:0;opacity:1}
+.mv-product-chat .movi-showcase,.mv-product-chat .movi-showcase :is(p,button,a,[role=textbox],th,td,.text-base,.movi-read,.movi-reasoned-label){font-size:15px;font-weight:400}
+.mv-product-chat .movi-showcase :is(.font-medium,.font-semibold,strong){font-weight:400}
+@media(max-width:760px){.mv-product-stage{--page-gutter:16px}}
+
+.mv-fade-debug{position:fixed;bottom:24px;left:24px;z-index:70;font-family:var(--font-sans)}
+.mv-fade-debug .og-panel{padding:0;width:min(320px,calc(100vw - 48px))}
+.mv-fade-debug-scroll{max-height:calc(100dvh - 48px)}
+.mv-fade-debug-content{padding:20px;display:grid;gap:16px}
+.mv-website .mv-fade-debug h2{font:500 16px var(--font-sans)}
+.mv-fade-debug .og-control{margin:0}
+
+.mv-fade-debug .og-panel{height:auto;max-height:none;overflow:hidden}
+.mv-fade-debug-scroll{height:min(470px,calc(100dvh - 48px));position:relative}
+
+/* Existing intelligence charts, arranged as a decorative grid behind Movi. */
+.mv-product-intelligence{background:transparent;border-radius:0;height:auto}
+.mv-product-charts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.mv-product-visitor-sources{grid-column:3;grid-row:1 / span 2;min-width:0}
+.mv-product-visitor-sources > *{height:100%}
+
+/* Keep the showcase transparent without changing cards elsewhere in the app. */
+.mv-product-charts{min-height:820px;background:var(--mv-page-background)}
+.mv-website .mv-product-charts [data-slot="frame-card"],
+.mv-website .mv-product-charts [data-slot="frame-card-content"],
+.mv-website .mv-product-charts .v2-card-tagline{background:transparent;box-shadow:none}
+.mv-website .mv-product-charts [data-slot="frame-card-content"]{border:0}
+.mv-website .mv-product-charts [data-slot="frame-card"]::before,
+.mv-website .mv-product-charts [data-slot="frame-card-content"]::before{display:none}
+
+/* Match the Observatory frame radius, including the nested visitor card. */
+.mv-website .mv-product-charts [data-slot="frame-card"],
+.mv-website .mv-product-charts [data-slot="frame-card-content"]{border-radius:var(--radius-md)}
+
+.mv-website .mv-product-charts .v2-card-tagline{background:var(--card)}
+
+@media(prefers-reduced-motion:no-preference){
+  .mv-product-charts > *{animation:section-enter 800ms cubic-bezier(.25,.46,.45,.94) backwards}
+  .mv-product-charts > :nth-child(2){animation-delay:80ms}
+  .mv-product-charts > :nth-child(3){animation-delay:160ms}
+  .mv-product-charts > :nth-child(4){animation-delay:240ms}
+  .mv-product-charts > :nth-child(5){animation-delay:320ms}
+}
