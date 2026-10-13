@@ -48,10 +48,10 @@ const ringStagger = 0.16
 const lineStagger = 0.12
 const defaultHitbox = { width: 72, outerWidth: 104, visible: false, followWobble: true, releaseDelay: 120 }
 const defaultFog = { enabled: true, strength: 0.85, start: 80, reach: 70 }
-const defaultSignals = { enabled: true, count: 9, duration: 4.5, outward: false, size: 1.25, color: '#a9ff9e', themeColor: false }
+export const defaultSignals = { enabled: true, count: 9, duration: 4.5, outward: false, size: 1.25, color: '#a9ff9e', themeColor: false }
 const SHOW_DEBUG_CONTROLS = true
 
-function OrbitBody({ ring, wobble, flatten, lineAlignment, logoProgress, dotAlignment, index, phase, logo, clock, viewX, viewY, solar, bodies, connectors, appearance, signals, signalClock, fadeId }) {
+function OrbitBody({ ring, wobble, flatten, lineAlignment, logoProgress, dotAlignment, index, phase, logo, clock, viewX, viewY, solar, bodies, connectors, appearance, signals, signalClock, fadeId, logosOnly = false }) {
   const logoMaskId = useId()
   const x = useTransform(() => projectRing(ring.size, ring.tilt, ring.angle + (solar ? 0 : clock.get() * ring.speed), (viewX.get() + wobble.x.get()), (viewY.get() + wobble.y.get()), phase + clock.get() * ring.speed, 'x', flatten.get()))
   const y = useTransform(() => projectRing(ring.size, ring.tilt, ring.angle + (solar ? 0 : clock.get() * ring.speed), (viewX.get() + wobble.x.get()), (viewY.get() + wobble.y.get()), phase + clock.get() * ring.speed, 'y', flatten.get()))
@@ -81,9 +81,9 @@ function OrbitBody({ ring, wobble, flatten, lineAlignment, logoProgress, dotAlig
   const logoScale = useTransform(() => `scale(${logoProgress.get()})`)
 
   return <g visibility={ring.visible ? 'visible' : 'hidden'} pointerEvents="none">
-    {connectors.enabled && ring.connector !== false && <motion.line x1={0} y1={0} x2={lineX} y2={lineY} stroke="var(--color-neutral-400)" strokeWidth={connectors.thickness} strokeDasharray={connectors.dashed ? '2 5' : undefined} vectorEffect="non-scaling-stroke" opacity={connectors.opacity} />}
-    {connectors.enabled && ring.connector !== false && signals.enabled && <motion.circle cx={signalX} cy={signalY} r={0.32 * signals.size} visibility={signalVisibility} fill={signals.themeColor !== false ? 'var(--foreground)' : signals.color} />}
-    {bodies && appearance.logos && <motion.g className="og-orbit-brand" style={{ transform: position }}>
+    {!logosOnly && connectors.enabled && ring.connector !== false && <motion.line x1={0} y1={0} x2={lineX} y2={lineY} stroke="var(--color-neutral-400)" strokeWidth={connectors.thickness} strokeDasharray={connectors.dashed ? '2 5' : undefined} vectorEffect="non-scaling-stroke" opacity={connectors.opacity} />}
+    {!logosOnly && connectors.enabled && ring.connector !== false && signals.enabled && <motion.circle cx={signalX} cy={signalY} r={0.32 * signals.size} visibility={signalVisibility} fill={signals.themeColor !== false ? 'var(--foreground)' : signals.color} />}
+    {logosOnly && bodies && appearance.logos && <motion.g className="og-orbit-brand" style={{ transform: position }}>
       <motion.g style={{ transform: logoScale, transformOrigin: '0px 0px', opacity: logoProgress }}>
         {appearance.fade && <circle cx={0} cy={0} r={fadeRadius} fill={`url(#${fadeId})`} />}
         <defs><mask id={logoMaskId} maskUnits="userSpaceOnUse" x={-logoSize / 2} y={-logoSize / 2} width={logoSize} height={logoSize} style={{ maskType: 'alpha' }}>
@@ -120,10 +120,10 @@ function OrbitRing({ ring, wobble, flatten, clock, thickness, opacity, viewX, vi
   return <motion.path d={path} fill="none" stroke="var(--color-neutral-400)" strokeWidth={thickness} strokeDasharray={ring.dashed ? `${ring.dash ?? 3} ${ring.gap ?? 7}` : undefined} vectorEffect="non-scaling-stroke" opacity={ring.visible ? opacity : 0} />
 }
 
-function OrbitLayer({ ring, index, wobble, onHover, onLeave, occupants, dimmed, highlighted, reducedMotion, hitbox, ...props }) {
+function OrbitLayer({ ring, index, wobble, onHover, onLeave, occupants, dimmed, highlighted, reducedMotion, hitbox, logosOnly = false, ...props }) {
   return <motion.g className={highlighted ? 'og-ring-highlighted' : undefined} animate={{ opacity: dimmed ? 0.2 : 1 }} transition={{ duration: reducedMotion ? 0 : 0.2 }}>
-    <OrbitRing ring={ring} wobble={wobble} {...props} opacity={highlighted ? 1 : props.opacity} />
-    {occupants.map(item => <OrbitBody key={item.logo.name} {...item} ring={ring} wobble={wobble} {...props} />)}
+    {!logosOnly && <OrbitRing ring={ring} wobble={wobble} {...props} opacity={highlighted ? 1 : props.opacity} />}
+    {occupants.map(item => <OrbitBody key={item.logo.name} {...item} ring={ring} wobble={wobble} logosOnly={logosOnly} {...props} />)}
   </motion.g>
 }
 function OrbitHitbox({ ring, index, outermost, wobble, onHover, onLeave, highlighted, hitbox, ...props }) {
@@ -235,11 +235,12 @@ export function OrbitGimbal({ rings, clock, thickness = 1, opacity = 0.7, zoom =
           <rect x={-fogBounds} y={-fogBounds} width={fogBounds * 2} height={fogBounds * 2} fill={'url(#' + fogGradientId + ')'} />
         </mask>
       </defs>
+      {connectors.enabled && !pageOutlet && <SignalOutlet rings={rings} transition={transition} signals={signals} connectors={connectors} />}
       <g mask={fog.enabled ? 'url(#' + fogId + ')' : undefined}>
       {rings.map((ring, index) => <OrbitLayer key={index} hitbox={hitbox} dimmed={focusedRing !== null && focusedRing !== index && index !== ringOrder[0]?.index} highlighted={focusedRing === index} reducedMotion={reducedMotion} ring={ring} index={index} wobble={wobbles[index]} flatten={transition.rings[index]} lineAlignment={transition.alignments[index]} logoProgress={transition.logos} dotAlignment={transition.dots} occupants={orbitLogos.filter(item => item.ringIndex === index)} onHover={onHover} onLeave={onLeave} clock={clock} thickness={thickness} opacity={opacity} viewX={viewX} viewY={viewY} solar={solar} bodies={bodies} connectors={connectors} appearance={appearance} signals={signals} signalClock={signalClock} fadeId={fadeId} />)}
+      {rings.map((ring, index) => <OrbitLayer key={`logos-${index}`} logosOnly hitbox={hitbox} dimmed={focusedRing !== null && focusedRing !== index && index !== ringOrder[0]?.index} highlighted={focusedRing === index} reducedMotion={reducedMotion} ring={ring} index={index} wobble={wobbles[index]} flatten={transition.rings[index]} lineAlignment={transition.alignments[index]} logoProgress={transition.logos} dotAlignment={transition.dots} occupants={orbitLogos.filter(item => item.ringIndex === index)} onHover={onHover} onLeave={onLeave} clock={clock} thickness={thickness} opacity={opacity} viewX={viewX} viewY={viewY} solar={solar} bodies={bodies} connectors={connectors} appearance={appearance} signals={signals} signalClock={signalClock} fadeId={fadeId} />)}
       </g>
       {rings.map((ring, index) => <OrbitHitbox key={index} outermost={index === ringOrder[ringOrder.length - 1]?.index} ring={ring} index={index} wobble={wobbles[index]} flatten={transition.rings[index]} clock={clock} viewX={viewX} viewY={viewY} solar={solar} hitbox={hitbox} highlighted={focusedRing === index} onHover={onHover} onLeave={onLeave} />)}
-      {connectors.enabled && !pageOutlet && <SignalOutlet rings={rings} transition={transition} signals={signals} connectors={connectors} />}
     </svg>
     {guides && <div className="og-guides" aria-hidden="true"><i /><i /><span /><b>+</b><b>+</b><b>+</b><b>+</b></div>}
     <span className={`og-center${solar ? ' og-sun' : ''}`} aria-hidden="true" />

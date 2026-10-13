@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react'
-import { animate, motion, useMotionValue, useReducedMotion } from 'motion/react'
+import { animate, motion, useInView, useMotionValue, useReducedMotion } from 'motion/react'
 import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../src/components/ui/card'
 import { ChatComposer } from '../../../src/features/observatory/_V2/components/intelligence-chat/chat-composer'
@@ -132,7 +132,9 @@ function FeatureAsset({ index }) {
 }
 
 function FeatureCard({ feature, index }) {
-  return <FrameCard withFill className="mv-feature-card" role="group" aria-label={`${index + 1} of ${features.length}: ${feature.title}`}>
+  const cardRef = useRef(null)
+  const inView = useInView(cardRef, { amount: 0.35 })
+  return <FrameCard ref={cardRef} withFill className={`mv-feature-card${inView ? ' is-in-view' : ''}`} role="group" aria-label={`${index + 1} of ${features.length}: ${feature.title}`}>
     <FrameCardContent className="mv-feature-card-content">
       <div className="mv-feature-copy"><h3>{feature.title}</h3><p>{feature.description}</p></div>
       <div className="mv-feature-asset" aria-hidden="true">{index === 7

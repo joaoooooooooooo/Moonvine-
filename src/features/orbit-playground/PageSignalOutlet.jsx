@@ -31,15 +31,18 @@ function PageSignalDot({ index, geometry, radius, end, transition, signals }) {
   const x = useTransform(() => position.get().x)
   const y = useTransform(() => position.get().y)
   const visibility = useTransform(() => distance.get() >= 0 && along.get() < end.get() ? 'visible' : 'hidden')
-  return <motion.circle cx={x} cy={y} r={radius} visibility={visibility} fill={signals.themeColor !== false ? 'var(--foreground)' : signals.color} />
+  const opacity = useTransform(() => Math.max(0, Math.min(1, (end.get() - along.get()) / TIP_FADE_LENGTH)))
+  return <motion.circle cx={x} cy={y} r={radius} visibility={visibility} opacity={opacity} fill={signals.themeColor !== false ? 'var(--foreground)' : signals.color} />
 }
 export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoom, strokeOpacity }) {
   const [geometry, setGeometry] = useState(null)
   const fadeId = useId()
-  const { scrollYProgress } = useScroll()
+  const { scrollY } = useScroll()
   useEffect(() => {
     const page = homeRef.current?.closest('.mv-website')
     const orbit = homeRef.current?.querySelector('.og-gimbal')
+    const connections = page?.querySelector('#connections')
+    const connectionsHeading = connections?.querySelector('#connections-heading')
     let measureFrame = 0
     if (!page || !orbit) return
     const measure = () => {
@@ -48,8 +51,19 @@ export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoo
       const top = ring.top + ring.height / 2 - bounds.top
       const left = ring.left + ring.width / 2 - bounds.left
       const height = Math.max(1, bounds.height - top)
-      const d = `M ${left} 0 V ${height}`
-      setGeometry({ page, orbitWidth: ring.width, top, height, width: bounds.width, d, ...samplePath(d) })
+      let d = `M ${left} 0 V ${height}`
+      if (connections && connectionsHeading) {
+        const heading = connectionsHeading.getBoundingClientRect()
+        const targetX = heading.left - bounds.left + 134
+        const radius = Math.min(96, Math.abs(left - targetX) / 3)
+        const bendY = heading.top - bounds.top - top - 135
+        const bendTop = Math.max(0, bendY - radius)
+        d = `M ${left} 0 V ${bendTop} C ${left} ${bendTop + radius * .55} ${left - radius * .45} ${bendY} ${left - radius} ${bendY} H ${targetX + radius} C ${targetX + radius * .45} ${bendY} ${targetX} ${bendY + radius * .45} ${targetX} ${bendY + radius}`
+      }
+      const revealAt = connectionsHeading
+        ? connectionsHeading.getBoundingClientRect().top - bounds.top - window.innerHeight * .65
+        : Math.max(1, bounds.height - window.innerHeight)
+      setGeometry({ page, orbitWidth: ring.width, top, height, width: bounds.width, revealAt: Math.max(1, revealAt), d, ...samplePath(d) })
     }
     const scheduleMeasure = () => {
       cancelAnimationFrame(measureFrame)
@@ -61,7 +75,7 @@ export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoo
     measure()
     return () => { observer.disconnect(); cancelAnimationFrame(measureFrame); window.removeEventListener('resize', scheduleMeasure) }
   }, [homeRef, zoom])
-  const end = useTransform(() => (geometry?.length ?? 0) * scrollYProgress.get())
+  const end = useTransform(() => Math.min(geometry?.length ?? 0, (geometry?.length ?? 0) * scrollY.get() / (geometry?.revealAt ?? 1)))
   const solidDash = useTransform(() => `${Math.max(0, end.get() - TIP_FADE_LENGTH)} ${(geometry?.length ?? 0) + 1}`)
   const tipDash = useTransform(() => `${Math.min(TIP_FADE_LENGTH, end.get())} ${(geometry?.length ?? 0) + 1}`)
   const tipOffset = useTransform(() => -Math.max(0, end.get() - TIP_FADE_LENGTH))

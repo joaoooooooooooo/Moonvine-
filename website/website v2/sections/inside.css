@@ -78,6 +78,27 @@
   box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
 }
 
+.mv-feature-card:not(.is-in-view) .mv-feature-asset > * { opacity: 0; transform: translateY(18px) }
+.mv-feature-card.is-in-view .mv-feature-asset > * { animation: mv-feature-asset-enter 650ms cubic-bezier(.2,.7,.2,1) both }
+.mv-feature-card.is-in-view .mv-feature-ranked li { animation: mv-feature-row-enter 550ms cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--row-index, 0) * 70ms + 180ms) }
+.mv-feature-ranked li:nth-child(2) { --row-index: 1 }
+.mv-feature-ranked li:nth-child(3) { --row-index: 2 }
+.mv-feature-ranked li:nth-child(4) { --row-index: 3 }
+.mv-feature-ranked li:nth-child(5) { --row-index: 4 }
+.mv-feature-ranked li:nth-child(6) { --row-index: 5 }
+.mv-feature-card.is-in-view .mv-feature-ranked li > [aria-hidden=true] { transform-origin:left center; animation:mv-feature-bar-grow 750ms cubic-bezier(.2,.7,.2,1) both; animation-delay:calc(var(--row-index, 0) * 70ms + 260ms) }
+.mv-feature-card.is-in-view .mv-feature-chart canvas,.mv-feature-card.is-in-view .mv-feature-chart svg { animation:mv-feature-chart-draw 900ms cubic-bezier(.2,.7,.2,1) 220ms both }
+.mv-feature-card.is-in-view .mv-feature-social-donut { animation:mv-feature-donut-enter 750ms cubic-bezier(.2,.7,.2,1) 150ms both }
+.mv-feature-card.is-in-view .mv-feature-social-key i { animation:mv-feature-bar-grow 550ms cubic-bezier(.2,.7,.2,1) both; transform-origin:left center }
+.mv-feature-card.is-in-view .mv-feature-social-key i:nth-child(2) { animation-delay:80ms }
+.mv-feature-card.is-in-view .mv-feature-social-key i:nth-child(3) { animation-delay:160ms }
+.mv-feature-card.is-in-view .mv-feature-social-key i:nth-child(4) { animation-delay:240ms }
+@keyframes mv-feature-asset-enter { from { opacity:0;transform:translateY(18px) } to { opacity:1;transform:translateY(0) } }
+@keyframes mv-feature-row-enter { from { opacity:0;transform:translateY(8px) } to { opacity:1;transform:translateY(0) } }
+@keyframes mv-feature-bar-grow { from { transform:scaleX(0) } to { transform:scaleX(1) } }
+@keyframes mv-feature-chart-draw { from { clip-path:inset(0 100% 0 0) } to { clip-path:inset(0 0 0 0) } }
+@keyframes mv-feature-donut-enter { from { opacity:0;transform:scale(.82) rotate(-25deg) } to { opacity:1;transform:scale(1) rotate(0) } }
+
 .mv-feature-asset-frame .mv-feature-brief,
 .mv-feature-chart > [data-slot="frame-card"] {
   border: 0;
@@ -164,4 +185,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mv-feature-nav button { transition: none }
+  .mv-feature-card:not(.is-in-view) .mv-feature-asset > * { opacity:1;transform:none }
+  .mv-feature-card.is-in-view .mv-feature-asset > *,
+  .mv-feature-card.is-in-view .mv-feature-ranked li,
+  .mv-feature-card.is-in-view .mv-feature-ranked li > [aria-hidden=true],
+  .mv-feature-card.is-in-view .mv-feature-chart canvas,
+  .mv-feature-card.is-in-view .mv-feature-chart svg,
+  .mv-feature-card.is-in-view .mv-feature-social-donut,
+  .mv-feature-card.is-in-view .mv-feature-social-key i { animation:none }
 }
