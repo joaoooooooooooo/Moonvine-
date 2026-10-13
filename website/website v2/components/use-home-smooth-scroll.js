@@ -23,7 +23,8 @@ export function useHomeSmoothScroll() {
     const wheel = event => {
       if (preference.matches || event.defaultPrevented || event.ctrlKey || event.metaKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return
       for (let node = event.target instanceof Element ? event.target : null; node && node !== document.body; node = node.parentElement) {
-        if (node.matches('[data-slot="scroll-area-viewport"], textarea, select, [role="dialog"]')) return
+        if (node.matches('[data-slot="scroll-area-viewport"]') && !node.closest('.movi-thread-static')) return
+        if (node.matches('textarea, select, [role="dialog"]')) return
         if (/(auto|scroll)/.test(getComputedStyle(node).overflowY) && node.scrollHeight > node.clientHeight) return
       }
       if (!event.deltaY) return

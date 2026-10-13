@@ -101,7 +101,7 @@ export function MoviShowcase({ playing = true, speed = 1, loop = false, autoAdva
 
   return <section ref={root} className="movi-showcase" aria-label="Movi marketing meeting demo">
     <span className="sr-only" role="status">{phase}</span>
-    <ScrollArea className={`movi-thread-scroll${singleTurn ? ' movi-thread-static' : ''}`} overscrollContain scrollFade={!singleTurn}>
+    <ScrollArea className={`movi-thread-scroll${singleTurn ? ' movi-thread-static' : ''}`} overscrollContain={!singleTurn} scrollFade={!singleTurn}>
       <div className="movi-thread">
 
         {meetingTurns.slice(0, singleTurn ? 1 : turnIndex + 1).map((item, index) => {
