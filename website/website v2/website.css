@@ -242,9 +242,12 @@ html.mv-home-scroll{scroll-behavior:smooth}
 .mv-website .mv-site-header,
 .mv-website .mv-theme-dark{--mv-theme-progress:0%}
 .mv-website .mv-theme-light{--mv-theme-progress:100%}
+.mv-website.is-light .mv-site-header,
+.mv-website.is-light .mv-theme-dark{--mv-theme-progress:100%}
 .mv-website .mv-band.mv-hero-band{background:var(--background)}
 .mv-website .mv-band.mv-product-band{background:var(--background)}
 .mv-website .mv-site-header .mv-wordmark img{filter:invert(1)}
+.mv-website.is-light .mv-site-header .mv-wordmark img{filter:none}
 .mv-website .mv-site-header,
 .mv-website .mv-footer,
 .mv-website .mv-band:not(.mv-hero-band)::before,
