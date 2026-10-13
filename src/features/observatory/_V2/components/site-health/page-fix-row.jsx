@@ -5,7 +5,7 @@ import { Collapsible, CollapsibleTrigger, CollapsiblePanel } from '@/components/
 import { FramePanel } from '@/components/ui/frame';
 import { TableRow, TableCell } from '@/components/ui/table';
 
-export function PageFixRow({ page }) {
+export function PageFixRow({ page, showWarnings = true, issueVariant = 'outline' }) {
   const warnings = page.issues.filter((issue) => issue.severity === 'warning').length;
   return (
     <TableRow>
@@ -17,8 +17,8 @@ export function PageFixRow({ page }) {
                 <span className="block break-words text-sm font-medium leading-5">{page.label}</span>
               </span>
               <span className="flex shrink-0 items-center gap-2">
-                <Badge variant="outline">{page.issues.length} {page.issues.length === 1 ? 'issue' : 'issues'}</Badge>
-                {warnings > 0 && <Badge variant="warning">{warnings} {warnings === 1 ? 'warning' : 'warnings'}</Badge>}
+                <Badge variant={issueVariant}>{page.issues.length} {page.issues.length === 1 ? 'issue' : 'issues'}</Badge>
+                {showWarnings && warnings > 0 && <Badge variant="warning">{warnings} {warnings === 1 ? 'warning' : 'warnings'}</Badge>}
               </span>
             </span>
             <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />

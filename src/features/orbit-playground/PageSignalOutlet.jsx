@@ -40,7 +40,6 @@ export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoo
   useEffect(() => {
     const page = homeRef.current?.closest('.mv-website')
     const orbit = homeRef.current?.querySelector('.og-gimbal')
-    let report = null
     let measureFrame = 0
     if (!page || !orbit) return
     const measure = () => {
@@ -49,17 +48,7 @@ export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoo
       const top = ring.top + ring.height / 2 - bounds.top
       const left = ring.left + ring.width / 2 - bounds.left
       const height = Math.max(1, bounds.height - top)
-      let d = `M ${left} 0 V ${height}`
-      const report = page.querySelector('[data-report-signal-target]')
-      if (report?.isConnected) {
-        const asset = report.getBoundingClientRect()
-        const destinationX = asset.left + asset.width / 2 - bounds.left
-        const destinationY = asset.top - bounds.top - top
-        const bendY = Math.max(0, destinationY - 90)
-        const direction = Math.sign(destinationX - left) || -1
-        const radius = Math.max(0, Math.min(2000, Math.abs(destinationX - left) / 2, 90, bendY))
-        d = `M ${left} 0 V ${bendY - radius} Q ${left} ${bendY} ${left + direction * radius} ${bendY} H ${destinationX - direction * radius} Q ${destinationX} ${bendY} ${destinationX} ${bendY + radius} V ${height}`
-      }
+      const d = `M ${left} 0 V ${height}`
       setGeometry({ page, orbitWidth: ring.width, top, height, width: bounds.width, d, ...samplePath(d) })
     }
     const scheduleMeasure = () => {
@@ -68,22 +57,9 @@ export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoo
     }
     const observer = new ResizeObserver(scheduleMeasure)
     observer.observe(page); observer.observe(orbit)
-    const refreshTarget = () => {
-      const next = page.querySelector('[data-report-signal-target]')
-      if (next === report) return
-      if (report) observer.unobserve(report)
-      report = next
-      if (report) observer.observe(report)
-      scheduleMeasure()
-    }
-    const targets = new MutationObserver(refreshTarget)
-    targets.observe(page, { childList: true, subtree: true })
-    refreshTarget()
-    const settled = event => { if (event.target.contains?.(report)) scheduleMeasure() }
-    page.addEventListener('animationend', settled)
-    window.addEventListener('resize', measure)
+    window.addEventListener('resize', scheduleMeasure)
     measure()
-    return () => { observer.disconnect(); targets.disconnect(); cancelAnimationFrame(measureFrame); page.removeEventListener('animationend', settled); window.removeEventListener('resize', measure) }
+    return () => { observer.disconnect(); cancelAnimationFrame(measureFrame); window.removeEventListener('resize', scheduleMeasure) }
   }, [homeRef, zoom])
   const end = useTransform(() => (geometry?.length ?? 0) * scrollYProgress.get())
   const solidDash = useTransform(() => `${Math.max(0, end.get() - TIP_FADE_LENGTH)} ${(geometry?.length ?? 0) + 1}`)

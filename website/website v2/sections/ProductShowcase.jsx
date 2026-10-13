@@ -1,8 +1,9 @@
 import { useAssetFade, assetFadeStyle, fadeDefaults } from '../components/asset-fade'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, useInView, useReducedMotion } from 'motion/react'
+import { useInView } from 'motion/react'
 import { Button } from '../../../src/components/ui/button'
+import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
 import { ScrollArea } from '../../../src/components/ui/scroll-area'
 import { MoviShowcase } from '../../../src/features/movi-showcase/MoviShowcase'
 import { MetricLineChart } from '../../../src/features/observatory/_V2/components/search-clicks-chart'
@@ -14,7 +15,7 @@ import { Activity } from '../../../src/components/ui/icons'
 import '../../../src/features/observatory/_V2/components/signals-grid.css'
 import { accounts } from '../../../src/features/observatory/_V2/data/observatory-fixtures'
 import { buildLenses } from '../../../src/features/observatory/_V2/utils/observatory-model'
-import { WebsiteSection } from '../components/website-primitives'
+import { WebsiteSection, StaggeredHeading } from '../components/website-primitives'
 import './product-showcase.css'
 
 const account = accounts.find(item => item.id === 'canopy')
@@ -24,17 +25,15 @@ const visits = searchClicksSeries(analytics)
 const engagement = engagementSeries(visits)
 const metricLenses = ['news', 'search', 'analytics'].map(id => lenses.find(item => item.id === id))
 const SHOW_DEBUG_CONTROLS = false
+const chartRightFade = 'linear-gradient(to right, #000 0%, #000 80%, transparent 100%)'
 
 function FadeSlider({ label, value, onChange, min = 0, max = 100, step = 1, unit = '%' }) {
   return <label className="og-control"><span>{label}<output>{value}{unit}</output></span><input type="range" min={min} max={max} step={step} value={value} onChange={event => onChange(Number(event.target.value))} /></label>
 }
 
 export function ProductShowcase() {
-  const reducedMotion = useReducedMotion()
-  const [firstQuestionSent, setFirstQuestionSent] = useState(false)
-  const handleFirstQuestionSent = useCallback(() => setFirstQuestionSent(true), [])
   const chartsRef = useRef(null)
-  const chartsInView = useInView(chartsRef, { once: true, amount: 0.15 })
+  const chartsReady = useInView(chartsRef, { once: true, amount: 0.1 })
   const [fade, setFade] = useAssetFade()
   const [controlsOpen, setControlsOpen] = useState(false)
   const [copyStatus, setCopyStatus] = useState('')
@@ -50,22 +49,29 @@ export function ProductShowcase() {
     }
   }
 
-  return <WebsiteSection className="mv-delivery-band mv-product-band" labelledBy="delivery-title">
+  return <WebsiteSection className="mv-delivery-band mv-product-band mv-theme-dark" labelledBy="delivery-title">
     <div className="mv-product-layout">
-      <h2 id="delivery-title" className="mv-product-heading">Access your data in plain language, in one place. Work with it in chat.</h2>
-      <div className="mv-product-stage" data-reveal-skip>
-        <div className="mv-product-intelligence mv-asset-fade" aria-hidden="true" inert style={assetFadeStyle(fade)}>
-          <div ref={chartsRef} className="mv-product-charts v2-signals-grid">
-            {chartsInView && <>
-            {metricLenses.map(lens => <MetricLineChart dataReady={firstQuestionSent} key={lens.id} compact className="min-w-0" title={lens.id === 'analytics' ? 'Visits' : lens.metric} metricLabel={lens.id === 'analytics' ? 'Website visits' : lens.metric} icon={lensIcons[lens.id]} data={lens.id === 'analytics' ? visits : searchClicksSeries(lens)} />)}
-            <MetricLineChart dataReady={firstQuestionSent} compact className="min-w-0" title="Engagement rate" metricLabel="Engagement rate" icon={Activity} data={engagement.data} metricValue={engagement.value} comparisonLabel={engagement.change} percentage curveType="bump" color="var(--chart-2)" />
-            <div className="mv-product-visitor-sources v2-signals-grid"><VisitorSourcesChart dataReady={firstQuestionSent} lens={analytics} /></div>
-            </>}
-          </div>
-        </div>
-        <motion.div className="mv-product-chat" initial={reducedMotion ? false : { opacity: 0, transform: 'translateY(16px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: reducedMotion ? 0 : 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}>
-          <MoviShowcase loop={false} autoAdvance={false} onFirstQuestionSent={handleFirstQuestionSent} />
-        </motion.div>
+      <div className="mv-product-copy">
+        <StaggeredHeading id="delivery-title" className="mv-product-heading">Access your data in plain language, in one place. Work with it in chat.</StaggeredHeading>
+        <p className="mv-product-description">AIO/GEO, social and competitor intel, earned media, and more via chat.</p>
+      </div>
+      <div className="mv-product-stage">
+        <FrameCard withFill className="mv-product-intelligence mv-asset-fade" data-reveal-item style={{ ...assetFadeStyle(fade), maskImage: chartRightFade, WebkitMaskImage: chartRightFade, '--shell-overlay': 'none' }}>
+          <FrameCardContent className="mv-product-intelligence-frame">
+            <div ref={chartsRef} className="mv-product-charts v2-signals-grid">
+              {chartsReady && <>
+                {metricLenses.map(lens => <MetricLineChart dataReady={chartsReady} key={lens.id} compact className="min-w-0" title={lens.id === 'analytics' ? 'Visits' : lens.metric} metricLabel={lens.id === 'analytics' ? 'Website visits' : lens.metric} icon={lensIcons[lens.id]} data={lens.id === 'analytics' ? visits : searchClicksSeries(lens)} />)}
+                <MetricLineChart dataReady={chartsReady} compact className="min-w-0" title="Engagement rate" metricLabel="Engagement rate" icon={Activity} data={engagement.data} metricValue={engagement.value} comparisonLabel={engagement.change} percentage curveType="bump" color="var(--chart-2)" />
+                <div className="mv-product-visitor-sources v2-signals-grid"><VisitorSourcesChart dataReady={chartsReady} lens={analytics} /></div>
+              </>}
+            </div>
+          </FrameCardContent>
+        </FrameCard>
+        <FrameCard withFill className="mv-product-chat" data-reveal-item>
+          <FrameCardContent className="mv-product-chat-frame">
+            <MoviShowcase loop={false} autoAdvance={false} singleTurn />
+          </FrameCardContent>
+        </FrameCard>
       </div>
     </div>
     {SHOW_DEBUG_CONTROLS && portal && createPortal(<div className="mv-fade-debug">

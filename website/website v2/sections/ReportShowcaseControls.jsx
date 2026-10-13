@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom'
 import { Button } from '../../../src/components/ui/button'
 import { ScrollArea } from '../../../src/components/ui/scroll-area'
 
-export const reportVisualDefaults = { pageBackground: 'background', assetBackground: 'background', fadeRight: 32, fadeBottom: 57, size: 100, assetBlur: 0, assetY: -13, assetOpacity: 100, cardBlur: 58, cardSpread: 0, cardY: -40, cardOpacity: 8 }
+export const reportVisualDefaults = { assetBackground: 'background', fadeRight: 32, fadeBottom: 57, size: 100, assetBlur: 0, assetY: -13, assetOpacity: 100, cardBlur: 58, cardSpread: 0, cardY: -40, cardOpacity: 8 }
 const storageKey = 'moonvine:website:report-visual:v2'
 export function useReportVisualSettings() {
   const [settings, setSettings] = useState(() => {
@@ -35,7 +35,6 @@ export function ReportShowcaseControls({ value, onChange }) {
     <ScrollArea className="mv-report-debug-scroll" overscrollContain>
       <div className="mv-report-debug-content">
         <div className="og-panel-heading"><h2>Report asset</h2><Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Close</Button></div>
-        <label className="og-control"><span>Page background</span><select value={value.pageBackground} onChange={event => onChange(current => ({ ...current, pageBackground: event.target.value }))}><option value="background">Background</option><option value="card">Card</option></select></label>
         <label className="og-control"><span>Report background</span><select value={value.assetBackground} onChange={event => onChange(current => ({ ...current, assetBackground: event.target.value }))}><option value="card">Card</option><option value="background">Background</option></select></label>
         <details open><summary>Fade</summary>
           <label className="og-control"><span>Mode</span><select value={fade.mode} onChange={event => setFade(current => ({ ...current, mode: event.target.value }))}><option value="mask">Mask</option><option value="overlay">Background overlay</option><option value="none">No fade</option></select></label>

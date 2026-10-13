@@ -1,5 +1,5 @@
-import { useAssetFade, assetFadeStyle } from '../components/asset-fade'
 ﻿import { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { IntroSection } from '../../../src/features/Reports/sections/Intro Section'
 import { SourcesSection } from '../../../src/features/Reports/sections/Sources Section'
@@ -10,15 +10,28 @@ import { NextStepsSection } from '../../../src/features/Reports/sections/Next St
 import { ReportProvider } from '../../../src/features/Reports/context'
 import { reportMock } from '../../../src/features/Reports/report.mock'
 import { Tabs, TabsList, TabsTrigger } from '../../../src/features/Reports/components/nav/components/nav-tabs'
-import { ReportStatusDot } from '../../../src/features/observatory/_V2/components/report-status-dot'
-import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
 import { Button } from '../../../src/components/ui/button'
-import { CalendarBlank } from '@phosphor-icons/react'
+import { Calendar } from '../../../src/components/ui/calendar'
+import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
 import { useReportVisualSettings } from './ReportShowcaseControls'
-import { WebsiteSection } from '../components/website-primitives'
+import { WebsiteSection, StaggeredHeading } from '../components/website-primitives'
 import './report-showcase.css'
 
 const REPORT_VIEWPORT_WIDTH = 1300
+const reportMondays = [2, 9, 16, 23, 30]
+const reportMondayColors = ['#f5f5f4', '#9200e8', '#ff9f0a', '#08b87b', '#2764ff']
+function MondayCalendar() {
+  const [activeMonday, setActiveMonday] = useState(0)
+  useEffect(() => {
+    const timer = window.setInterval(() => setActiveMonday(index => (index + 1) % reportMondays.length), 1200)
+    return () => window.clearInterval(timer)
+  }, [])
+  return <FrameCard withFill className="mv-report-calendar-preview" aria-hidden="true" inert style={{ '--calendar-accent': reportMondayColors[activeMonday], '--calendar-accent-foreground': activeMonday === 0 ? '#171717' : '#fff' }}>
+    <FrameCardContent className="mv-report-calendar-frame">
+      <Calendar key={activeMonday} mode="single" month={new Date(2026, 10, 1)} hideNavigation components={{ MonthCaption: () => null }} modifiers={{ activeMonday: new Date(2026, 10, reportMondays[activeMonday]) }} modifiersClassNames={{ activeMonday: 'mv-calendar-active-monday' }} className="mv-report-calendar" />
+    </FrameCardContent>
+  </FrameCard>
+}
 const sections = [
   { id: 'overview', label: 'Overview' },
   { id: 'sources', label: 'Sources' },
@@ -40,7 +53,6 @@ function ReportPreviewContent({ section }) {
 export function ReportHeroPreview() {
   const [section, setSection] = useState('overview')
   const [background, setBackground] = useState('card')
-  const reduced = useReducedMotion()
   useEffect(() => {
     document.documentElement.style.background = 'var(--card)'
     document.documentElement.style.overflow = 'hidden'
@@ -55,7 +67,11 @@ export function ReportHeroPreview() {
     window.addEventListener('message', receive)
     return () => window.removeEventListener('message', receive)
   }, [])
-  return <div className="mv-report-desktop" style={{ background: `var(--${background})`, ...(background === 'card' ? { '--background': 'var(--card)' } : {}) }}>
+  return <ReportDesktop section={section} background={background} />
+}
+const ReportDesktop = React.memo(function ReportDesktop({ section, background }) {
+  const reduced = useReducedMotion()
+  return <div className="mv-report-desktop" style={{ background: `var(--${background})` }}>
     <ReportProvider value={reportMock.context}>
       <Tabs value={section} variant="underline" className="mv-report-nav"><TabsList>{sections.map(item => <TabsTrigger key={item.id} value={item.id}>{item.label}</TabsTrigger>)}</TabsList></Tabs>
       <AnimatePresence mode="wait" initial={false}>
@@ -65,52 +81,57 @@ export function ReportHeroPreview() {
       </AnimatePresence>
     </ReportProvider>
   </div>
-}
+})
 export function ReportShowcase() {
+  const sectionRef = useRef(null)
   const [visual] = useReportVisualSettings()
-  const [fade] = useAssetFade()
   const assetRef = useRef(null)
-  const frameRef = useRef(null)
   const [scale, setScale] = useState(0.5)
   const [section, setSection] = useState('overview')
-  const syncTheme = () => {
-    const dark = assetRef.current?.closest('.mv-website')?.classList.contains('dark')
-    frameRef.current?.contentDocument?.documentElement.classList.toggle('dark', Boolean(dark))
-  }
-  const sendSection = () => frameRef.current?.contentWindow?.postMessage({ type: 'moonvine:report-preview', section, background: visual.assetBackground }, window.location.origin)
-  useEffect(sendSection, [section, visual.assetBackground])
+  const [revealed, setRevealed] = useState(false)
   useEffect(() => {
-    const page = assetRef.current?.closest('.mv-website')
-    page?.style.setProperty('--mv-page-background', `var(--${visual.pageBackground})`)
-    return () => page?.style.removeProperty('--mv-page-background')
-  }, [visual.pageBackground])
+    if (revealed) return
+    let frame = 0
+    const updateReveal = () => {
+      frame = 0
+      const bounds = sectionRef.current?.getBoundingClientRect()
+      if (!bounds) return
+      if (bounds.top <= window.innerHeight * .76) setRevealed(true)
+    }
+    const scheduleReveal = () => { if (!frame) frame = requestAnimationFrame(updateReveal) }
+    updateReveal()
+    window.addEventListener('scroll', scheduleReveal, { passive: true })
+    window.addEventListener('resize', scheduleReveal)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', scheduleReveal)
+      window.removeEventListener('resize', scheduleReveal)
+    }
+  }, [revealed])
   useEffect(() => {
     const asset = assetRef.current
     const resize = new ResizeObserver(([entry]) => setScale(entry.contentRect.width / REPORT_VIEWPORT_WIDTH))
     resize.observe(asset)
-    const theme = new MutationObserver(syncTheme)
-    theme.observe(asset.closest('.mv-website'), { attributes: true, attributeFilter: ['class'] })
-    return () => { resize.disconnect(); theme.disconnect() }
+    return () => resize.disconnect()
   }, [REPORT_VIEWPORT_WIDTH])
-  return <WebsiteSection id="reports" className="mv-report-band" labelledBy="reports-title">
-    <div className="mv-report-layout">
-      <div className="mv-report-visual" data-reveal-item style={{ width: `${visual.size}%`, '--report-background': `var(--${visual.assetBackground})`, '--report-fade-right': `${visual.fadeRight}%`, '--report-fade-bottom': `${visual.fadeBottom}%` }}>
-        <div className="mv-report-asset-shadow">
-        <div ref={assetRef} id="report-section-preview" className="mv-report-asset mv-asset-fade" style={assetFadeStyle(fade)} data-report-signal-target aria-label="Weekly report preview">
-          <iframe ref={frameRef} src="/website/report-preview" title="Weekly report desktop preview" className="mv-report-frame" width={REPORT_VIEWPORT_WIDTH} height="800" tabIndex={-1} inert scrolling="no" onLoad={() => { syncTheme(); sendSection() }} style={{ transform: `scale(${scale})` }} />
-        </div>
-        </div>
-        <FrameCard className="mv-report-notification" withFill>
-          <FrameCardContent>
-            <p className="mv-report-notification-title"><ReportStatusDot unread />New report available!</p>
-            <p className="mv-report-notification-date"><CalendarBlank size={16} aria-hidden="true" />Aug 25 – Aug 31</p>
+  return <WebsiteSection id="reports" className="mv-report-band mv-theme-dark" labelledBy="reports-title" reveal={false}>
+    <div ref={sectionRef} className="mv-report-layout" onFocusCapture={() => setRevealed(true)}>
+      <div className="mv-report-visual" style={{ width: `${visual.size}%`, '--report-background': `var(--${visual.assetBackground})` }}>
+        <FrameCard withFill className="mv-report-asset-shadow" style={{ '--reveal-stagger': 0 }} data-section-reveal={revealed ? 'visible' : 'pending'}>
+          <FrameCardContent className="mv-report-asset-frame">
+            <div ref={assetRef} id="report-section-preview" className="mv-report-asset" aria-label="Weekly report preview">
+              <div className="mv-report-frame" style={{ transform: `scale(${scale})` }} inert aria-hidden="true"><ReportDesktop section={section} background={visual.assetBackground} /></div>
+            </div>
           </FrameCardContent>
         </FrameCard>
+        <MondayCalendar />
       </div>
-      <div className="mv-report-copy">
-        <h2 id="reports-title" className="mv-report-heading">A marketing and competitor audit every Monday.</h2>
+      <div className="mv-report-copy" style={{ '--reveal-stagger': 1 }} data-section-reveal={revealed ? 'visible' : 'pending'}>
+        <StaggeredHeading id="reports-title" className="mv-report-heading">A marketing and competitor audit every Monday.</StaggeredHeading>
         <div className="mv-report-section-nav" role="group" aria-label="Preview report sections">
-          {sections.map(item => <Button key={item.id} variant={section === item.id ? 'default' : 'ghost'} aria-pressed={section === item.id} aria-controls="report-section-preview" onClick={() => setSection(item.id)}>{item.label}</Button>)}
+          {[sections.slice(0, 3), sections.slice(3)].map((row, index) => <div className="mv-report-section-row" key={index}>
+            {row.map(item => <Button key={item.id} variant={section === item.id ? 'default' : 'ghost'} aria-pressed={section === item.id} aria-controls="report-section-preview" onClick={() => setSection(item.id)}>{item.label}</Button>)}
+          </div>)}
         </div>
         <span className="sr-only" role="status">Showing {sections.find(item => item.id === section).label} report preview</span>
       </div>

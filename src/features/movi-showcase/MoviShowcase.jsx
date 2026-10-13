@@ -18,7 +18,7 @@ const sourceDetails = ['source:gsc', 'source:social', 'source:ga4'].map(lens => 
   return { name: tab.label, domain: lens, href: '/observatory-v2' + accountHref('northstar', lens), icon: tab.icon, image: '' }
 })
 
-export function MoviShowcase({ playing = true, speed = 1, loop = false, autoAdvance = false, onFirstQuestionSent, onPhaseChange }) {
+export function MoviShowcase({ playing = true, speed = 1, loop = false, autoAdvance = false, singleTurn = false, onFirstQuestionSent, onPhaseChange }) {
   const reduced = useReducedMotion()
   const [turnIndex, setTurnIndex] = useState(0)
   const [elapsed, setElapsed] = useState(0)
@@ -65,10 +65,11 @@ export function MoviShowcase({ playing = true, speed = 1, loop = false, autoAdva
   useEffect(() => {
     if (turnIndex === 0 && sent) onFirstQuestionSent?.()
   }, [turnIndex, sent, onFirstQuestionSent])
-  const finalTurn = turnIndex === meetingTurns.length - 1
+  const finalTurn = singleTurn || turnIndex === meetingTurns.length - 1
   const phase = !introDone && typed && !reduced ? 'Positioning the composer' : !sent ? 'Typing your question' : !answering ? 'Reviewing the evidence' : !finished ? 'Streaming your meeting brief' : finalTurn ? 'Meeting brief ready' : autoAdvance ? 'Preparing the follow-up' : 'Choose a follow-up'
 
   function nextTurn(immediate = false) {
+    if (singleTurn) return
     setTurnIndex(current => (current + 1) % meetingTurns.length)
     const next = meetingTurns[(turnIndex + 1) % meetingTurns.length]
     setElapsed(immediate ? 600 + next.prompt.length * 42 + 350 : 0); setStreamDone(false); setStreamRun(0); setFeedback('')
@@ -100,20 +101,20 @@ export function MoviShowcase({ playing = true, speed = 1, loop = false, autoAdva
 
   return <section ref={root} className="movi-showcase" aria-label="Movi marketing meeting demo">
     <span className="sr-only" role="status">{phase}</span>
-    <ScrollArea className="movi-thread-scroll" overscrollContain scrollFade>
+    <ScrollArea className={`movi-thread-scroll${singleTurn ? ' movi-thread-static' : ''}`} overscrollContain scrollFade={!singleTurn}>
       <div className="movi-thread">
 
-        {meetingTurns.slice(0, turnIndex + 1).map((item, index) => {
+        {meetingTurns.slice(0, singleTurn ? 1 : turnIndex + 1).map((item, index) => {
           const current = index === turnIndex
           return <div key={index} className="movi-exchange">
             {(!current || sent) && <ChatMessage message={{ from: 'user', text: item.prompt }} />}
             {current && sent && !answering && <Message from="assistant"><MessageContent>{inView && playing ? <ReasoningText variant="swap" phrases={item.reasoning} interval={1200} className="text-base font-normal" /> : <span className="text-base text-muted-foreground">Reviewing the evidence?</span>}</MessageContent></Message>}
             {(!current || answering) && <Message from="assistant"><MessageContent className="w-full max-w-[44ch] gap-3">{current && <p className="movi-reasoned-label">Worked for {reasoningDuration / 1000}s</p>}<div className="movi-read">
               <StreamingText key={current ? streamRun : 'complete'} playing={playing && inView} speed={speed} fill loop={false}
-                content={item.content} sources={sourceDetails} showExtras hoverActions={!current} afterContent={item.recap ? <MeetingRecap /> : undefined}
+                content={item.content} sources={sourceDetails} showExtras={!singleTurn} hoverActions={!current && !singleTurn} afterContent={!singleTurn && item.recap ? <MeetingRecap /> : undefined}
                 visibleCount={!current || reduced ? item.content.length : undefined}
                 onDone={() => { setStreamDone(true); setElapsed(answerAt) }}
-                followUps={current && item.followUp ? [item.followUp] : []} onFollowUp={() => nextTurn(true)}
+                followUps={!singleTurn && current && item.followUp ? [item.followUp] : []} onFollowUp={() => nextTurn(true)}
                 onAction={async action => {
                   if (action === 0) { try { await navigator.clipboard.writeText(item.content.filter(token => !token.cite).map(token => token.text).join(' ')); setFeedback('Response copied') } catch { setFeedback('Could not copy the response') } }
                   if (action === 1) { setTurnIndex(index); setStreamRun(value => value + 1); setStreamDone(false); setElapsed(600 + item.prompt.length * 42 + 350 + reasoningDuration); setFeedback('') }

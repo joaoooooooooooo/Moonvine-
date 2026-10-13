@@ -2,6 +2,8 @@ const providerLogos = {
   ChatGPT: { src: '/provider-logos/openai.svg', monochrome: true },
   Gemini: { src: '/provider-logos/gemini-color.svg', monochrome: false },
   Perplexity: { src: '/provider-logos/perplexity.svg', monochrome: true },
+  Claude: { src: '/provider-logos/claude.svg', monochrome: true },
+  Copilot: { src: '/provider-logos/copilot.svg', monochrome: false },
 };
 
 export function ProviderLogo({ name }) {

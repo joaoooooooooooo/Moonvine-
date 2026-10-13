@@ -7,14 +7,27 @@ import wordmark from '../../../src/assets/Logo type - Light.svg'
 export const APP_URL = 'https://moonvine-product-design.vercel.app/login'
 export const OBSERVATORY_URL = 'https://moonvine-ds.vercel.app/observatory-v2'
 export const WIREFRAME_MODE = true
+export function WebsiteSection({ id, className = '', children, labelledBy, reveal = true }) {
+  const revealRef = useSectionReveal({ together: true, enterVh: 76 })
+  return <section id={id} className={`mv-band ${className}`} aria-labelledby={labelledBy}><div ref={reveal ? revealRef : undefined} className="mv-container mv-section-inner">{children}</div></section>
+}
 
-export function WebsiteSection({ id, className = '', children, labelledBy }) {
-  const revealRef = useSectionReveal()
-  return <section id={id} className={`mv-band ${className}`} aria-labelledby={labelledBy}><div ref={revealRef} className="mv-container mv-section-inner">{children}</div></section>
+export function StaggeredHeading({ as: Tag = 'h2', children, className = '', ...props }) {
+  let wordIndex = 0
+  const wrapWords = content => React.Children.map(content, child => {
+    if (typeof child === 'string' || typeof child === 'number') {
+      return String(child).split(/(\s+)/).map(part => !part ? null : /\s/.test(part)
+        ? part
+        : <span key={wordIndex} className="mv-stagger-word" style={{ '--word-index': Math.min(wordIndex++, 24) }}>{part}</span>)
+    }
+    if (!React.isValidElement(child) || child.type === 'br') return child
+    return React.cloneElement(child, { children: wrapWords(child.props.children) })
+  })
+  return <Tag {...props} className={`mv-stagger-heading ${className}`.trim()}>{wrapWords(children)}</Tag>
 }
 
 export function SectionIntro({ eyebrow, title, description, id, centered = false, aside }) {
-  return <div className={`mv-section-intro${centered ? ' is-centered' : ''}`}><div><p className="mv-kicker">{eyebrow}</p><h2 id={id}>{title}</h2></div>{description && <p className="mv-section-description">{description}</p>}{aside}</div>
+  return <div className={`mv-section-intro${centered ? ' is-centered' : ''}`}><div>{eyebrow && <p className="mv-kicker">{eyebrow}</p>}<StaggeredHeading id={id}>{title}</StaggeredHeading></div>{description && <p className="mv-section-description">{description}</p>}{aside}</div>
 }
 
 export function DemoSurface({ label, children, className = '' }) {
@@ -33,5 +46,16 @@ function Header() {
 }
 
 export function WebsiteShell({ children }) {
-  return <div id="top" className={`mv-website dark${WIREFRAME_MODE ? ' is-wireframe' : ''}`}><a className="mv-skip" href="#main">Skip to content</a><div className="mv-page"><Header /><main id="main">{children}</main><footer className="mv-footer"><div className="mv-container mv-footer-inner"><Wordmark /><span>A clearer read on the marketing universe.</span><a href="#top">Back to top ↑</a></div></footer></div></div>
+  const [debugOpen, setDebugOpen] = useState(false)
+  const [theme, setTheme] = useState('dark')
+  return <div id="top" className={`mv-website ${theme}${theme === 'light' ? ' is-light' : ''}${WIREFRAME_MODE ? ' is-wireframe' : ''}`}>
+      <a className="mv-skip" href="#main">Skip to content</a>
+      <div className="mv-page"><Header /><main id="main">{children}</main><footer className="mv-footer"><div className="mv-container mv-footer-inner"><Wordmark /><span>A clearer read on the marketing universe.</span><a href="#top">Back to top ↑</a></div></footer></div>
+      <div className="mv-reveal-debug">
+        <button type="button" className="mv-reveal-debug-toggle" aria-expanded={debugOpen} onClick={() => setDebugOpen(!debugOpen)}>Theme debug</button>
+        {debugOpen && <div className="mv-reveal-debug-panel">
+          <div className="mv-debug-theme" role="group" aria-label="Page theme"><span>Theme</span><button type="button" aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')}>Dark</button><button type="button" aria-pressed={theme === 'light'} onClick={() => setTheme('light')}>Light</button></div>
+        </div>}
+      </div>
+    </div>
 }

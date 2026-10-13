@@ -49,7 +49,7 @@ const lineStagger = 0.12
 const defaultHitbox = { width: 72, outerWidth: 104, visible: false, followWobble: true, releaseDelay: 120 }
 const defaultFog = { enabled: true, strength: 0.85, start: 80, reach: 70 }
 const defaultSignals = { enabled: true, count: 9, duration: 4.5, outward: false, size: 1.25, color: '#a9ff9e', themeColor: false }
-const SHOW_DEBUG_CONTROLS = false
+const SHOW_DEBUG_CONTROLS = true
 
 function OrbitBody({ ring, wobble, flatten, lineAlignment, logoProgress, dotAlignment, index, phase, logo, clock, viewX, viewY, solar, bodies, connectors, appearance, signals, signalClock, fadeId }) {
   const logoMaskId = useId()
@@ -121,7 +121,7 @@ function OrbitRing({ ring, wobble, flatten, clock, thickness, opacity, viewX, vi
 }
 
 function OrbitLayer({ ring, index, wobble, onHover, onLeave, occupants, dimmed, highlighted, reducedMotion, hitbox, ...props }) {
-  return <motion.g animate={{ opacity: dimmed ? 0.2 : 1 }} transition={{ duration: reducedMotion ? 0 : 0.2 }}>
+  return <motion.g className={highlighted ? 'og-ring-highlighted' : undefined} animate={{ opacity: dimmed ? 0.2 : 1 }} transition={{ duration: reducedMotion ? 0 : 0.2 }}>
     <OrbitRing ring={ring} wobble={wobble} {...props} opacity={highlighted ? 1 : props.opacity} />
     {occupants.map(item => <OrbitBody key={item.logo.name} {...item} ring={ring} wobble={wobble} {...props} />)}
   </motion.g>
@@ -585,9 +585,9 @@ export default function OrbitPlayground({ embedded = false }) {
         </div>
         </ScrollArea>
       </aside>
-  if (embedded) return <div ref={homeRef} className="og-home-orbit" data-reveal-skip>
+  if (embedded) return <div ref={homeRef} className="og-home-orbit" data-reveal-item>
     <div ref={stageRef} className="og-home-stage" role="group" aria-label="Interactive orbit. Hover over the rings to disturb them.">
-      <OrbitGimbal pageOutlet rings={rings} clock={clock} thickness={thickness} opacity={opacity} zoom={zoom} guides={guides} viewX={viewX} viewY={viewY} solar={solar} bodies={bodies} connectors={connectors} appearance={appearance} signals={signals} signalClock={signalClock} interaction={interaction} transitioning={phase !== 'idle' && phase !== 'resetting'} transition={transition} fog={fog} hitbox={hitbox} />
+      <OrbitGimbal pageOutlet rings={rings} clock={clock} thickness={thickness} opacity={opacity} zoom={zoom} guides={false} viewX={viewX} viewY={viewY} solar={solar} bodies={bodies} connectors={connectors} appearance={{ ...appearance, names: true }} signals={signals} signalClock={signalClock} interaction={interaction} transitioning={phase !== 'idle' && phase !== 'resetting'} transition={transition} fog={fog} hitbox={hitbox} />
     </div>
     <PageSignalOutlet strokeOpacity={opacity} homeRef={homeRef} transition={transition} signals={signals} connectors={connectors} zoom={zoom} />
       {SHOW_DEBUG_CONTROLS && (panelOpen ? <div className="og-home-panel">{controls}</div> : <Button className="og-home-panel-toggle" variant="outline" onClick={() => setPanelOpen(true)}>Orbit controls</Button>)}
