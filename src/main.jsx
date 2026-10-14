@@ -8,6 +8,7 @@ import WebsiteHome from '../website/website v2/main.jsx'
 import OrbitPlayground from './features/orbit-playground/OrbitPlayground'
 import MoviShowcasePage from './features/movi-showcase/MoviShowcasePage'
 import ComponentGallery from './pages/ComponentGallery'
+import OnboardingPage from './features/Onboarding'
 import { Agentation } from 'agentation'
 
 // A separate app entry: this recreation never renders the MVDS prototype shell.
@@ -20,7 +21,7 @@ window.addEventListener('hashchange', () => {
   }
 })
 const pathname = window.location.pathname.replace(/\/$/, '')
-const Page = pathname === '/website/report-preview' ? ReportHeroPreview : pathname === '/observatory-v2'
+const Page = pathname === '/onboarding' ? OnboardingPage : pathname === '/website/report-preview' ? ReportHeroPreview : pathname === '/observatory-v2'
   ? ObservatoryV2
   : pathname === '/component'
     ? ComponentGallery
@@ -35,6 +36,6 @@ const Page = pathname === '/website/report-preview' ? ReportHeroPreview : pathna
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Page />
-    {process.env.NODE_ENV === 'development' && ['/website', '/movi-showcase'].includes(pathname) && <Agentation />}
+    {process.env.NODE_ENV === 'development' && ['/website', '/movi-showcase', '/onboarding'].includes(pathname) && <Agentation />}
   </StrictMode>,
 )

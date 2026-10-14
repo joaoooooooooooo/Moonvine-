@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const prefix = 'moonvine:orbit-playground:v2:'
+const prefix = 'moonvine:orbit-playground:v3:'
 
 export function readSetting(key, fallback) {
   try {
