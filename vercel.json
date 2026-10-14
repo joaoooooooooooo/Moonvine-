@@ -36,6 +36,14 @@
     {
       "source": "/website/report-preview",
       "destination": "/index.html"
+    },
+    {
+      "source": "/onboarding",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/onboarding/",
+      "destination": "/index.html"
     }
   ]
 }
