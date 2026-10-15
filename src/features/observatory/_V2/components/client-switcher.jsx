@@ -9,7 +9,9 @@ export function ClientSwitcher({ account, accounts, route }) {
   const items = accounts.map((item) => ({ label: item.name, value: item.id }));
   return (
     <Select items={items} value={account.id} onValueChange={(id) => {
-      if (id) window.location.hash = (route.lensId === 'intelligence:chat' ? chatHref(id) : accountHref(id, route.lensId, route.period)).slice(1);
+      if (id) window.location.hash = route.path === '/console/reports'
+        ? `/console/reports?account=${encodeURIComponent(id)}`
+        : (route.lensId === 'intelligence:chat' ? chatHref(id) : accountHref(id, route.lensId, route.period)).slice(1);
     }}>
       <SelectTrigger aria-label="Switch client" size="sm" className="w-fit min-w-0 max-w-28 sm:max-w-52">
         <SelectValue><AccountSelectLabel account={account} /></SelectValue>

@@ -17,8 +17,8 @@ export function NavUser({ model }) {
         </MenuTrigger>
         <MenuPopup align="start" side={isMobile ? 'bottom' : 'right'} sideOffset={4} className="min-w-56">
           <MenuGroup><MenuGroupLabel>Apta workspace</MenuGroupLabel>
-            <MenuLinkItem href="#/console/accounts" closeOnClick onClick={() => setOpenMobile(false)}><Building2 />Accounts</MenuLinkItem>
-            {model.account && <MenuLinkItem href={accountHref(model.account.id, 'account:summary')} closeOnClick onClick={() => setOpenMobile(false)}><Settings />Account settings</MenuLinkItem>}
+            <MenuLinkItem href="#/console/accounts" closeOnClick onClick={() => setOpenMobile(false)}><Building2 />Workspaces</MenuLinkItem>
+            {model.account && <MenuLinkItem href={accountHref(model.account.id, 'account:summary')} closeOnClick onClick={() => setOpenMobile(false)}><Settings />Workspace settings</MenuLinkItem>}
           </MenuGroup>
           <MenuSeparator />
           <MenuSub>

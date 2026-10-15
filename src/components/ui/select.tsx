@@ -106,6 +106,7 @@ export function SelectValue({
 
 export function SelectPopup({
   className,
+  footer,
   children,
   side = "bottom",
   sideOffset = 4,
@@ -116,6 +117,7 @@ export function SelectPopup({
   portalProps,
   ...props
 }: SelectPrimitive.Popup.Props & {
+  footer?: React.ReactNode;
   portalProps?: SelectPrimitive.Portal.Props;
   side?: SelectPrimitive.Positioner.Props["side"];
   sideOffset?: SelectPrimitive.Positioner.Props["sideOffset"];
@@ -157,6 +159,7 @@ export function SelectPopup({
             >
               {children}
             </SelectPrimitive.List>
+            {footer}
           </div>
           <SelectPrimitive.ScrollDownArrow
             className="bottom-0 z-50 flex h-6 w-full cursor-default items-center justify-center before:pointer-events-none before:absolute before:inset-x-px before:bottom-px before:h-[200%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-50% before:from-popover"

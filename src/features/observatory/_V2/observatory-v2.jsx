@@ -9,6 +9,7 @@ import { AccountProfile } from './components/account-profile';
 import { ReportHistory } from './components/report-history';
 import { IntelligenceEmptyPage } from './components/intelligence-empty-page';
 import { IntelligenceChatPage } from './components/intelligence-chat/intelligence-chat-page';
+import { DataSourcesPage } from './components/data-sources-page';
 
 export function ObservatoryV2() {
   const model = useObservatory();
@@ -16,8 +17,10 @@ export function ObservatoryV2() {
   const directory = ['accounts', 'people', 'entities'].find((id) => route.path === '/console/' + id);
   let page;
   if (route.path === '/console') page = <ObservatoryHome />;
-  else if (directory) page = <DirectoryPage key={directory} type={directory} />;
-  else if (route.path === '/console/reports') page = <ReportHistory key="all-reports" />;
+  else if (route.path === '/console/data-sources/competitors') page = <DirectoryPage key="competitors" type="entities" workspaces={model.accounts} />;
+  else if (route.path.startsWith('/console/data-sources')) page = <DataSourcesPage sectionId={route.path.split('/')[3]} />;
+  else if (directory) page = <DirectoryPage key={directory} type={directory} workspaces={model.accounts} />;
+  else if (route.path === '/console/reports') page = <ReportHistory key={account?.id ?? 'all-reports'} account={account} />;
   else if (account && route.lensId === 'account:summary') page = <AccountProfile key={account.id} model={model} />;
   else if (account && route.lensId === 'report:history') page = <ReportHistory key={account.id} account={account} />;
   else if (account && route.lensId === 'intelligence:chat') page = <IntelligenceChatPage key={account.id + (route.threadId || 'new')} model={model} />;

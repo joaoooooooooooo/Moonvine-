@@ -27,7 +27,7 @@ export function ReportsTable({ account, pageSize = 10, label = 'Reports' }) {
       }>
         <TableHeader><TableRow>
           <TableHead aria-sort={newestFirst ? 'descending' : 'ascending'}><button type="button" className="flex h-full w-full cursor-pointer items-center justify-start gap-2 text-start focus-visible:outline-2 focus-visible:outline-ring" onClick={() => { setNewestFirst(!newestFirst); setPageIndex(0); }}>Name<SortIcon aria-hidden="true" className="size-4 opacity-80" /></button></TableHead>
-          <TableHead className="hidden sm:table-cell">Account</TableHead>
+          <TableHead className="hidden sm:table-cell">Workspace</TableHead>
           <TableHead className="hidden w-28 lg:table-cell">Sent to</TableHead>
           <TableHead className="w-12"><span className="sr-only">Open report</span></TableHead>
         </TableRow></TableHeader>

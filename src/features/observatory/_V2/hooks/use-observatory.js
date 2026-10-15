@@ -8,12 +8,13 @@ function readRoute() {
   const chat = url.pathname.match(/^\/chat\/([^/]+)\/([^/]+)$/);
   if (chat) return { path: url.pathname, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), lensId: 'intelligence:chat', period: 'current' };
   const match = url.pathname.match(/^\/(?:intelligence|console)\/client\/([^/]+)\/current$/);
-  return { path: url.pathname, accountId: match?.[1] || null, lensId: url.searchParams.get('lens'), period: url.searchParams.get('period') || 'current' };
+  return { path: url.pathname, accountId: match?.[1] || (url.pathname === '/console/reports' ? url.searchParams.get('account') : null), lensId: url.searchParams.get('lens'), period: url.searchParams.get('period') || 'current' };
 }
 
 export function useObservatory() {
   const [route, setRoute] = useState(readRoute);
   const [profiles, setProfiles] = useState({});
+  const [selectedAccountId, setSelectedAccountId] = useState(() => window.localStorage.getItem('observatory-workspace') || 'canopy');
   const { resolvedTheme, setTheme } = useThemePreference();
   const dark = resolvedTheme === 'dark';
   const setDark = (nextDark) => setTheme(nextDark ? 'dark' : 'light');
@@ -27,7 +28,16 @@ export function useObservatory() {
     return () => window.removeEventListener('hashchange', handleRoute);
   }, []);
 
-  const account = accounts.find((item) => item.id === route.accountId);
+  useEffect(() => {
+    if (route.accountId && accounts.some((item) => item.id === route.accountId)) {
+      setSelectedAccountId(route.accountId);
+      window.localStorage.setItem('observatory-workspace', route.accountId);
+    }
+  }, [route.accountId]);
+
+  const selectedAccount = accounts.find((item) => item.id === selectedAccountId) ?? accounts[0];
+  const account = accounts.find((item) => item.id === route.accountId)
+    ?? (route.path === '/console/reports' ? selectedAccount : null);
   const currentAccount = account ? { ...account, ...profiles[account.id] } : null;
   const lenses = currentAccount ? buildLenses(currentAccount, route.period) : [];
   const lens = lenses.find((item) => item.sourceId === route.lensId);
@@ -35,7 +45,7 @@ export function useObservatory() {
     setProfiles((current) => ({ ...current, [account.id]: values }));
     window.location.hash = '/intelligence/client/' + account.id + '/current';
   }
-  return { route, account: currentAccount, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile };
+  return { route, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile };
 }
 
 

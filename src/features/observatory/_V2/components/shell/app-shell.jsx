@@ -15,7 +15,7 @@ export function AppShell({ model, children }) {
 
   return (
     <div className="relative overflow-hidden">
-      <SidebarProvider open={true} onOpenChange={() => {}} className="relative h-svh w-full" style={{ '--sidebar-width': '15rem' }}>
+      <SidebarProvider open={true} onOpenChange={() => {}} className="relative h-svh w-full" style={{ '--sidebar-width': '16rem' }}>
         <AppSidebar model={model} />
         <SidebarInset className="v2-shell isolate overflow-hidden bg-card">
           {route.lensId === 'intelligence:chat' && <ChatBackground />}

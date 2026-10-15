@@ -44,7 +44,7 @@ export function SearchCommand({ model }) {
       </CommandDialogTrigger>
       <CommandDialogPopup aria-label="Search Observatory">
         <Command items={items}>
-          <CommandInput aria-label="Search pages, accounts, and commands" placeholder="Search pages, accounts, and commands..." />
+          <CommandInput aria-label="Search pages, workspaces, and commands" placeholder="Search pages, workspaces, and commands..." />
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandPanel><CommandList>{(item) => <CommandItem key={item.value} value={item} onClick={() => select(item)}><item.icon className="size-4 opacity-60" /><span>{item.label}</span></CommandItem>}</CommandList></CommandPanel>
         </Command>
