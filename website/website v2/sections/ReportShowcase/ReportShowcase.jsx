@@ -1,12 +1,8 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { IntroSection } from '../../../../src/features/Reports/sections/Intro Section'
 import { SourcesSection } from '../../../../src/features/Reports/sections/Sources Section'
-import { OverviewSection } from '../../../../src/features/Reports/sections/Overview Section'
-import { AiVisibilitySection } from '../../../../src/features/Reports/sections/AI Visibility Section'
-import { WebsiteAuditSection } from '../../../../src/features/Reports/sections/Website Audit Section'
-import { NextStepsSection } from '../../../../src/features/Reports/sections/Next Steps Section'
+import { IntroSection, OverviewSection, AiVisibilitySection, WebsiteAuditSection, WebsiteNextStepsSection } from './WebsiteReportSections'
 import { ReportProvider } from '../../../../src/features/Reports/context'
 import { reportMock } from '../../../../src/features/Reports/report.mock'
 import { Tabs, TabsList, TabsTrigger } from '../../../../src/features/Reports/components/nav/components/nav-tabs'
@@ -46,7 +42,7 @@ function ReportPreviewContent({ section }) {
     case 'market': return <OverviewSection data={reportMock.overview} />
     case 'ai': return <AiVisibilitySection data={reportMock.aiVisibility} />
     case 'website': return <WebsiteAuditSection data={reportMock.websiteAudit} />
-    case 'next': return <NextStepsSection data={reportMock.nextSteps} />
+    case 'next': return <WebsiteNextStepsSection data={reportMock.nextSteps} />
     default: return <IntroSection id="website-report-preview" data={reportMock.intro} reportUrl="https://moonvine-ds.vercel.app/#/reports" />
   }
 }
