@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInView, useReducedMotion } from 'motion/react'
 import { Article, ChartLineUp, ChatCircleDots, Database, Globe, UsersThree } from '@phosphor-icons/react'
-import { TaskSteps } from '../../../src/components/interior/task-steps'
-import { Avatar, AvatarImage } from '../../../src/components/ui/avatar'
-import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
-import { MetricLineChart } from '../../../src/features/observatory/_V2/components/search-clicks-chart'
-import { ReportStatusDot } from '../../../src/features/observatory/_V2/components/report-status-dot'
-import { defaultSignals } from '../../../src/features/orbit-playground/OrbitPlayground'
-import { useSavedSetting } from '../../../src/features/orbit-playground/use-saved-setting'
-import { WebsiteSection, SectionIntro } from '../components/website-primitives'
+import { TaskSteps } from '../../../../src/components/interior/task-steps'
+import { Avatar, AvatarImage } from '../../../../src/components/ui/avatar'
+import { FrameCard, FrameCardContent } from '../../../../src/components/ui/frame-card'
+import { MetricLineChart } from '../../../../src/features/observatory/_V2/components/search-clicks-chart'
+import { ReportStatusDot } from '../../../../src/features/observatory/_V2/components/report-status-dot'
+import { defaultSignals } from '../../../../src/features/orbit-playground/OrbitPlayground'
+import { useSavedSetting } from '../../../../src/features/orbit-playground/use-saved-setting'
+import { WebsiteSection, SectionIntro, BorderGlow } from '../../components'
 import './connections.css'
 
 const groups = [
@@ -83,11 +83,11 @@ export function Connections() {
     return () => { observer.disconnect(); cancelAnimationFrame(frame); window.removeEventListener('resize', schedule) }
   }, [])
 
-  return <WebsiteSection id="connections" className="mv-connections-band" labelledBy="connections-heading">
+  return <WebsiteSection id="connections" className="mv-connections-band" labelledBy="connections-heading" orbit>
     <SectionIntro id="connections-heading" title="Access your data in plain language, in one place. Work with it in chat." />
     <div ref={root} className="mv-signal-flow" data-reveal-item aria-label="Your data, social signals, and the open web become insights in chat, dashboard, and weekly reports">
       <svg className="mv-signal-paths" width="100%" height="100%" aria-hidden="true">
-        {paths.map((path, index) => <path key={index} d={path} fill="none" stroke="var(--color-neutral-400)" strokeOpacity=".35" strokeWidth="1" />)}
+        {paths.map((path, index) => <path key={index} d={path} fill="none" stroke="var(--mv-section-line-color)" strokeWidth="1" />)}
         {inView && !reduced && signals.enabled && paths.length > 0 && Array.from({ length: Math.max(0, signals.count) }, (_, index) => <circle key={index} r="0" fill={signals.themeColor !== false ? 'var(--foreground)' : signals.color}>
           <animateMotion dur={`${signals.duration}s`} begin={`${index * signals.duration / Math.max(1, signals.count)}s`} repeatCount="indefinite" path={paths[index % paths.length]} calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.58 1" />
           <animate attributeName="r" values={`0;${0.32 * signals.size * 5};${0.32 * signals.size * 5};0`} keyTimes="0;.1;.92;1" dur={`${signals.duration}s`} begin={`${index * signals.duration / Math.max(1, signals.count)}s`} repeatCount="indefinite" />
@@ -102,9 +102,9 @@ export function Connections() {
         </div>)}
       </div>
       <div ref={center} className="mv-signal-hub">
-        <FrameCard withFill className="mv-signal-hub-card"><FrameCardContent>
+        <BorderGlow animated className="mv-signal-hub-glow"><FrameCard withFill className="mv-signal-hub-card"><FrameCardContent>
           <TaskSteps steps={steps} current={step} label="How Moonvine turns signals into insights" className="mv-signal-task-steps" />
-        </FrameCardContent></FrameCard>
+        </FrameCardContent></FrameCard></BorderGlow>
       </div>
       <div className="mv-signal-column mv-signal-destinations">
         {outputs.map((output, index) => <div className="mv-signal-destination" key={output.title} ref={node => { destinations.current[index] = node }}><FrameCard withFill className="mv-signal-output-card"><FrameCardContent><h3><output.icon aria-hidden="true" />{output.title}</h3><OutputAsset index={index} /></FrameCardContent></FrameCard></div>)}

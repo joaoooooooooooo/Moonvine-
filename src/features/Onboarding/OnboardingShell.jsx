@@ -25,7 +25,7 @@ export function OnboardingShell({ children, step = 0, showProgress = true }) {
         <main className="onboarding-step">{children}</main>
       </section>
       <aside className="onboarding-asset" aria-label="Moonvine orbit">
-        <OrbitPlayground embedded scrollTransition={false} />
+        <OrbitPlayground embedded scrollTransition={false} variant="onboarding" />
       </aside>
     </div>
   </div>

@@ -87,7 +87,7 @@ export function PageSignalOutlet({ homeRef, transition, signals, connectors, zoo
   const y2 = useTransform(() => endPoint.get().y)
   if (!geometry || !connectors.enabled) return null
   const radius = 0.32 * signals.size * geometry.orbitWidth / 100
-  return createPortal(<svg aria-hidden="true" width={geometry.width} height={geometry.height} style={{ position: 'absolute', left: 0, top: geometry.top, overflow: 'visible', pointerEvents: 'none', zIndex: 1 }}>
+  return createPortal(<svg className="og-page-signal-line" aria-hidden="true" width={geometry.width} height={geometry.height} style={{ position: 'absolute', left: 0, top: geometry.top, overflow: 'visible', pointerEvents: 'none', zIndex: 1 }}>
     <defs><motion.linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1={x1} y1={y1} x2={x2} y2={y2}><stop stopColor="var(--color-neutral-400)" /><stop offset="1" stopColor="var(--color-neutral-400)" stopOpacity="0" /></motion.linearGradient></defs>
     <g fill="none" strokeWidth={connectors.thickness} opacity={strokeOpacity ?? connectors.opacity}>
       <motion.path d={geometry.d} stroke="var(--color-neutral-400)" strokeDasharray={solidDash} />

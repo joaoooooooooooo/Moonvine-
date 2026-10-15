@@ -1,0 +1,9 @@
+.mv-kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--muted-foreground);margin:0 0 20px;text-transform:uppercase}
+.mv-section-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);align-items:end;gap:48px;margin-bottom:48px}
+.mv-section-intro h2{font-size:clamp(36px,3.5vw,56px);line-height:1.09;letter-spacing:-.022em;max-width:720px;margin:0}
+.mv-section-intro h2 span{color:var(--muted-foreground)}
+.mv-section-description{font-size:17px;line-height:1.6;color:var(--muted-foreground);max-width:520px;margin:0}
+.mv-section-description strong{font-weight:500;color:var(--foreground)}
+.mv-section-intro.is-centered{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.mv-section-intro.is-centered .mv-kicker{margin-bottom:16px}
+.mv-section-intro.is-centered .mv-section-description{max-width:600px}

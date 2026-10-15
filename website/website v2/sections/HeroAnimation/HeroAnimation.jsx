@@ -1,11 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { Check, Sparkle, ArrowUp } from '@phosphor-icons/react'
-import { Button } from '../../../src/components/ui/button'
-import { Input } from '../../../src/components/ui/input'
-import { Badge } from '../../../src/components/ui/badge'
-import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
-import { ChatMessage } from '../../../src/features/observatory/_V2/components/intelligence-chat/chat-message'
+import { Button } from '../../../../src/components/ui/button'
+import { Input } from '../../../../src/components/ui/input'
+import { Badge } from '../../../../src/components/ui/badge'
+import { FrameCard, FrameCardContent } from '../../../../src/components/ui/frame-card'
+import { ChatMessage } from '../../../../src/features/observatory/_V2/components/intelligence-chat/chat-message'
 import './hero-animation.css'
 
 // Authored cues and interpolation from Moonvine Hero Animation v3.

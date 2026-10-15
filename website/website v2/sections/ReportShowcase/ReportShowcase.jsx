@@ -1,20 +1,20 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { IntroSection } from '../../../src/features/Reports/sections/Intro Section'
-import { SourcesSection } from '../../../src/features/Reports/sections/Sources Section'
-import { OverviewSection } from '../../../src/features/Reports/sections/Overview Section'
-import { AiVisibilitySection } from '../../../src/features/Reports/sections/AI Visibility Section'
-import { WebsiteAuditSection } from '../../../src/features/Reports/sections/Website Audit Section'
-import { NextStepsSection } from '../../../src/features/Reports/sections/Next Steps Section'
-import { ReportProvider } from '../../../src/features/Reports/context'
-import { reportMock } from '../../../src/features/Reports/report.mock'
-import { Tabs, TabsList, TabsTrigger } from '../../../src/features/Reports/components/nav/components/nav-tabs'
-import { Button } from '../../../src/components/ui/button'
-import { Calendar } from '../../../src/components/ui/calendar'
-import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
+import { IntroSection } from '../../../../src/features/Reports/sections/Intro Section'
+import { SourcesSection } from '../../../../src/features/Reports/sections/Sources Section'
+import { OverviewSection } from '../../../../src/features/Reports/sections/Overview Section'
+import { AiVisibilitySection } from '../../../../src/features/Reports/sections/AI Visibility Section'
+import { WebsiteAuditSection } from '../../../../src/features/Reports/sections/Website Audit Section'
+import { NextStepsSection } from '../../../../src/features/Reports/sections/Next Steps Section'
+import { ReportProvider } from '../../../../src/features/Reports/context'
+import { reportMock } from '../../../../src/features/Reports/report.mock'
+import { Tabs, TabsList, TabsTrigger } from '../../../../src/features/Reports/components/nav/components/nav-tabs'
+import { Button } from '../../../../src/components/ui/button'
+import { Calendar } from '../../../../src/components/ui/calendar'
+import { FrameCard, FrameCardContent } from '../../../../src/components/ui/frame-card'
 import { useReportVisualSettings } from './ReportShowcaseControls'
-import { WebsiteSection, StaggeredHeading } from '../components/website-primitives'
+import { WebsiteSection, StaggeredHeading } from '../../components'
 import './report-showcase.css'
 
 const REPORT_VIEWPORT_WIDTH = 1300
@@ -114,9 +114,9 @@ export function ReportShowcase() {
     resize.observe(asset)
     return () => resize.disconnect()
   }, [REPORT_VIEWPORT_WIDTH])
-  return <WebsiteSection id="reports" className="mv-report-band mv-theme-dark" labelledBy="reports-title" reveal={false}>
+  return <WebsiteSection id="reports" className="mv-report-band mv-theme-dark" labelledBy="reports-title" reveal={false} orbit>
     <div ref={sectionRef} className="mv-report-layout" onFocusCapture={() => setRevealed(true)}>
-      <div className="mv-report-visual" style={{ width: `${visual.size}%`, '--report-background': `var(--${visual.assetBackground})` }}>
+      <div className="mv-report-visual" style={{ '--report-size': visual.size / 100, '--report-background': `var(--${visual.assetBackground})` }}>
         <FrameCard withFill className="mv-report-asset-shadow" style={{ '--reveal-stagger': 0 }} data-section-reveal={revealed ? 'visible' : 'pending'}>
           <FrameCardContent className="mv-report-asset-frame">
             <div ref={assetRef} id="report-section-preview" className="mv-report-asset" aria-label="Weekly report preview">

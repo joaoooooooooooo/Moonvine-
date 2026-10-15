@@ -1,8 +1,8 @@
-import { useAssetFade, fadeDefaults } from '../components/asset-fade'
+import { useAssetFade, fadeDefaults } from '../../components'
 ﻿import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Button } from '../../../src/components/ui/button'
-import { ScrollArea } from '../../../src/components/ui/scroll-area'
+import { Button } from '../../../../src/components/ui/button'
+import { ScrollArea } from '../../../../src/components/ui/scroll-area'
 
 export const reportVisualDefaults = { assetBackground: 'background', fadeRight: 32, fadeBottom: 57, size: 100, assetBlur: 0, assetY: -13, assetOpacity: 100, cardBlur: 58, cardSpread: 0, cardY: -40, cardOpacity: 8 }
 const storageKey = 'moonvine:website:report-visual:v2'

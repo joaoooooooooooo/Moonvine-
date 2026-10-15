@@ -38,7 +38,7 @@ const logos = [
   { name: 'Perplexity', src: '/provider-logos/perplexity.svg' },
   { name: 'X', src: '/report-logos/x.svg' },
 ]
-const defaultAppearance = { logoSize: 0.5, logos: true, names: false, fade: true, fadeSize: 1.5, fadeOpacity: 0.85, fadeSoftness: 65 }
+const defaultAppearance = { logoSize: 0.5, logos: true, names: true, fade: true, fadeSize: 1.5, fadeOpacity: 0.85, fadeSoftness: 65 }
 // Shared by forward and reverse transitions; editable in the Motion panel.
 const ringTransition = { duration: 2, ease: [0.113, 0.517, 0.567, 0.832] }
 const lineTransition = { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
@@ -48,8 +48,11 @@ const ringStagger = 0.16
 const lineStagger = 0.12
 const defaultHitbox = { width: 72, outerWidth: 104, visible: false, followWobble: true, releaseDelay: 120 }
 const defaultFog = { enabled: true, strength: 0.85, start: 50, reach: 95 }
-export const defaultSignals = { enabled: true, count: 4, duration: 3.5, outward: false, size: 1.25, color: '#000000', themeColor: false, pageCount: 2 }
-const SHOW_DEBUG_CONTROLS = true
+export const defaultSignals = { enabled: true, count: 4, duration: 3.5, outward: false, size: 1.75, color: '#ffffff', themeColor: false, pageCount: 2 }
+const onboardingSignals = { ...defaultSignals, size: 0.75, color: '#000000' }
+const orbitSettingKey = (key, onboarding) => onboarding ? `onboarding:${key}` : key
+function useOrbitSetting(key, fallback, onboarding) { return useSavedSetting(orbitSettingKey(key, onboarding), fallback) }
+const SHOW_DEBUG_CONTROLS = false
 
 function OrbitBody({ ring, wobble, flatten, lineAlignment, logoProgress, dotAlignment, index, phase, logo, clock, viewX, viewY, solar, bodies, connectors, appearance, signals, signalClock, fadeId, logosOnly = false }) {
   const logoMaskId = useId()
@@ -224,7 +227,7 @@ export function OrbitGimbal({ rings, clock, thickness = 1, opacity = 0.7, zoom =
   })
   return <div ref={boundsRef} className="og-gimbal-bounds" style={{ width: `${zoom}%` }}>
     <svg className="og-gimbal" viewBox="-50 -50 100 100" width="100%" height="100%" overflow="visible" aria-hidden="true" onPointerMoveCapture={trackPointer} onPointerDownCapture={() => { dragging.current = true; window.clearTimeout(leaveTimer.current); setHovered(null) }}>
-      <defs><radialGradient id={fadeId}><stop offset="0%" stopColor="var(--mv-page-background, var(--background))" stopOpacity={appearance.fadeOpacity} /><stop offset={`${100 - appearance.fadeSoftness}%`} stopColor="var(--mv-page-background, var(--background))" stopOpacity={appearance.fadeOpacity * 0.76} /><stop offset="100%" stopColor="var(--mv-page-background, var(--background))" stopOpacity="0" /></radialGradient></defs>
+      <defs><radialGradient id={fadeId}><stop offset="0%" stopColor="var(--mv-page-background, var(--background))" stopOpacity="1" /><stop offset={`${100 - appearance.fadeSoftness}%`} stopColor="var(--mv-page-background, var(--background))" stopOpacity={appearance.fadeOpacity} /><stop offset="100%" stopColor="var(--mv-page-background, var(--background))" stopOpacity="0" /></radialGradient></defs>
       <defs>
         <radialGradient id={fogGradientId} gradientUnits="userSpaceOnUse" cx="0" cy="0" r={fogRadius}>
           <stop offset="0%" stopColor="white" stopOpacity="1" />
@@ -263,14 +266,15 @@ function ControlGroup({ title, children }) {
   return <details className="og-control-group" open={open} onToggle={event => setOpen(event.currentTarget.open)}><summary>{title}</summary><div className="og-group-content">{children}</div></details>
 }
 
-export default function OrbitPlayground({ embedded = false, scrollTransition = true }) {
+export default function OrbitPlayground({ embedded = false, scrollTransition = true, variant = 'default' }) {
+  const onboarding = variant === 'onboarding'
   const reducedMotion = useReducedMotion()
-  const [playing, setPlaying] = useSavedSetting('playing', true)
-  const [rings, setRings] = useSavedSetting('rings', solarRings)
-  const [solar, setSolar] = useSavedSetting('solar', true)
-  const [bodies, setBodies] = useSavedSetting('bodies', true)
-  const [fog, setFog] = useSavedSetting('fog', defaultFog)
-  const [hitbox, setHitbox] = useSavedSetting('hitbox', defaultHitbox)
+  const [playing, setPlaying] = useOrbitSetting('playing', true, onboarding)
+  const [rings, setRings] = useOrbitSetting('rings', solarRings, onboarding)
+  const [solar, setSolar] = useOrbitSetting('solar', true, onboarding)
+  const [bodies, setBodies] = useOrbitSetting('bodies', true, onboarding)
+  const [fog, setFog] = useOrbitSetting('fog', defaultFog, onboarding)
+  const [hitbox, setHitbox] = useOrbitSetting('hitbox', defaultHitbox, onboarding)
   useEffect(() => {
     if (readSetting('hitbox-width-72-104', false)) return
     setHitbox(current => ({ ...current, width: Math.max(72, current.width ?? 72), outerWidth: Math.max(104, current.outerWidth ?? 104), visible: false }))
@@ -291,27 +295,27 @@ export default function OrbitPlayground({ embedded = false, scrollTransition = t
     setHitbox(current => ({ ...current, visible: false }))
     saveSetting('hitbox-overlay-hidden-v3', true)
   }, [setHitbox])
-  const [appearance, setAppearance] = useSavedSetting('appearance', defaultAppearance)
-  const [signals, setSignals] = useSavedSetting('signals', defaultSignals)
+  const [appearance, setAppearance] = useOrbitSetting('appearance', defaultAppearance, onboarding)
+  const [signals, setSignals] = useOrbitSetting('signals', onboarding ? onboardingSignals : defaultSignals, onboarding)
   useEffect(() => {
     if (readSetting('faster-signals-applied', false)) return
     setSignals(current => ({ ...current, duration: current.duration === 3 ? 1.5 : current.duration }))
     saveSetting('faster-signals-applied', true)
   }, [setSignals])
-  const [interaction, setInteraction] = useSavedSetting('interaction', defaultInteraction)
-  const [connectors, setConnectors] = useSavedSetting('connectors', defaultConnectors)
+  const [interaction, setInteraction] = useOrbitSetting('interaction', defaultInteraction, onboarding)
+  const [connectors, setConnectors] = useOrbitSetting('connectors', defaultConnectors, onboarding)
   const updateConnector = (key, value) => setConnectors(current => ({ ...current, [key]: value }))
-  const [selected, setSelected] = useSavedSetting('selected', 0)
-  const [speed, setSpeed] = useSavedSetting('speed', 1)
-  const [zoom, setZoom] = useSavedSetting('zoom', 164)
-  const [thickness, setThickness] = useSavedSetting('thickness', 1)
-  const [opacity, setOpacity] = useSavedSetting('opacity', 1)
-  const [guides, setGuides] = useSavedSetting('guides', false)
+  const [selected, setSelected] = useOrbitSetting('selected', 0, onboarding)
+  const [speed, setSpeed] = useOrbitSetting('speed', 1, onboarding)
+  const [zoom, setZoom] = useOrbitSetting('zoom', 164, onboarding)
+  const [thickness, setThickness] = useOrbitSetting('thickness', 1, onboarding)
+  const [opacity, setOpacity] = useOrbitSetting('opacity', 1, onboarding)
+  const [guides, setGuides] = useOrbitSetting('guides', false, onboarding)
   const dark = true
   const [phase, setPhase] = useState('idle')
   const [copyStatus, setCopyStatus] = useState('')
-  const [panelOpen, setPanelOpen] = useSavedSetting('home-panel-open', false)
-  const [scrollDistance, setScrollDistance] = useSavedSetting('scroll-distance', 600)
+  const [panelOpen, setPanelOpen] = useOrbitSetting('home-panel-open', false, onboarding)
+  const [scrollDistance, setScrollDistance] = useOrbitSetting('scroll-distance', 600, onboarding)
   const scrollDriven = useRef(false)
   const scrollTarget = useRef(0)
   const smoothScroll = useRef(0)
@@ -399,21 +403,21 @@ export default function OrbitPlayground({ embedded = false, scrollTransition = t
   }, [])
   const clock = useMotionValue(0)
   const signalClock = useMotionValue(0)
-  const [savedView] = useState(() => ({ x: readSetting('viewX', -1), y: readSetting('viewY', -130) }))
+  const [savedView] = useState(() => ({ x: readSetting(orbitSettingKey('viewX', onboarding), -1), y: readSetting(orbitSettingKey('viewY', onboarding), -130) }))
   const viewX = useMotionValue(savedView.x)
   const viewY = useMotionValue(savedView.y)
   useEffect(() => {
     let timer
     const flush = () => {
       window.clearTimeout(timer)
-      saveSetting('viewX', viewX.get()); saveSetting('viewY', viewY.get())
+      saveSetting(orbitSettingKey('viewX', onboarding), viewX.get()); saveSetting(orbitSettingKey('viewY', onboarding), viewY.get())
     }
     const schedule = () => { window.clearTimeout(timer); timer = window.setTimeout(flush, 150) }
     const stopX = viewX.on('change', schedule)
     const stopY = viewY.on('change', schedule)
     window.addEventListener('pagehide', flush)
     return () => { flush(); stopX(); stopY(); window.removeEventListener('pagehide', flush) }
-  }, [viewX, viewY])
+  }, [viewX, viewY, onboarding])
   useAnimationFrame((_, delta) => {
     if (embedded && scrollDriven.current && smoothScroll.current !== scrollTarget.current) {
       const blend = reducedMotion ? 1 : 1 - Math.exp(-Math.min(delta, 64) / 180)
@@ -447,7 +451,7 @@ export default function OrbitPlayground({ embedded = false, scrollTransition = t
     setInteraction(defaultInteraction)
     setFog(defaultFog)
     setHitbox(defaultHitbox)
-    setAppearance(defaultAppearance); setSignals(defaultSignals); signalClock.set(0)
+    setAppearance(defaultAppearance); setSignals(onboarding ? onboardingSignals : defaultSignals); signalClock.set(0)
     setSolar(true); setRings(solarRings); setBodies(true); setSpeed(1); setZoom(164); setThickness(1); setOpacity(1); setScrollDistance(600); setGuides(false); setPlaying(true)
     clock.set(0); viewX.set(-1); viewY.set(-130)
   }

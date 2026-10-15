@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import OrbitPlayground from '../../../src/features/orbit-playground/OrbitPlayground'
-import { WebsiteSection, StaggeredHeading, APP_URL } from '../components/website-primitives'
-import { BorderGlow } from '../components/border-glow'
-import { ProductShowcase } from './ProductShowcase'
+import OrbitPlayground from '../../../../src/features/orbit-playground/OrbitPlayground'
+import { WebsiteSection, StaggeredHeading, APP_URL, BorderGlow } from '../../components'
+import { ProductShowcase } from '../ProductShowcase/ProductShowcase'
 
 function DomainScan() {
   const [domain, setDomain] = useState('')
@@ -25,7 +24,7 @@ function DomainScan() {
 
 export function HeroDelivery() {
   return <>
-    <WebsiteSection className="mv-hero-band mv-theme-dark" labelledBy="hero-title">
+    <WebsiteSection className="mv-hero-band mv-theme-dark justify-center" labelledBy="hero-title" contentBorders={false} contentClassName="flex flex-col justify-center">
       <div className="mv-hero-layout">
         <div className="mv-hero-copy">
           <StaggeredHeading as="h1" id="hero-title">A weekly audit of your<br />marketing signals,<br />with insights and next<br />steps. Chat native.</StaggeredHeading>

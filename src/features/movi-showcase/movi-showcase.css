@@ -45,6 +45,7 @@
 
 .movi-composer-entrance{position:absolute;inset-inline:0;bottom:0;height:120px;z-index:20;pointer-events:none;transform-origin:50% 100%}
 .movi-composer-entrance{width:auto}.movi-composer-entrance form{max-width:none;border-radius:var(--movi-composer-radius,48px);align-items:center}
+.movi-composer-entrance>div{background:none}
 
 .movi-composer-entrance [role="textbox"]{font-size:var(--movi-prompt-size,16px);line-height:1.4}
 

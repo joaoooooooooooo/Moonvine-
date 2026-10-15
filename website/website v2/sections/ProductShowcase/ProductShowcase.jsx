@@ -1,21 +1,21 @@
-import { useAssetFade, assetFadeStyle, fadeDefaults } from '../components/asset-fade'
+import { useAssetFade, assetFadeStyle, fadeDefaults } from '../../components'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useInView } from 'motion/react'
-import { Button } from '../../../src/components/ui/button'
-import { FrameCard, FrameCardContent } from '../../../src/components/ui/frame-card'
-import { ScrollArea } from '../../../src/components/ui/scroll-area'
-import { MoviShowcase } from '../../../src/features/movi-showcase/MoviShowcase'
-import { MetricLineChart } from '../../../src/features/observatory/_V2/components/search-clicks-chart'
-import { VisitorSourcesChart } from '../../../src/features/observatory/_V2/components/analytics/visitor-sources-chart'
-import { searchClicksSeries } from '../../../src/features/observatory/_V2/utils/search-clicks-series'
-import { engagementSeries } from '../../../src/features/observatory/_V2/utils/engagement-series'
-import { lensIcons } from '../../../src/features/observatory/_V2/data/navigation'
-import { Activity } from '../../../src/components/ui/icons'
-import '../../../src/features/observatory/_V2/components/signals-grid.css'
-import { accounts } from '../../../src/features/observatory/_V2/data/observatory-fixtures'
-import { buildLenses } from '../../../src/features/observatory/_V2/utils/observatory-model'
-import { WebsiteSection, StaggeredHeading } from '../components/website-primitives'
+import { Button } from '../../../../src/components/ui/button'
+import { FrameCard, FrameCardContent } from '../../../../src/components/ui/frame-card'
+import { ScrollArea } from '../../../../src/components/ui/scroll-area'
+import { MoviShowcase } from '../../../../src/features/movi-showcase/MoviShowcase'
+import { MetricLineChart } from '../../../../src/features/observatory/_V2/components/search-clicks-chart'
+import { VisitorSourcesChart } from '../../../../src/features/observatory/_V2/components/analytics/visitor-sources-chart'
+import { searchClicksSeries } from '../../../../src/features/observatory/_V2/utils/search-clicks-series'
+import { engagementSeries } from '../../../../src/features/observatory/_V2/utils/engagement-series'
+import { lensIcons } from '../../../../src/features/observatory/_V2/data/navigation'
+import { Activity } from '../../../../src/components/ui/icons'
+import '../../../../src/features/observatory/_V2/components/signals-grid.css'
+import { accounts } from '../../../../src/features/observatory/_V2/data/observatory-fixtures'
+import { buildLenses } from '../../../../src/features/observatory/_V2/utils/observatory-model'
+import { WebsiteSection, StaggeredHeading } from '../../components'
 import './product-showcase.css'
 
 const account = accounts.find(item => item.id === 'canopy')
@@ -56,7 +56,8 @@ export function ProductShowcase() {
         <p className="mv-product-description">AIO/GEO, social and competitor intel, earned media, and more via chat.</p>
       </div>
       <div className="mv-product-stage">
-        <FrameCard withFill className="mv-product-intelligence mv-asset-fade" data-reveal-item style={{ ...assetFadeStyle(fade), maskImage: chartRightFade, WebkitMaskImage: chartRightFade, '--shell-overlay': 'none' }}>
+        <div className="mv-product-intelligence-shadow">
+          <FrameCard withFill className="mv-product-intelligence mv-asset-fade" data-reveal-item style={{ ...assetFadeStyle(fade), maskImage: chartRightFade, WebkitMaskImage: chartRightFade, '--shell-overlay': 'none' }}>
           <FrameCardContent className="mv-product-intelligence-frame">
             <div ref={chartsRef} className="mv-product-charts v2-signals-grid">
               {chartsReady && <>
@@ -66,7 +67,8 @@ export function ProductShowcase() {
               </>}
             </div>
           </FrameCardContent>
-        </FrameCard>
+          </FrameCard>
+        </div>
         <FrameCard withFill className="mv-product-chat" data-reveal-item>
           <FrameCardContent className="mv-product-chat-frame">
             <MoviShowcase loop={false} autoAdvance={false} singleTurn />

@@ -1,0 +1,2 @@
+.mv-demo-surface{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-2xl)}
+.mv-demo-label{position:absolute;z-index:2;top:16px;left:18px;padding:5px 9px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--card);font:11px var(--font-mono);color:var(--muted-foreground)}

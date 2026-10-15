@@ -1,0 +1,10 @@
+import { useState } from 'react'
+import { ArrowRight, Check } from '@phosphor-icons/react'
+import { Button } from '../../../../src/components/ui/button'
+import { FrameCard, FrameCardContent } from '../../../../src/components/ui/frame-card'
+import { BorderGlow, WebsiteSection, StaggeredHeading, APP_URL } from '../../components'
+
+export function Pricing() {
+  const [annual, setAnnual] = useState(false)
+  return <WebsiteSection id="pricing" className="mv-pricing-band" labelledBy="pricing-heading" orbit><div className="mv-pricing-grid"><div className="mv-pricing-copy"><p className="mv-kicker">Pricing</p><StaggeredHeading id="pricing-heading">14 days free, then $249/mo.</StaggeredHeading><p>One place to follow the signals around your brand, read the weekly audit, and work with your data in chat.</p><ul><li><Check size={17} /> Dashboard and chat</li><li><Check size={17} /> Weekly marketing and competitor audit</li><li><Check size={17} /> Connected source coverage</li><li><Check size={17} /> Reports and exports</li></ul></div><BorderGlow animated className="mv-plan-glow"><FrameCard withFill className="mv-plan"><FrameCardContent><div className="mv-billing-toggle" role="group" aria-label="Billing period"><button type="button" className={!annual ? 'is-active' : ''} aria-pressed={!annual} onClick={() => setAnnual(false)}>Monthly</button><button type="button" className={annual ? 'is-active' : ''} aria-pressed={annual} onClick={() => setAnnual(true)}>Annual <span>2 months free</span></button></div><div className="mv-plan-price"><span>Moonvine Weekly Intelligence</span><strong>{annual ? '$208' : '$249'}<small>/mo</small></strong><p>{annual ? 'Billed $2,490 yearly after your trial' : 'Billed monthly after your 14-day trial'}</p></div><Button render={<a href={APP_URL} />} size="xl">Continue to Moonvine <ArrowRight /></Button><div className="mv-plan-notes"><span>$0 today</span><span>Cancel anytime</span><span>Watch any domain</span></div></FrameCardContent></FrameCard></BorderGlow></div></WebsiteSection>
+}

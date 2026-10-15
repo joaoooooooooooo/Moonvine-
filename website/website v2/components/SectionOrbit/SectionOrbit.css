@@ -1,0 +1,3 @@
+.mv-section-orbit{position:absolute;inset-block:0;left:50%;width:min(100%,var(--container-7xl));transform:translateX(-50%);z-index:1;overflow:hidden;pointer-events:none;mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent calc(100% - 32px))}
+.mv-section-orbit-art{position:absolute;right:-640px;bottom:-640px;width:1186px;height:1186px;opacity:.75}
+@media(max-width:760px){.mv-section-orbit-art{right:-520px;bottom:-520px;width:940px;height:940px;opacity:.55}}
