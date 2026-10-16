@@ -60,9 +60,11 @@ function upsertReplayClassName(toast: {
 }
 
 function Toasts({
+  bottomOffset,
   position,
   portalProps,
 }: {
+  bottomOffset?: string;
   position: ToastPosition;
   portalProps?: React.ComponentProps<typeof Toast.Portal>;
 }): React.ReactElement {
@@ -76,7 +78,7 @@ function Toasts({
           "fixed z-60 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] max-w-90 [--toast-inset:--spacing(4)] sm:[--toast-inset:--spacing(8)]",
           // Vertical positioning
           "data-[position*=top]:top-(--toast-inset)",
-          "data-[position*=bottom]:bottom-(--toast-inset)",
+          "data-[position*=bottom]:bottom-[calc(var(--toast-inset)+var(--toast-bottom-offset,0px))]",
           // Horizontal positioning
           "data-[position*=left]:left-(--toast-inset)",
           "data-[position*=right]:right-(--toast-inset)",
@@ -84,6 +86,7 @@ function Toasts({
         )}
         data-position={position}
         data-slot="toast-viewport"
+        style={{ "--toast-bottom-offset": bottomOffset } as React.CSSProperties}
       >
         {toasts.map((toast) => {
           const Icon = toast.type
@@ -287,11 +290,13 @@ export type ToastPosition =
   | "bottom-right";
 
 export interface ToastProviderProps extends Toast.Provider.Props {
+  bottomOffset?: string;
   position?: ToastPosition;
   portalProps?: React.ComponentProps<typeof Toast.Portal>;
 }
 
 export function ToastProvider({
+  bottomOffset,
   children,
   position = "bottom-right",
   portalProps,
@@ -300,7 +305,7 @@ export function ToastProvider({
   return (
     <Toast.Provider toastManager={toastManager} {...props}>
       {children}
-      <Toasts portalProps={portalProps} position={position} />
+      <Toasts bottomOffset={bottomOffset} portalProps={portalProps} position={position} />
     </Toast.Provider>
   );
 }

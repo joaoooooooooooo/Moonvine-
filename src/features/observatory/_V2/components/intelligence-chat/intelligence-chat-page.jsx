@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { MessageGroup } from '@/components/agents/message';
 import { ChatSuggestions } from './chat-suggestions';
 import { PageHeading } from '../page-heading';
-import { ClientPeriodSwitcher } from '../client-period-switcher';
 import { ChatMessage } from './chat-message';
 import { ChatComposer } from './chat-composer';
-import { chatHref, saveChatThread, useChatThreads } from '../../hooks/use-chat-threads';
+import { chatHref, saveChatThread, updateChatThread, useChatThreads } from '../../hooks/use-chat-threads';
 import { ChatReasoning } from './chat-reasoning';
 import { chatReply } from '../../data/intelligence-chat';
 import '../signals-grid.css';
@@ -18,6 +17,7 @@ export function IntelligenceChatPage({ model }) {
   const replyTimer = useRef(null);
   const end = useRef(null);
   useEffect(() => () => window.clearTimeout(replyTimer.current), []);
+  useEffect(() => { if (model.route.threadId) updateChatThread(model.route.threadId, { unread: false }); }, [model.route.threadId]);
   useEffect(() => { if (messages.length) end.current?.scrollIntoView({ block: 'nearest' }); }, [messages.length]);
 
   function send(text = draft) {
@@ -41,7 +41,6 @@ export function IntelligenceChatPage({ model }) {
   return (
     <div className="flex min-h-[calc(100svh-10rem)] flex-col gap-10 pb-28" data-chat-started={messages.length > 0 || isReplying}>
       {!messages.length && <div className="flex flex-col items-center gap-2 text-center">
-        <div className="mb-4 min-w-0"><ClientPeriodSwitcher account={model.account} accounts={model.accounts} route={model.route} /></div>
         <PageHeading title="Talk through your intelligence." />
         <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Explore {model.account.name}’s selected report week.</p>
       </div>}

@@ -2,6 +2,8 @@
 
 These are user-confirmed rules. Apply them to all work in this directory. Screenshots provide content and structure; adapt them to these existing V2 patterns.
 
+- Editable settings and data-source pages follow `DESIGN_RULES.md`. Treat those rules as the source of truth for settings frames, field previews, dialogs, validation, loading states, combobox chips, and toasts.
+
 - Reuse existing components and keep page sections in separate files. Do not copy a reference's visual conventions when they conflict with V2.
 - Major page sections use the shared `v2-page-sections` stack with 64px spacing. Keep the internal heading/content gap at 40px and heading/description gap at 8px.
 - Page content and header breadcrumbs use centered `max-w-4xl` containers. Intelligence uses its own `/intelligence/client/:id/current` routes and `Intelligence > Overview` or `Intelligence > source` breadcrumbs. The account/week selector stays in the header beside the breadcrumbs.

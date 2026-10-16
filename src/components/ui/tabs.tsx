@@ -8,8 +8,11 @@ export type TabsVariant = "default" | "underline";
 
 export function Tabs({
   className,
+  size = "default",
   ...props
-}: TabsPrimitive.Root.Props): React.ReactElement {
+}: TabsPrimitive.Root.Props & {
+  size?: "default" | "sm";
+}): React.ReactElement {
   return (
     <TabsPrimitive.Root
       className={cn(
@@ -17,6 +20,7 @@ export function Tabs({
         className,
       )}
       data-slot="tabs"
+      data-size={size}
       {...props}
     />
   );
@@ -38,6 +42,7 @@ export function TabsList({
         variant === "default"
           ? "rounded-lg bg-muted p-0.5 text-muted-foreground/72"
           : "data-[orientation=vertical]:px-1 data-[orientation=horizontal]:py-1 *:data-[slot=tabs-tab]:hover:bg-accent",
+        "in-data-[size=sm]:rounded-md",
         className,
       )}
       data-slot="tabs-list"
@@ -65,6 +70,7 @@ export function TabsTab({
     <TabsPrimitive.Tab
       className={cn(
         "relative flex h-9 shrink-0 grow cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-[calc(--spacing(2.5)-1px)] font-medium text-base outline-none transition-[color,background-color,box-shadow] hover:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring data-disabled:pointer-events-none data-[orientation=vertical]:w-full data-[orientation=vertical]:justify-start data-active:text-foreground data-disabled:opacity-64 sm:h-8 sm:text-sm [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0",
+        "in-data-[size=sm]:h-8 in-data-[size=sm]:px-[calc(--spacing(2)-1px)] in-data-[size=sm]:text-sm sm:in-data-[size=sm]:h-7 sm:in-data-[size=sm]:text-xs",
         className,
       )}
       data-slot="tabs-tab"

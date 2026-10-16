@@ -1,25 +1,45 @@
-import { SquarePen, ChevronDown, ChevronUp } from '@/components/ui/icons';
-import { SidebarGroup, SidebarMenuButton } from '@/components/ui/sidebar';
-import { AccountSelectLabel } from '../account-select-label';
-import { chatHref, useChatThreads } from '../../hooks/use-chat-threads';
+import { useId, useState } from 'react';
+import { ChevronDown, Plus } from '@/components/ui/icons';
+import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Tooltip, TooltipCreateHandle, TooltipPopup, TooltipProvider } from '@/components/ui/tooltip';
+import { chatHref, consoleChatHref, useChatThreads } from '../../hooks/use-chat-threads';
+import { ChatNavigationItem } from './chat-navigation-item';
+import './chat-navigation.css';
 
-export function ChatNavigation({ model, onNavigate }) {
+export function ChatNavigation({ model, onNavigate, className = '' }) {
   const threads = useChatThreads();
-  return <SidebarGroup className="gap-3">
-    {model.accounts.map((account) => <details key={account.id} open className="group/chat-account">
-      <summary className="flex cursor-pointer list-none items-center gap-2 rounded-lg px-2 py-2 text-sm hover:bg-sidebar-accent [&::-webkit-details-marker]:hidden">
-        <AccountSelectLabel account={account} />
-        <ChevronDown aria-hidden="true" className="ml-auto size-3.5 shrink-0 group-open/chat-account:hidden" />
-        <ChevronUp aria-hidden="true" className="ml-auto hidden size-3.5 shrink-0 group-open/chat-account:block" />
-      </summary>
-      <div className="ml-7 mt-1 space-y-1">
-        <SidebarMenuButton render={<a href={chatHref(account.id)} />} onClick={onNavigate} isActive={model.account.id === account.id && !model.route.threadId}>
-          <SquarePen aria-hidden="true" className="size-4.5" /><span>New chat</span>
+  const listId = useId();
+  const [collapsed, setCollapsed] = useState(false);
+  const [tooltipHandle] = useState(() => TooltipCreateHandle());
+  const chats = threads.filter((thread) => thread.accountId === model.selectedAccountId && !thread.archived)
+    .sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+  const visible = chats.slice(0, 8);
+  return <TooltipProvider delay={600} timeout={400}>
+    <SidebarGroup className={`gap-1 ${className}`} aria-label="Recent chats">
+      <SidebarMenuButton className="h-8.5 text-muted-foreground" aria-expanded={!collapsed} aria-controls={listId} onClick={() => setCollapsed((value) => !value)}>
+        <span>Recent chats</span>
+        <ChevronDown aria-hidden="true" className={`size-3.5 shrink-0 transition-transform motion-reduce:transition-none ${collapsed ? 'rotate-180' : ''}`} weight="fill" />
+      </SidebarMenuButton>
+    <SidebarMenu id={listId} hidden={collapsed} className={`gap-0.5 ${collapsed ? 'hidden' : ''}`}>
+      {visible.map((thread) => <ChatNavigationItem key={thread.id} thread={thread} onNavigate={onNavigate} tooltipHandle={tooltipHandle}
+        href={model.route.path.startsWith('/console') ? consoleChatHref(thread.accountId, thread.id) : chatHref(thread.accountId, thread.id)}
+        archiveHref={model.route.path.startsWith('/console') ? '#/console' : chatHref(thread.accountId)}
+        active={model.route.lensId === 'intelligence:chat' && model.route.threadId === thread.id} />)}
+      <SidebarMenuItem>
+        <SidebarMenuButton render={<a href={chatHref(model.selectedAccountId)} />} onClick={onNavigate} className="h-8 text-muted-foreground">
+          <Plus aria-hidden="true" className="size-4" weight="regular" />
+          <span>New chat</span>
         </SidebarMenuButton>
-        {threads.filter((thread) => thread.accountId === account.id).map((thread) => <SidebarMenuButton key={thread.id} render={<a href={chatHref(account.id, thread.id)} />} onClick={onNavigate} isActive={model.route.threadId === thread.id} title={thread.title}>
-          <span>{thread.title}</span>
-        </SidebarMenuButton>)}
-      </div>
-    </details>)}
-  </SidebarGroup>;
+      </SidebarMenuItem>
+    </SidebarMenu>
+    </SidebarGroup>
+    <Tooltip handle={tooltipHandle}>
+      {({ payload }) => <TooltipPopup side="right" align="start" sideOffset={12} className={payload?.title ? 'chat-title-tooltip max-w-80 text-sm' : 'max-w-48'}>
+        {payload?.title ? <div className="flex flex-col items-start gap-1 text-left">
+          <span className="break-words">{payload.title}</span>
+          {payload.date ? <time dateTime={payload.date.toISOString()} className="text-xs text-muted-foreground">{payload.date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</time> : <span className="text-xs text-muted-foreground">Date unavailable</span>}
+        </div> : payload?.label}
+      </TooltipPopup>}
+    </Tooltip>
+  </TooltipProvider>;
 }

@@ -56,6 +56,7 @@ import {
   Pause as PhosphorPause,
   Play as PhosphorPlay,
   Plugs as PhosphorPlugs,
+  PlugsConnected as PhosphorPlugsConnected,
   Plus as PhosphorPlus,
   Pulse as PhosphorPulse,
   PushPin as PhosphorPushPin,
@@ -172,6 +173,7 @@ export const PauseIcon = regularIcon(PhosphorPause);
 export const PinIcon = regularIcon(PhosphorPushPin);
 export const PlayIcon = regularIcon(PhosphorPlay);
 export const Plug = regularIcon(PhosphorPlugs);
+export const PlugConnected = regularIcon(PhosphorPlugsConnected);
 export const Plus = regularIcon(PhosphorPlus);
 export const PlusIcon = regularIcon(PhosphorPlus);
 export const QuoteIcon = regularIcon(PhosphorQuotes);

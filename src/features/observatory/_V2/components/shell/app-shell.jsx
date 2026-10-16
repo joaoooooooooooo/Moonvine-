@@ -4,7 +4,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { AppSidebar } from './app-sidebar';
 import { AppHeader } from './app-header';
 import { ChatBackground } from './chat-background';
-import { ClientPeriodSwitcher } from '../client-period-switcher';
+import { ReportWeekPicker } from '../report-week-picker';
+import { SetupProgressCard } from './setup-progress-card';
 import '../page-sections.css';
 
 // Local adaptation of the prototype Console AppShell; page routes stay inside V2.
@@ -15,7 +16,7 @@ export function AppShell({ model, children }) {
 
   return (
     <div className="relative overflow-hidden">
-      <SidebarProvider open={true} onOpenChange={() => {}} className="relative h-svh w-full" style={{ '--sidebar-width': '16rem' }}>
+      <SidebarProvider open={true} onOpenChange={() => {}} className="relative h-svh w-full" style={{ '--sidebar-width': '17rem' }}>
         <AppSidebar model={model} />
         <SidebarInset className="v2-shell isolate overflow-hidden bg-card">
           {route.lensId === 'intelligence:chat' && <ChatBackground />}
@@ -23,12 +24,15 @@ export function AppShell({ model, children }) {
           <ScrollArea ref={scrollArea} className="relative h-auto min-w-0 flex-1" overscrollContain>
             <div className="p-5 pt-8 md:p-8 md:pt-12">
               <div className={`mx-auto flex w-full ${route.lensId === 'intelligence:chat' ? 'max-w-3xl' : 'max-w-4xl'} min-w-0 flex-col gap-4`} data-v2-page-content>
-                {model.account && route.lensId !== 'intelligence:chat' && <div className="min-w-0 pb-2"><ClientPeriodSwitcher account={model.account} accounts={model.accounts} route={route} /></div>}
+                {model.account && route.lensId !== 'intelligence:chat' && route.path !== '/console/reports' && <div className="min-w-0 pb-2"><ReportWeekPicker account={model.account} route={route} /></div>}
                 {children}
               </div>
             </div>
           </ScrollArea>
         </SidebarInset>
+        <div className="fixed right-4 bottom-4 z-40 w-[calc(100%-2rem)] max-w-72">
+          <SetupProgressCard />
+        </div>
       </SidebarProvider>
     </div>
   );

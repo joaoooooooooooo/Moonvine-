@@ -8,8 +8,11 @@
   display: none;
 }
 
-.v2-sidebar-content {
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--foreground) 20%, transparent) transparent;
-  overscroll-behavior-y: contain;
+.v2-sidebar-content > [data-slot="scroll-area-viewport"] {
+  /* Reserve the same space even when the list fits, preventing row shifts. */
+  padding-inline-end: 12px;
+}
+
+.v2-sidebar-content > [data-slot="scroll-area-scrollbar"][data-orientation="vertical"] {
+  margin-inline-end: 8px;
 }

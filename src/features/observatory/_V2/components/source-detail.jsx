@@ -11,6 +11,7 @@ import { AiVisibilityQuestions } from './ai-visibility/ai-visibility-questions';
 import { AiVisibilitySources } from './ai-visibility/ai-visibility-sources';
 import { AiVisibilityNextSteps } from './ai-visibility/ai-visibility-next-steps';
 import { AiVisibilityProcess } from './ai-visibility/ai-visibility-process';
+import { Button } from '@/components/ui/button';
 
 export function SourceDetail({ model }) {
   const { account, lens, route } = model;
@@ -32,6 +33,8 @@ export function SourceDetail({ model }) {
       <div className="space-y-2">
         <PageHeading title={lens.description} />
         {lens.id !== 'website' && <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">{lens.summary}</p>}
+        {lens.id === 'analytics' && <Button className="mt-2" variant="secondary" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Analytics</Button>}
+        {lens.id === 'search' && <Button className="mt-2" variant="secondary" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Search Console</Button>}
       </div>
       {lens.id === 'analytics' ? <AnalyticsCharts lens={lens} account={account} /> : lens.id === 'website' ? (
         <div className="v2-page-sections">

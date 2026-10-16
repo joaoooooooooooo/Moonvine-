@@ -1,4 +1,4 @@
-import { LayoutGrid, Sparkles, Activity, ChartNoAxesCombined, Search, MessageCircle, Newspaper, Globe, ScanSearch, FileText, Plug } from '@/components/ui/icons';
+import { LayoutGrid, Sparkles, Activity, ChartNoAxesCombined, Search, MessageCircle, Newspaper, Globe, ScanSearch, FileText } from '@/components/ui/icons';
 
 export const intelligenceItems = [
   { label: 'Overview', lens: '', icon: LayoutGrid },
@@ -11,7 +11,6 @@ export const intelligenceItems = [
   { label: 'Site health', lens: 'source:site', icon: Globe },
   { label: 'Search competitors', lens: 'source:semrush', icon: ScanSearch },
   { label: 'Reports', lens: 'report:history', icon: FileText },
-  { label: 'Connection status', lens: 'account:connections', icon: Plug },
 ];
 
 

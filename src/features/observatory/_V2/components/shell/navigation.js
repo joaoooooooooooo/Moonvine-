@@ -16,7 +16,7 @@ export const chatShellItem = { label: 'Chat', href: '#/chat/canopy/new', icon: M
 export const shellItems = [...shellGroups.flatMap((group) => group.items), chatShellItem];
 
 export function activeShellItem(route) {
-  if (route.path === '/console/accounts' || route.path === '/console/people') return shellItems.find((item) => item.label === 'Settings');
+  if (route.path === '/console/accounts' || route.path === '/console/people' || route.path === '/console/data-sources/access') return shellItems.find((item) => item.label === 'Settings');
   if (route.path.startsWith('/console/data-sources')) return shellItems.find((item) => item.label === 'Data Sources');
   if (route.lensId === 'report:history') return shellItems.find((item) => item.label === 'Reports');
   return shellItems.find((item) => item.href === '#' + route.path) ?? shellItems[0];

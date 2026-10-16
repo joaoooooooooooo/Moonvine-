@@ -2,21 +2,12 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Badge } from '@/components/ui/badge';
-import { Building2, Network, Link2, Newspaper, ChartNoAxesCombined, Layers2Icon, ShieldCheckIcon, CircleCheckIcon, CircleAlertIcon } from '@/components/ui/icons';
-
-const sections = [
-  { id: 'organization', label: 'Organization', icon: Building2, connected: false },
-  { id: 'competitors', label: 'Competitors', icon: Network, connected: true },
-  { id: 'social-accounts', label: 'Social accounts', icon: Link2, connected: true },
-  { id: 'news-keywords', label: 'News keywords', icon: Newspaper, connected: false },
-  { id: 'first-party-data', label: 'First-party data', icon: ChartNoAxesCombined, connected: false },
-  { id: 'index', label: 'Index', icon: Layers2Icon, connected: false },
-  { id: 'access', label: 'Access', icon: ShieldCheckIcon, connected: false },
-];
+import { Plug, PlugConnected } from '@/components/ui/icons';
+import { dataSourceSections } from '../../data/data-source-navigation';
 
 export function DataSourcesNavigation({ route, onNavigate }) {
   return <SidebarGroup><SidebarMenu className="gap-2">
-    {sections.map((section) => <DataSourceItem key={section.id} section={section} route={route} onNavigate={onNavigate} />)}
+    {dataSourceSections.map((section) => <DataSourceItem key={section.id} section={section} route={route} onNavigate={onNavigate} />)}
   </SidebarMenu></SidebarGroup>;
 }
 
@@ -28,8 +19,9 @@ function DataSourceItem({ section: { id, label, icon: Icon, connected }, route, 
   const href = `#/console/data-sources/${id}`;
   const active = '#' + route.path === href;
   const hasStatus = typeof connected === 'boolean';
-  const status = connected ? 'Connected' : 'Not connected';
-  const StatusIcon = connected ? CircleCheckIcon : CircleAlertIcon;
+  const status = connected ? 'Connected' : 'No Source';
+  const StatusIcon = connected ? PlugConnected : Plug;
+  const badgeVariant = connected ? 'info' : 'secondary';
   function showBadge() {
     if (!hasStatus || !statusRef.current) return;
     const rect = statusRef.current.getBoundingClientRect();
@@ -61,10 +53,12 @@ function DataSourceItem({ section: { id, label, icon: Icon, connected }, route, 
   }, []);
   const button = <SidebarMenuButton className="h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5" isActive={active}
     render={<a href={href} aria-current={active ? 'page' : undefined} />} onClick={onNavigate}>
-    <Icon aria-hidden="true" className="size-4.5" /><span ref={labelRef} className="min-w-0 truncate"
+    <Icon aria-hidden="true" className="size-4.5" weight="fill" /><span ref={labelRef} className="min-w-0 truncate"
       style={badgePosition?.mask ? { maskImage: badgePosition.mask, WebkitMaskImage: badgePosition.mask } : undefined}>{label}</span>
     {hasStatus && <span ref={statusRef} aria-hidden="true" className="ml-auto inline-flex shrink-0">
-      <StatusIcon className={`size-3.5 ${connected ? 'text-success-foreground' : 'text-warning-foreground'}`} />
+      <Badge variant={badgeVariant} size="lg" className={connected ? '[&_svg]:opacity-100' : 'text-muted-foreground [&_svg]:opacity-100'}>
+        <StatusIcon aria-hidden="true" weight="fill" />
+      </Badge>
     </span>}
     {hasStatus && <span className="sr-only">{status}</span>}
   </SidebarMenuButton>;
@@ -75,7 +69,7 @@ function DataSourceItem({ section: { id, label, icon: Icon, connected }, route, 
     {badgePosition && createPortal(
       <span ref={badgeRef} aria-hidden="true" className="pointer-events-none fixed z-50 inline-flex -translate-y-1/2 rounded-sm bg-popover"
         style={{ left: badgePosition.left, top: badgePosition.top, maxWidth: badgePosition.right - badgePosition.minLeft }}>
-        <Badge variant={connected ? 'success' : 'warning'}><StatusIcon aria-hidden="true" />{status}</Badge>
+        <Badge variant={badgeVariant} size="lg" className={connected ? '[&_svg]:opacity-100' : 'text-muted-foreground [&_svg]:opacity-100'}><StatusIcon aria-hidden="true" weight="fill" />{status}</Badge>
       </span>, document.body,
     )}
   </SidebarMenuItem>;

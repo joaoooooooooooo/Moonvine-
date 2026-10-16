@@ -6,12 +6,29 @@ import { useSidebar } from '@/components/ui/sidebar';
 
 const visibleLimit = 5;
 
+function workspaceRoute(workspaceId) {
+  const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
+  const path = url.pathname;
+  if (path === '/console') {
+    url.searchParams.delete('chat');
+    url.searchParams.delete('account');
+  }
+  if (path.startsWith('/chat/')) {
+    url.pathname = `/chat/${encodeURIComponent(workspaceId)}/new`;
+  } else if (/^\/intelligence\/client\/[^/]+\//.test(path)) {
+    url.pathname = path.replace(/^\/(intelligence\/client|chat)\/[^/]+\//, `/$1/${encodeURIComponent(workspaceId)}/`);
+  } else if (path === '/console/reports') {
+    url.searchParams.set('account', workspaceId);
+  }
+  return url.pathname + url.search;
+}
+
 function WorkspaceLabel({ workspace }) {
   return (
     <span className="flex min-w-0 items-center gap-2">
-      <Avatar className="size-8 shrink-0">
+      <Avatar className="size-8 shrink-0 rounded-[6px]">
         <AvatarImage src={workspace.imageSrc} alt="" />
-        <AvatarFallback>{workspace.initials}</AvatarFallback>
+        <AvatarFallback className="rounded-[6px]">{workspace.initials}</AvatarFallback>
       </Avatar>
       <span className="flex min-w-0 flex-col text-left">
         <span className="truncate font-medium">{workspace.name}</span>
@@ -38,7 +55,8 @@ export function WorkspaceSwitcher({ model }) {
       onOpenChange={setOpen}
       onValueChange={(id) => {
         if (!id) return;
-        window.location.hash = `/console/client/${encodeURIComponent(id)}/current`;
+        model.selectWorkspace(id);
+        window.location.hash = workspaceRoute(id);
         setOpen(false);
         setOpenMobile(false);
       }}

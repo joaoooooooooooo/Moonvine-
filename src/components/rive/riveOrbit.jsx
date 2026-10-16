@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   RuntimeLoader,
   useRive,
@@ -21,17 +21,38 @@ import {
 // Keep the Rive engine in the application bundle instead of relying on its CDN.
 RuntimeLoader.setWasmUrl(riveWasmUrl);
 
+function cssColorToRiveColor(color, background) {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 1;
+  const context = canvas.getContext("2d");
+  if (!context) return hexToRiveColor(getRiveBorderStrokeColor());
+  context.fillStyle = background;
+  context.fillRect(0, 0, 1, 1);
+  context.fillStyle = color;
+  context.fillRect(0, 0, 1, 1);
+  const [red, green, blue] = context.getImageData(0, 0, 1, 1).data;
+  return (0xff000000 | (red << 16) | (green << 8) | blue) >>> 0;
+}
+
 export default function RiveOrbit({
   className,
   style,
   stateMachines = "State Machine 1",
+  inheritStrokeColor = false,
+  playing = true,
   ...props
 }) {
+  const containerRef = useRef(null);
   const { rive, RiveComponent } = useRive({
     src: moonvineOrbitSrc,
     stateMachines,
     autoplay: true,
   });
+  useEffect(() => {
+    if (!rive) return;
+    if (playing) rive.play();
+    else rive.pause();
+  }, [playing, rive]);
   const viewModel = useViewModel(rive, { useDefault: true });
   const viewModelInstance = useViewModelInstance(viewModel, {
     rive,
@@ -61,7 +82,12 @@ export default function RiveOrbit({
 
   useEffect(() => {
     const applyThemeBindings = () => {
-      const riveStrokeColor = hexToRiveColor(getRiveBorderStrokeColor());
+      const riveStrokeColor = inheritStrokeColor && containerRef.current
+        ? cssColorToRiveColor(
+          getComputedStyle(containerRef.current).color,
+          getComputedStyle(containerRef.current.closest(".mv-website")).backgroundColor,
+        )
+        : hexToRiveColor(getRiveBorderStrokeColor());
 
       strokeColorBinding.setValue(riveStrokeColor);
       pointColorBinding.setValue(hexToRiveColor(getRivePointColor()));
@@ -74,6 +100,8 @@ export default function RiveOrbit({
       attributeFilter: ["class"],
       attributes: true,
     });
+    const website = inheritStrokeColor ? containerRef.current?.closest(".mv-website") : null;
+    if (website) observer.observe(website, { attributes: true, attributeFilter: ["class", "style"] });
 
     window.addEventListener(RIVE_STROKE_COLOR_CHANGE_EVENT, applyThemeBindings);
 
@@ -84,7 +112,9 @@ export default function RiveOrbit({
         applyThemeBindings,
       );
     };
-  }, [pointColorBinding, strokeColorBinding]);
+  }, [inheritStrokeColor, pointColorBinding, strokeColorBinding]);
 
-  return <RiveComponent className={className} style={style} {...props} />;
+  return inheritStrokeColor
+    ? <div ref={containerRef} className={className} style={{ ...style, color: "var(--mv-section-line-color)" }}><RiveComponent className="size-full" {...props} /></div>
+    : <RiveComponent className={className} style={style} {...props} />;
 }

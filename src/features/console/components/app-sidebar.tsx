@@ -1,5 +1,6 @@
 "use client";
 
+import { cloneElement, isValidElement } from "react";
 import { ChevronLeftIcon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -35,7 +36,9 @@ function SidebarIconBadge({
 			size="lg"
 			variant={variant}
 		>
-			{item.icon}
+			{isValidElement<{ weight?: "fill" }>(item.icon)
+				? cloneElement(item.icon, { weight: "fill" })
+				: item.icon}
 		</Badge>
 	);
 }

@@ -1,0 +1,15 @@
+.badge-debug-page { min-height: 100dvh; padding: clamp(20px, 4vw, 48px); background: var(--background); color: var(--foreground); }
+.badge-debug-intro { margin-block-end: 32px; }
+.badge-debug-intro h1 { font-size: 28px; font-weight: 600; letter-spacing: -.035em; }
+.badge-debug-intro p { margin-block-start: 6px; color: var(--muted-foreground); font-size: 14px; }
+.badge-debug-board { max-width: 1443px; margin-block-end: 24px; padding: 32px; overflow: hidden; border: 1px solid var(--border); border-radius: 16px; background: var(--background); color: var(--foreground); }
+.badge-debug-board-heading { margin-block-end: 32px; }
+.badge-debug-board-heading h2 { font-size: 18px; font-weight: 600; }
+.badge-debug-board-heading p { color: var(--muted-foreground); font-size: 12px; }
+.badge-debug-scroll { overflow-x: auto; }
+.badge-debug-grid { display: grid; grid-template-columns: 88px repeat(10, minmax(92px, 1fr)); min-width: 1120px; align-items: center; gap: 20px 8px; }
+.badge-debug-column { color: var(--muted-foreground); font-size: 11px; text-transform: capitalize; }
+.badge-debug-row { display: contents; }
+.badge-debug-size { color: var(--muted-foreground); font-size: 12px; }
+.badge-debug-cell { display: flex; align-items: center; min-height: 48px; }
+.badge-debug-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success-foreground); }

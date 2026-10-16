@@ -8,6 +8,7 @@ import WebsiteHome from '../website/website v2/main.jsx'
 import OrbitPlayground from './features/orbit-playground/OrbitPlayground'
 import MoviShowcasePage from './features/movi-showcase/MoviShowcasePage'
 import ComponentGallery from './pages/ComponentGallery'
+import BadgeDebug from './pages/BadgeDebug'
 import OnboardingPage from './features/Onboarding'
 import { Agentation } from 'agentation'
 
@@ -25,6 +26,8 @@ const Page = pathname === '/onboarding' ? OnboardingPage : pathname === '/websit
   ? ObservatoryV2
   : pathname === '/component'
     ? ComponentGallery
+  : pathname === '/badge-debug'
+    ? BadgeDebug
   : pathname === '/website'
     ? WebsiteHome
     : pathname === '/orbit-playground'

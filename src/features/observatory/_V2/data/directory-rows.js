@@ -11,10 +11,18 @@ export function directoryRows(type, workspaces = accounts) {
       ? index === 0 ? 'Jordan Davis' : 'Team member ' + (index + 1)
       : index === 0 ? account.name : 'Watched organization ' + (index + 1),
     domain: account.name,
+    email: type === 'people'
+      ? `${index === 0 ? 'jordan' : `team${index + 1}`}@${account.domain}`
+      : undefined,
+    recipient: type === 'people' && index === 0,
     accountId: account.id,
     accountImageSrc: account.imageSrc,
     imageSrc: type === 'people'
       ? reportRecipients[index % reportRecipients.length].imageSrc
       : index === 0 ? account.imageSrc : organizationImages[(index - 1) % organizationImages.length],
   })));
+}
+
+export function findDirectoryPerson(personId, workspaces = accounts) {
+  return directoryRows('people', workspaces).find((person) => person.id === personId);
 }

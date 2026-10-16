@@ -5,10 +5,14 @@ import { useThemePreference } from '@/components/navigation/avatar-menu/hooks/us
 
 function readRoute() {
   const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
-  const chat = url.pathname.match(/^\/chat\/([^/]+)\/([^/]+)$/);
-  if (chat) return { path: url.pathname, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), lensId: 'intelligence:chat', period: 'current' };
-  const match = url.pathname.match(/^\/(?:intelligence|console)\/client\/([^/]+)\/current$/);
-  return { path: url.pathname, accountId: match?.[1] || (url.pathname === '/console/reports' ? url.searchParams.get('account') : null), lensId: url.searchParams.get('lens'), period: url.searchParams.get('period') || 'current' };
+  const path = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') : url.pathname;
+  const chat = path.match(/^\/chat\/([^/]+)\/([^/]+)$/);
+  if (path === '/console' && url.searchParams.get('chat')) return { path, accountId: url.searchParams.get('account'), threadId: url.searchParams.get('chat'), lensId: 'intelligence:chat', period: 'current' };
+  if (chat) return { path, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), lensId: 'intelligence:chat', period: 'current' };
+  const person = path.match(/^\/console\/people\/([^/]+)$/);
+  if (person) return { path, personId: decodeURIComponent(person[1]), lensId: null, period: 'current' };
+  const match = path.match(/^\/(?:intelligence|console)\/client\/([^/]+)\/current$/);
+  return { path, accountId: match?.[1] || (path === '/console/reports' ? url.searchParams.get('account') : null), lensId: url.searchParams.get('lens'), period: url.searchParams.get('period') || 'current' };
 }
 
 export function useObservatory() {
@@ -45,7 +49,14 @@ export function useObservatory() {
     setProfiles((current) => ({ ...current, [account.id]: values }));
     window.location.hash = '/intelligence/client/' + account.id + '/current';
   }
-  return { route, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile };
+  function saveWorkspaceProfile(workspaceId, values) {
+    setProfiles((current) => ({ ...current, [workspaceId]: { ...current[workspaceId], ...values } }));
+  }
+  function selectWorkspace(workspaceId) {
+    setSelectedAccountId(workspaceId);
+    window.localStorage.setItem('observatory-workspace', workspaceId);
+  }
+  return { route, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile, saveWorkspaceProfile, selectWorkspace };
 }
 
 

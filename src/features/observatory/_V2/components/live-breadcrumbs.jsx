@@ -1,11 +1,16 @@
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
-export function LiveBreadcrumbs({ account, route, current }) {
+export function LiveBreadcrumbs({ items }) {
   return (
     <Breadcrumb aria-label="Breadcrumb" className="min-w-0">
       <BreadcrumbList className="flex-nowrap">
-        {(account || current !== 'Observatory') && <><BreadcrumbItem><span>{route.lensId === 'intelligence:chat' ? 'Chat' : route.path.startsWith('/intelligence/') ? 'Intelligence' : 'Observatory'}</span></BreadcrumbItem><BreadcrumbSeparator /></>}
-        {current && <BreadcrumbItem className="min-w-0"><BreadcrumbPage className="truncate">{current}</BreadcrumbPage></BreadcrumbItem>}
+        {items.map(({ label, icon: Icon }, index) => <span key={`${label}-${index}`} className="contents">
+          {index > 0 && <BreadcrumbSeparator />}
+          <BreadcrumbItem className="min-w-0">
+            <Icon aria-hidden="true" className="size-4 shrink-0" />
+            {index === items.length - 1 ? <BreadcrumbPage className="truncate">{label}</BreadcrumbPage> : <span className="truncate">{label}</span>}
+          </BreadcrumbItem>
+        </span>)}
       </BreadcrumbList>
     </Breadcrumb>
   );

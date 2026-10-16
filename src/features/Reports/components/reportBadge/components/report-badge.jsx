@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 const segments = {
   warning: {
-    className: "bg-warning/8 text-warning-foreground dark:bg-warning/16",
+    className: "bg-warning text-warning-foreground",
     dotClassName: "bg-warning",
     label: "Fix",
   },
