@@ -7,6 +7,7 @@ import {
   ArrowUp as PhosphorArrowUp,
   ArrowUpRight as PhosphorArrowUpRight,
   Bell as PhosphorBell,
+  BookmarkSimple as PhosphorBookmarkSimple,
   BookOpen as PhosphorBookOpen,
   Brain as PhosphorBrain,
   Broadcast as PhosphorBroadcast,
@@ -22,6 +23,8 @@ import {
   CaretUpDown as PhosphorCaretUpDown,
   ChartLineUp as PhosphorChartLineUp,
   ChatCircle as PhosphorChatCircle,
+  ChatCircleText as PhosphorChatCircleText,
+  ChatTeardrop as PhosphorChatTeardrop,
   Check as PhosphorCheck,
   CheckCircle as PhosphorCheckCircle,
   Circle as PhosphorCircle,
@@ -33,6 +36,9 @@ import {
   FileArrowDown as PhosphorFileArrowDown,
   FileText as PhosphorFileText,
   Fingerprint as PhosphorFingerprint,
+  Folder as PhosphorFolder,
+  FolderOpen as PhosphorFolderOpen,
+  FolderSimple as PhosphorFolderSimple,
   FolderPlus as PhosphorFolderPlus,
   Gear as PhosphorGear,
   Globe as PhosphorGlobe,
@@ -60,6 +66,7 @@ import {
   Plus as PhosphorPlus,
   Pulse as PhosphorPulse,
   PushPin as PhosphorPushPin,
+  PushPinSlash as PhosphorPushPinSlash,
   Question as PhosphorQuestion,
   Quotes as PhosphorQuotes,
   Scan as PhosphorScan,
@@ -131,6 +138,7 @@ export const CircleCheckIcon = regularIcon(PhosphorCheckCircle);
 export const CircleFadingPlusIcon = regularIcon(PhosphorCircleDashed);
 export const CircleIcon = regularIcon(PhosphorCircle);
 export const CircleUserRoundIcon = regularIcon(PhosphorUserCircle);
+export const BookmarkIcon = regularIcon(PhosphorBookmarkSimple);
 export const CopyIcon = regularIcon(PhosphorCopy);
 export const CreditCardIcon = regularIcon(PhosphorCreditCard);
 export const ExternalLink = regularIcon(PhosphorArrowSquareOut);
@@ -139,6 +147,9 @@ export const EyeIcon = regularIcon(PhosphorEye);
 export const FileInputIcon = regularIcon(PhosphorFileArrowDown);
 export const FileText = regularIcon(PhosphorFileText);
 export const FingerprintIcon = regularIcon(PhosphorFingerprint);
+export const FolderIcon = regularIcon(PhosphorFolder);
+export const FolderOpenIcon = regularIcon(PhosphorFolderOpen);
+export const FolderSimpleIcon = regularIcon(PhosphorFolderSimple);
 export const FolderPlusIcon = regularIcon(PhosphorFolderPlus);
 export const Globe = regularIcon(PhosphorGlobe);
 export const GlobeIcon = regularIcon(PhosphorGlobe);
@@ -158,6 +169,8 @@ export const LoaderCircleIcon = regularIcon(PhosphorSpinner);
 export const LogOutIcon = regularIcon(PhosphorSignOut);
 export const MegaphoneIcon = regularIcon(PhosphorMegaphone);
 export const MessageCircle = regularIcon(PhosphorChatCircle);
+export const ChatCircleText = regularIcon(PhosphorChatCircleText);
+export const ChatTeardrop = regularIcon(PhosphorChatTeardrop);
 export const MinusIcon = regularIcon(PhosphorMinus);
 export const Monitor = regularIcon(PhosphorMonitor);
 export const MonitorIcon = regularIcon(PhosphorMonitor);
@@ -171,6 +184,7 @@ export const Newspaper = regularIcon(PhosphorNewspaper);
 export const PanelLeftIcon = regularIcon(PhosphorSidebarSimple);
 export const PauseIcon = regularIcon(PhosphorPause);
 export const PinIcon = regularIcon(PhosphorPushPin);
+export const PinSlashIcon = regularIcon(PhosphorPushPinSlash);
 export const PlayIcon = regularIcon(PhosphorPlay);
 export const Plug = regularIcon(PhosphorPlugs);
 export const PlugConnected = regularIcon(PhosphorPlugsConnected);

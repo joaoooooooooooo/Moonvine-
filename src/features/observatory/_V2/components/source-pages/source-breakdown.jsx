@@ -18,7 +18,7 @@ export function SourceBreakdown({ lens, presentation, account }) {
           {[...lens.rows].sort((a, b) => b[1] - a[1]).map(([name, value]) => {
             const share = total ? value / total * 100 : 0;
             return presentation.profiles ? (
-              <RankItem key={name} label={name} imageSrc={presentation.profiles[name]} value={value.toLocaleString('en-US')}
+              <RankItem key={name} label={name} imageSrc={presentation.profiles[name]} value={value.toLocaleString('en-US')} badge={false}
                 valueLabel={presentation.unit} fillPercentage={share} percentageLabel={`${Math.round(share)}%`}
                 isCompetitor={lens.id === 'competitors' && name !== account.name}
                 className="min-h-12 rounded-md bg-transparent px-3 py-2 [&_p]:text-sm" />

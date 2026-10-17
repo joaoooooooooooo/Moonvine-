@@ -12,6 +12,7 @@ export function RankItem({
   value = 12,
   valueLabel = "Citations",
   percentageLabel,
+  badge = true,
 }) {
   const boundedFill = Math.min(Math.max(fillPercentage, 0), 100);
 
@@ -47,13 +48,13 @@ export function RankItem({
         </div>
       </div>
       <div className="relative z-10 flex shrink-0 items-center gap-2">
-      <Badge
+      {badge ? <Badge
         className="z-10 tracking-[0.12px]"
         size="default"
         variant="secondary"
       >
         {value} {valueLabel}
-      </Badge>
+      </Badge> : <span className="text-sm tabular-nums">{value} {valueLabel}</span>}
       {percentageLabel && <span className="text-xs tabular-nums text-muted-foreground">{percentageLabel}</span>}
       </div>
     </li>

@@ -1,3 +1,4 @@
+import { SidebarControlTooltip } from './sidebar-control-tooltip';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { ArrowLeftIcon, Moon, Search, ShieldCheckIcon, Sparkles, Sun } from '@/components/ui/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -25,13 +26,13 @@ export function SearchCommand({ model }) {
   const [response, setResponse] = useState('');
   const [generating, setGenerating] = useState(false);
   const timerRef = useRef(null);
-  const modifier = /Mac|iPhone|iPad/.test(navigator.platform) ? '\u2318' : 'Ctrl';
-
   useEffect(() => {
     function onKeyDown(event) {
-      if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
+      const target = event.target;
+      const isEditing = target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]');
+      if (!open && event.key.toLowerCase() === 'f' && !event.altKey && !event.ctrlKey && !event.metaKey && !event.repeat && !isEditing) {
         event.preventDefault();
-        setOpen((value) => !value);
+        setOpen(true);
       }
       if (event.key === 'Escape' && open && aiMode) {
         event.preventDefault();
@@ -115,13 +116,13 @@ export function SearchCommand({ model }) {
 
   return (
     <CommandDialog open={open} onOpenChange={(nextOpen) => { setOpen(nextOpen); if (!nextOpen) reset(); }}>
-      <CommandDialogTrigger aria-label="Search commands" className="inline-flex h-9 w-full items-center rounded-lg bg-sidebar-accent/50 px-3 py-2 text-sm text-sidebar-accent-foreground outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring">
+      <SidebarControlTooltip label="Search or ask AI (F)"><CommandDialogTrigger aria-label="Search commands" aria-keyshortcuts="F" className="inline-flex h-9 w-full origin-center items-center rounded-lg bg-sidebar-accent/50 px-3 py-2 text-sm text-sidebar-accent-foreground outline-none transition-transform duration-[190ms] ease-out active:duration-0 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100 hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring">
         <span className="flex grow items-center">
           <Search aria-hidden="true" className="text-muted-foreground/80 sm:-ms-1 sm:me-3" size={16} />
-          <span className="hidden font-normal text-muted-foreground/70 sm:inline">Search or ask AI</span>
+          <span data-slot="sidebar-search-label" className="hidden font-normal text-muted-foreground/70 sm:inline">Search or ask AI</span>
         </span>
-        <KbdGroup className="ms-auto hidden lg:flex"><Kbd className="border border-border bg-transparent">{modifier}</Kbd><Kbd className="border border-border bg-transparent">K</Kbd></KbdGroup>
-      </CommandDialogTrigger>
+        <KbdGroup data-slot="sidebar-search-shortcut" className="ms-auto hidden lg:flex"><Kbd className="border border-border bg-transparent">F</Kbd></KbdGroup>
+      </CommandDialogTrigger></SidebarControlTooltip>
       <CommandDialogPopup aria-label="Search Observatory or ask AI" className={aiMode ? 'h-[32rem]' : ''}>
         {!aiMode ? <Command filter={filterItem} items={groups}>
           <div className="relative flex items-center *:first:flex-1">

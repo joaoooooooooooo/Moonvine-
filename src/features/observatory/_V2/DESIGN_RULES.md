@@ -4,10 +4,27 @@ These rules apply to Observatory data-source pages and other editable settings. 
 
 ## Page structure
 
+- Chart, frame, and table header titles and icons use `foreground`; reporting dates and inactive tabs use `muted-foreground`; muted header surfaces remain unchanged. Chart controls sit in the header, with the icon before the title and month immediately beside it. Summary metric labels sit below values, and footer category names include their matching square marker.
+
 - Use `v2-page-sections` for the page stack and `PageHeading` for the page introduction.
 - Page descriptions use the established section-copy measure and typography: `max-w-[36ch] text-base leading-6 text-muted-foreground`.
 - Group related settings in `PanelFrame`, using `PanelFrameHeader`, `PanelFrameTitle`, and `PanelFrameContent`.
 - Use the compact framed-card treatment: one visible border, `radius-md`, `bg-card`, the shared edge highlight, and a muted header row.
+- Analytic frames follow the Media Mentions pattern: the muted header row spans the full card width, and the content below occupies the full body width. Progress bars, charts, tables, and metric groups use `w-full`; keep primary values in the body instead of the header.
+- Expandable data tables use `ObservatoryCollapsibleTable`. Its API accepts column definitions, row data, stable row IDs, accessible row labels, detail rendering, and initial expansion. They behave as accordions by default, so opening a row closes the previously open row. Do not reproduce table columns with CSS grids.
+- Table headers and cells are start aligned by default. Numeric values use the shared table primitive's tabular numerals. Every empty table cell renders `-` in muted text instead of remaining blank. Expected-fix impact uses this placeholder for rows whose status is already good.
+- Mixed-content expandable tables use the natural table layout rather than manually assigning a width to every column. Remove the parent row's bottom divider while it is expanded. Expanded descriptions use `max-w-[48ch] text-sm/normal` with muted foreground.
+- Nested issue lists within expanded details use `text-sm/normal` for both issue titles and fix copy, with medium titles and muted fixes.
+- Fixable website issue rows group saved findings by issue type. Expanded details are dynamic: the explanation grid is shared, while affected-page lists and actions render only when supplied by that issue's data.
+- Expandable tables keep the disclosure caret inside the final data cell and never add an empty caret-only column. Use a down caret for closed rows and an up caret for open rows. Fixable issue tables use Issue, Area, Expected impact, and Occurrences; affected-page links begin with the regular file icon.
+- Expandable table summary rows change background only on hover. Expansion must not apply a persistent selected background. Reveal details with a subtle height and opacity transition, and disable the transition when reduced motion is requested.
+- Website inventory uses the same `CardFrame` treatment as Observatory tables: `rounded-md`, the shared edge highlight, no inset wrapper padding, and full-width rows on `bg-card`. It contains a root summary, collapsible path groups, and full-row page links. Show the standard warning badge only on pages with saved issues; clean pages have no status placeholder.
+- Website score cards place the shared last-week comparison on the inline start and the 14px score on the inline end above the progress line.
+- All badges are borderless. Table status badges use the large size variant.
+- Buttons, sidebar tabs, search, and workspace controls scale to `0.99` from the center while pressed; shared icon-size buttons scale to `0.91`. They return over `190ms ease-out`. Do not scale on hover, and do not animate padding, width, alignment, or popup content with the trigger.
+- Sidebar tab hover and selected colors update immediately. Menus and selects reveal with opacity plus a subtle directional translate over `150ms ease-out`; do not zoom popup surfaces.
+- Animate only the CSS properties that change. Do not use `transition-all`. Reserve `will-change` for measured animation problems on short-lived or low-count surfaces; do not keep it on repeated controls.
+- Persistent status indicators remain static. Use motion only when a status is newly introduced or when animation communicates active progress. Respect reduced-motion preferences for every nonessential transition.
 - A frame header may include a relevant regular-weight icon and a sentence-case title. Do not add a caret unless the whole frame navigates somewhere. Table frames are the exception: their `PanelFrameHeader` contains the table’s aligned column labels instead of a separate frame title, while non-table frames keep the standard title treatment.
 - Use full-width `Separator` elements between settings. Keep horizontal padding on each setting instead of on `PanelFrameContent`, so dividers reach both frame edges.
 

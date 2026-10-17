@@ -15,8 +15,10 @@ export function markReportOpened(id) {
 
 export function useReportReadState(accountId) {
   const read = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+  const unreadCount = reports.filter((report) => (!accountId || report.accountId === accountId) && !read.has(report.id)).length;
   return {
     isOpened: (id) => read.has(id),
-    hasUnread: reports.some((report) => (!accountId || report.accountId === accountId) && !read.has(report.id)),
+    hasUnread: unreadCount > 0,
+    unreadCount,
   };
 }

@@ -1,6 +1,8 @@
 import { SourceOverview } from './source-pages/source-overview';
 import { SocialMediaPage } from './social-media/social-media-page';
+import { FixableWebsiteIssues } from './site-health/fixable-website-issues';
 import { PagesToReview } from './site-health/pages-to-review';
+import { WebsiteInventory } from './site-health/website-inventory';
 import { PageHeading } from './page-heading';
 import { SiteHealth } from './site-health/site-health';
 import { SectionDivider } from './section-divider';
@@ -12,9 +14,13 @@ import { AiVisibilitySources } from './ai-visibility/ai-visibility-sources';
 import { AiVisibilityNextSteps } from './ai-visibility/ai-visibility-next-steps';
 import { AiVisibilityProcess } from './ai-visibility/ai-visibility-process';
 import { Button } from '@/components/ui/button';
+import { SearchConsolePage } from './search-console/search-console-page';
+import { AnalyticsV2Page } from './analytics-v2/analytics-v2-page';
 
 export function SourceDetail({ model }) {
   const { account, lens, route } = model;
+  if (lens.id === 'search') return <SearchConsolePage key={account.id + route.period} account={account} lens={lens} />;
+  if (lens.id === 'analytics') return <AnalyticsV2Page key={account.id + route.period} account={account} lens={lens} period={route.period} />;
   if (lens.id === 'social') return <SocialMediaPage account={account} period={route.period} lens={lens} />;
   if (lens.id === 'ai') {
     return (
@@ -40,7 +46,11 @@ export function SourceDetail({ model }) {
         <div className="v2-page-sections">
           <SiteHealth lens={lens} account={account} />
           <SectionDivider />
-          <PagesToReview key={account.id + route.period} account={account} />
+          <FixableWebsiteIssues key={account.id + route.period} account={account} />
+          <SectionDivider />
+          <PagesToReview key={`pages-${account.id}-${route.period}`} account={account} />
+          <SectionDivider />
+          <WebsiteInventory key={`inventory-${account.id}-${route.period}`} account={account} />
         </div>
       ) : <SourceOverview lens={lens} account={account} />}
     </div>

@@ -743,7 +743,7 @@ function buildMainAxes(ctx: OptionBuildContext): { xAxis: XAxisOption; yAxis: YA
       show: !isLoading && xAxisSlot.present,
       color: axisLabelColor,
       fontSize: 10,
-      margin: 8,
+      margin: 16,
       formatter: xTickFormatter
         ? (value: string, index: number) => xTickFormatter(value, index)
         : undefined,

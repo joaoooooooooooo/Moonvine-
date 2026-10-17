@@ -8,12 +8,12 @@ const items = [
 ];
 
 export function SettingsNavigation({ route, onNavigate }) {
-  return <SidebarGroup><SidebarMenu className="gap-2">
+  return <SidebarGroup><SidebarMenu className="gap-1">
     {items.map(({ label, href, icon: Icon }) => {
       const active = '#' + route.path === href || (href === '#/console/people' && route.path.startsWith('/console/people/'));
       return <SidebarMenuItem key={href}>
         <SidebarMenuButton className="h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5" isActive={active}
-          render={<a href={href} aria-current={active ? 'page' : undefined} />} onClick={onNavigate} tooltip={label}>
+          render={<a href={href} aria-label={label} aria-current={active ? 'page' : undefined} />} onClick={onNavigate} tooltip={label}>
           <Icon aria-hidden="true" className="size-4.5" weight="fill" /><span>{label}</span>
         </SidebarMenuButton>
       </SidebarMenuItem>;

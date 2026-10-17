@@ -1,7 +1,5 @@
-import { ChevronRight } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { accountHref } from '../utils/observatory-model';
 import { LatestReports } from './latest-reports';
 import { PageHeading } from './page-heading';
 import { SectionDivider } from './section-divider';
@@ -19,7 +17,6 @@ export function AccountWorkspace({ model }) {
         <PageHeading title={account.description} />
         <div className="flex flex-wrap items-center gap-3">
           {latestReport && <Button variant="default" onClick={() => setReportOpen(true)}>See last report</Button>}
-          <Button render={<a href={accountHref(account.id, 'account:summary')} />} aria-label={'Edit account profile for ' + account.name} variant="secondary">Edit settings<ChevronRight /></Button>
         </div>
       </div>
       <SignalsGrid account={account} lenses={lenses} />

@@ -1,3 +1,6 @@
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { SidebarControlTooltip } from './sidebar-control-tooltip';
+import { SidebarTooltipContent } from './sidebar-tooltip-content';
 import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from '@/components/ui/icons';
 import { Button } from '@/components/ui/button';
@@ -17,37 +20,47 @@ import { DataSourcesNavigation } from './data-sources-navigation';
 import { useReportReadState } from '../../hooks/use-report-read-state';
 import { ReportStatusDot } from '../report-status-dot';
 import { dataSourceSections } from '../../data/data-source-navigation';
+import { getSiteFixCount } from '../../data/site-fixes';
+import { SiteFixStatus } from '../site-health/site-fix-status';
 
 const connectableSources = dataSourceSections.filter((section) => typeof section.connected === 'boolean');
 const connectedSourceCount = connectableSources.filter((section) => section.connected).length;
 const connectedSourceProgress = (connectedSourceCount / connectableSources.length) * 100;
 
 export function AppSidebar({ model }) {
-  const { hasUnread } = useReportReadState();
+  const { hasUnread, unreadCount } = useReportReadState(model.selectedAccountId);
+  const sidebarAccount = model.account ?? model.accounts.find((item) => item.id === model.selectedAccountId) ?? model.accounts[0];
+  const siteFixCount = sidebarAccount ? getSiteFixCount(sidebarAccount.domain) : 0;
   const { setOpenMobile } = useSidebar();
   useEffect(() => { setOpenMobile(false); }, [model.route, setOpenMobile]);
   const active = activeShellItem(model.route);
   const group = model.route.path === '/console/data-sources/access' || model.route.path === '/console/accounts' || model.route.path.startsWith('/console/people') ? 'settings' : model.route.path.startsWith('/console/data-sources') ? 'data-sources' : model.route.lensId === 'intelligence:chat' && model.route.path !== '/console' ? 'chat' : model.account && model.route.path.startsWith('/intelligence/') ? 'intelligence' : 'main';
   return (
-    <Sidebar className="v2-sidebar static min-h-full group-data-[collapsible=offcanvas]:hidden *:data-[slot=sidebar-inner]:bg-card" collapsible="offcanvas" variant="sidebar">
-      <SidebarHeader className="relative h-16 border-b px-2 py-2 transition-colors hover:bg-accent/50 focus-within:bg-accent/50">
+    <TooltipProvider delay={150} timeout={500}><Sidebar id="observatory-v2-sidebar" className="v2-sidebar static min-h-full group-data-[collapsible=offcanvas]:hidden *:data-[slot=sidebar-inner]:bg-primary-foreground dark:*:data-[slot=sidebar-inner]:bg-card" collapsible="icon" variant="sidebar">
+      <SidebarHeader className="gap-1 p-2 pt-3">
         <WorkspaceSwitcher model={model} />
+        <SearchCommand model={model} />
       </SidebarHeader>
       {group !== 'main' && (
-        <div className="group/back-link shrink-0 border-b px-2 py-2 transition-colors hover:bg-accent/50 focus-within:bg-accent/50">
-          <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:bg-transparent hover:text-foreground group-focus-within/back-link:text-foreground group-hover/back-link:text-foreground data-pressed:bg-transparent" render={<a href="#/console" />} onClick={() => setOpenMobile(false)}>
+        <div data-slot="sidebar-back-link" className="group/back-link relative shrink-0 p-2">
+          <SidebarControlTooltip label="Go Back"><Button variant="ghost" className="w-full justify-start text-muted-foreground" render={<a href="#/console" aria-label="Go Back" />} onClick={() => setOpenMobile(false)}>
             <ChevronLeft aria-hidden="true" className="size-4" />
-            Back to Observatory
-          </Button>
+            <span data-slot="sidebar-back-label">Go Back</span>
+          </Button></SidebarControlTooltip>
         </div>
       )}
+      <SidebarSeparator />
       <ScrollArea data-slot="sidebar-content" data-sidebar="content" className="v2-sidebar-content h-auto min-h-0 flex-1" overscrollContain scrollFade>
-        <nav aria-label="Main navigation" className="overflow-x-clip px-1 pt-2">
+        <nav aria-label="Main navigation" className="overflow-x-clip [&_[data-slot=sidebar-group]]:p-2">
           <SidebarGroupTransition group={group}>
           {group === 'data-sources' ? <DataSourcesNavigation route={model.route} onNavigate={() => setOpenMobile(false)} /> : group === 'settings' ? <SettingsNavigation route={model.route} onNavigate={() => setOpenMobile(false)} /> : group === 'chat' ? <ChatNavigation model={model} onNavigate={() => setOpenMobile(false)} /> : group === 'intelligence' ? <IntelligenceNavigation model={model} onNavigate={() => setOpenMobile(false)} /> : <>
           <SidebarGroup>
-            <SidebarMenu className="gap-2">{shellGroups.flatMap((group) => group.items).map((item) => <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton className="h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5" isActive={active.href === item.href} render={<a href={item.label === 'Reports' ? `#/console/reports?account=${encodeURIComponent(model.selectedAccountId)}` : item.label === 'Intelligence' ? accountHref(model.selectedAccountId) : item.href} aria-current={active.href === item.href ? 'page' : undefined} />} tooltip={item.label} onClick={() => setOpenMobile(false)}>
+            <SidebarMenu className="gap-1">{shellGroups.flatMap((group) => group.items).map((item) => <SidebarMenuItem key={item.href}>
+              <SidebarMenuButton data-collapsed-status={item.label === 'Data Sources' ? (connectedSourceCount ? 'info' : 'muted') : item.label === 'Reports' && hasUnread ? 'info' : item.label === 'Intelligence' && siteFixCount > 0 ? 'warning' : undefined} className={`h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5${item.label === 'Reports' ? ' group/report-status' : ''}${item.label === 'Intelligence' ? ' group/site-health' : ''}`} isActive={active.href === item.href} render={<a href={item.label === 'Reports' ? `#/console/reports?account=${encodeURIComponent(model.selectedAccountId)}` : item.label === 'Intelligence' ? accountHref(model.selectedAccountId) : item.href} aria-label={item.label} aria-current={active.href === item.href ? 'page' : undefined} />} tooltip={{ children: <SidebarTooltipContent title={item.label}>
+                {item.label === 'Data Sources' && <Badge variant="info" size="lg">{connectedSourceCount}/{connectableSources.length} connected</Badge>}
+                {item.label === 'Reports' && hasUnread && <Badge variant="info" size="lg">{unreadCount} unread {unreadCount === 1 ? 'report' : 'reports'}</Badge>}
+                {item.label === 'Intelligence' && siteFixCount > 0 && <Badge variant="warning" size="lg">{siteFixCount} {siteFixCount === 1 ? 'issue' : 'issues'}</Badge>}
+              </SidebarTooltipContent> }} onClick={() => setOpenMobile(false)}>
                 <item.icon aria-hidden="true" className="size-4.5" weight="fill" />
                 <span>{item.label}</span>
                 <span className="ml-auto flex shrink-0 items-center gap-2">
@@ -58,23 +71,23 @@ export function AppSidebar({ model }) {
                     </svg>
                     <span aria-hidden="true">{connectedSourceCount}/{connectableSources.length}</span>
                   </Badge>}
-                  {item.label === 'Reports' && hasUnread && <ReportStatusDot unread />}
-                  {(item.label === 'Chat' || item.label === 'Intelligence' || item.label === 'Settings' || item.label === 'Data Sources') && <ChevronRight aria-hidden="true" className="size-3.5 shrink-0" />}
+                  {item.label === 'Reports' && hasUnread && <ReportStatusDot unread count={unreadCount} />}
+                  {item.label === 'Intelligence' && <SiteFixStatus count={siteFixCount} />}
+                  {(item.label === 'Chat' || item.label === 'Intelligence' || item.label === 'Settings' || item.label === 'Data Sources') && <ChevronRight aria-hidden="true" className="size-3.5 shrink-0 text-muted-foreground/60" />}
                 </span>
               </SidebarMenuButton>
             </SidebarMenuItem>)}</SidebarMenu>
           </SidebarGroup>
-          <SidebarSeparator className="my-3" />
+          <SidebarSeparator />
           <ChatNavigation model={model} onNavigate={() => setOpenMobile(false)} />
           </>}
           </SidebarGroupTransition>
         </nav>
       </ScrollArea>
-      <SidebarFooter className="gap-3 border-t px-3 py-3">
-        <SearchCommand model={model} />
+      <SidebarFooter className="p-2 pb-3">
         <FooterUserMenu />
       </SidebarFooter>
-    </Sidebar>
+    </Sidebar></TooltipProvider>
   );
 }
 

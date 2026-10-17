@@ -10,7 +10,8 @@ import { TopPagesChart } from '@/features/observatory/_V2/components/analytics/t
 import { LandingPagesCard } from '@/features/observatory/_V2/components/analytics/landing-pages-card'
 import { VisitorSourcesChart } from '@/features/observatory/_V2/components/analytics/visitor-sources-chart'
 import { SiteStatCard as ObservatorySiteStatCard } from '@/features/observatory/_V2/components/site-health/site-stat-card'
-import { SiteCheckCard as ObservatorySiteCheckCard } from '@/features/observatory/_V2/components/site-health/site-check-card'
+import { ObservatoryCollapsibleTable } from '@/features/observatory/_V2/components/observatory-collapsible-table'
+import { Badge } from '@/components/ui/badge'
 import { SourcePresenceCard } from '@/features/observatory/_V2/components/source-presence-card'
 import { WeeklyBrief } from '@/features/observatory/_V2/components/weekly-brief'
 import { AiVisibilityMethod } from '@/features/observatory/_V2/components/ai-visibility/ai-visibility-method'
@@ -55,6 +56,12 @@ const account = accounts[0]
 const lenses = buildLenses(account)
 const lens = id => lenses.find(item => item.id === id)
 const analytics = lens('analytics')
+const galleryAuditColumns = [
+  { id: 'audit', header: 'Audit', render: row => <span className="font-medium">{row.title}</span> },
+  { id: 'impact', header: 'Expected impact', headerClassName: 'w-36', cellClassName: 'w-36 tabular-nums', render: row => row.impact },
+  { id: 'status', header: 'Status', headerClassName: 'w-36', cellClassName: 'w-36', render: row => <Badge variant="warning">{row.status}</Badge> },
+]
+const galleryAuditRows = [{ id: 'description', title: 'Page descriptions', impact: '+12.8%', status: 'Needs attention', description: 'Add a clear summary to priority pages.' }]
 
 export default function ComponentGallery() {
   return <ReportProvider value={reportMock.context}>
@@ -68,7 +75,7 @@ export default function ComponentGallery() {
         <LandingPagesCard lens={analytics} account={account} />
         <VisitorSourcesChart lens={analytics} />
         <ObservatorySiteStatCard />
-        <ObservatorySiteCheckCard title="Missing page description" description="Add a clear summary to the page." />
+        <ObservatoryCollapsibleTable columns={galleryAuditColumns} getRowId={row => row.id} getRowLabel={row => row.title} label="Audit example" renderDetails={row => <p className="text-sm text-muted-foreground">{row.description}</p>} rows={galleryAuditRows} />
         <SourcePresenceCard account={account} />
         <WeeklyBrief account={account} />
         <AiVisibilityMethod lens={lens('ai')} />

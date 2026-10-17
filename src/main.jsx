@@ -9,6 +9,7 @@ import OrbitPlayground from './features/orbit-playground/OrbitPlayground'
 import MoviShowcasePage from './features/movi-showcase/MoviShowcasePage'
 import ComponentGallery from './pages/ComponentGallery'
 import BadgeDebug from './pages/BadgeDebug'
+import ReportHeaderPreview from './pages/ReportHeaderPreview'
 import OnboardingPage from './features/Onboarding'
 import { Agentation } from 'agentation'
 
@@ -22,7 +23,7 @@ window.addEventListener('hashchange', () => {
   }
 })
 const pathname = window.location.pathname.replace(/\/$/, '')
-const Page = pathname === '/onboarding' ? OnboardingPage : pathname === '/website/report-preview' ? ReportHeroPreview : pathname === '/observatory-v2'
+const Page = pathname === '/report-header-preview' ? ReportHeaderPreview : pathname === '/onboarding' ? OnboardingPage : pathname === '/website/report-preview' ? ReportHeroPreview : pathname === '/observatory-v2'
   ? ObservatoryV2
   : pathname === '/component'
     ? ComponentGallery

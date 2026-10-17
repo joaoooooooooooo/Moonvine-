@@ -8,7 +8,7 @@ function readRoute() {
   const path = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') : url.pathname;
   const chat = path.match(/^\/chat\/([^/]+)\/([^/]+)$/);
   if (path === '/console' && url.searchParams.get('chat')) return { path, accountId: url.searchParams.get('account'), threadId: url.searchParams.get('chat'), lensId: 'intelligence:chat', period: 'current' };
-  if (chat) return { path, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), lensId: 'intelligence:chat', period: 'current' };
+  if (chat) return { path, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), prompt: url.searchParams.get('prompt') || '', autoSend: url.searchParams.get('send') === '1', lensId: 'intelligence:chat', period: 'current' };
   const person = path.match(/^\/console\/people\/([^/]+)$/);
   if (person) return { path, personId: decodeURIComponent(person[1]), lensId: null, period: 'current' };
   const match = path.match(/^\/(?:intelligence|console)\/client\/([^/]+)\/current$/);

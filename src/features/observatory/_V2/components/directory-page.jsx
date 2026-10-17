@@ -5,6 +5,9 @@ import { TableProfileAvatar } from './table-profile-avatar';
 import { Tag } from '@/components/ui/tag';
 import { ObservatoryInput as Input } from './observatory-input';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { dataSourceSections } from '../data/data-source-navigation';
 import { Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogPanel, DialogPopup, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -123,10 +126,9 @@ export function DirectoryPage({ type, workspaces }) {
           <TableRow>
             <TableHead aria-sort={ascending ? 'ascending' : 'descending'}><button type="button" className="flex h-full w-full cursor-pointer select-none items-center justify-start gap-2 rounded-sm text-start focus-visible:outline-2 focus-visible:outline-ring" onClick={() => { setAscending(!ascending); setPageIndex(0); }}>{type === 'accounts' ? 'Workspace' : 'Name'}<SortIcon aria-hidden="true" className="size-4 shrink-0 opacity-80" /></button></TableHead>
             {type === 'people' && <TableHead className="hidden sm:table-cell">Email</TableHead>}
-            {type !== 'people' && <TableHead className="hidden sm:table-cell">{type === 'accounts' ? 'Domain' : 'Workspace'}</TableHead>}
+            {type !== 'people' && <TableHead className="hidden sm:table-cell">{type === 'accounts' ? 'Sources Connected' : 'Workspace'}</TableHead>}
             {type === 'people' && <TableHead className="hidden w-32 lg:table-cell">Tags</TableHead>}
             {type === 'people' && <TableHead>Recipient</TableHead>}
-            {type === 'accounts' && <TableHead className="hidden sm:table-cell">Signal</TableHead>}
             <TableHead className="w-14"><span className="sr-only">{type === 'people' ? 'Copy recipient link' : 'Open workspace'}</span></TableHead>
           </TableRow>
         </TableHeader>
@@ -151,21 +153,20 @@ export function DirectoryPage({ type, workspaces }) {
                 </div>
               </TableCell>
               {type === 'people' && <TableCell className="hidden truncate text-muted-foreground sm:table-cell">{row.email}</TableCell>}
-              {type !== 'people' && <TableCell className="hidden text-muted-foreground sm:table-cell">{type === 'accounts' ? row.domain : <div className="flex items-center gap-3"><TableProfileAvatar src={row.accountImageSrc} /><span>{row.domain}</span></div>}</TableCell>}
+              {type !== 'people' && <TableCell className="hidden text-muted-foreground sm:table-cell">{type === 'accounts' ? <Badge variant="info" size="lg">{dataSourceSections.filter((source) => source.connected).length}/{dataSourceSections.filter((source) => typeof source.connected === 'boolean').length} connected</Badge> : <div className="flex items-center gap-3"><TableProfileAvatar src={row.accountImageSrc} /><span>{row.domain}</span></div>}</TableCell>}
               {type === 'people' && <TableCell className="hidden lg:table-cell"><Tag>Account user</Tag></TableCell>}
               {type === 'people' && <TableCell>
                 <Tabs className="gap-0" size="sm" value={recipients[row.id] ?? (row.recipient ? 'yes' : 'no')} onValueChange={(value) => setRecipients((current) => ({ ...current, [row.id]: value }))}>
                   <TabsList><TabsTab value="yes">Yes</TabsTab><TabsTab value="no">No</TabsTab></TabsList>
                 </Tabs>
               </TableCell>}
-              {type === 'accounts' && <TableCell className="hidden sm:table-cell"><span className="inline-flex items-center gap-2"><span aria-hidden="true" className="size-2 rounded-full bg-info-foreground" />Sources available</span></TableCell>}
               <TableCell>{type === 'people'
-                ? (recipients[row.id] ?? (row.recipient ? 'yes' : 'no')) === 'yes' ? <Button type="button" aria-label={copiedId === row.id ? 'Recipient link copied' : `Copy recipient link for ${row.name}`} size="icon" variant="ghost" onClick={() => copyRecipientLink(row)}>{copiedId === row.id ? <CheckIcon aria-hidden="true" /> : <CopyIcon aria-hidden="true" />}</Button> : null
+                ? (recipients[row.id] ?? (row.recipient ? 'yes' : 'no')) === 'yes' ? <TooltipProvider><Tooltip><TooltipTrigger render={<Button type="button" aria-label={copiedId === row.id ? 'Recipient link copied' : `Copy recipient link for ${row.name}`} size="icon" variant="ghost" onClick={() => copyRecipientLink(row)} />}>{copiedId === row.id ? <CheckIcon aria-hidden="true" /> : <CopyIcon aria-hidden="true" />}</TooltipTrigger><TooltipPopup>Copy Report Link</TooltipPopup></Tooltip></TooltipProvider> : null
                 : <a href={accountHref(row.accountId || row.id)} className="inline-flex items-center justify-center text-muted-foreground outline-none after:absolute after:inset-0" aria-label={'Open ' + row.name + ' workspace'}><ChevronRight aria-hidden="true" className="size-4" /></a>}
               </TableCell>
             </TableRow>
           ))}
-          {!filtered.length && <TableRow><TableCell colSpan={type === 'accounts' ? 4 : type === 'people' ? 5 : 3}>
+          {!filtered.length && <TableRow><TableCell colSpan={type === 'accounts' ? 3 : type === 'people' ? 5 : 3}>
             <Empty><EmptyHeader><EmptyTitle className="text-base font-medium">No matching {surface.label.toLowerCase()}.</EmptyTitle></EmptyHeader><EmptyContent><Button variant="secondary" size="sm" onClick={() => setQuery('')}>Clear search</Button></EmptyContent></Empty>
           </TableCell></TableRow>}
         </TableBody>

@@ -12,6 +12,8 @@ import { IntelligenceChatPage } from './components/intelligence-chat/intelligenc
 import { DataSourcesPage } from './components/data-sources-page';
 import { PersonDetailPage } from './components/person-detail-page';
 import { ToastProvider } from '@/components/ui/toast';
+import { NewsMediaPage } from './components/news-media/news-media-page';
+import { AnalyticsV2Page } from './components/analytics-v2/analytics-v2-page';
 
 export function ObservatoryV2() {
   const model = useObservatory();
@@ -22,7 +24,7 @@ export function ObservatoryV2() {
   const directory = ['accounts', 'people', 'entities'].find((id) => route.path === '/console/' + id);
   let page;
   if (route.path === '/console' && account && route.threadId) page = <IntelligenceChatPage key={account.id + route.threadId} model={model} />;
-  else if (route.path === '/console') page = <ObservatoryHome />;
+  else if (route.path === '/console') page = <ObservatoryHome model={model} />;
   else if (personId) page = <PersonDetailPage personId={personId} workspaces={model.accounts} />;
   else if (route.path.startsWith('/console/data-sources')) page = <DataSourcesPage sectionId={route.path.split('/')[3]} workspace={selectedWorkspace} onSaveWorkspace={model.saveWorkspaceProfile} />;
   else if (directory) page = <DirectoryPage key={directory} type={directory} workspaces={model.accounts} />;
@@ -31,6 +33,8 @@ export function ObservatoryV2() {
   else if (account && route.lensId === 'report:history') page = <ReportHistory key={account.id} account={account} />;
   else if (account && route.lensId === 'intelligence:chat') page = <IntelligenceChatPage key={account.id + (route.threadId || 'new')} model={model} />;
   else if (account && ['insight:investor', 'account:connections'].includes(route.lensId)) page = <IntelligenceEmptyPage connections={route.lensId === 'account:connections'} />;
+  else if (account && route.lensId === 'source:news-media') page = <NewsMediaPage account={account} period={route.period} />;
+  else if (account && route.lensId === 'source:ga4-2') page = <AnalyticsV2Page account={account} period={route.period} lens={model.lenses.find((item) => item.id === 'analytics')} />;
   else if (account && lens) page = <SourceDetail model={model} />;
   else if (account && !route.lensId) page = <AccountWorkspace model={model} />;
   else page = <div className="space-y-3"><h1 className="text-xl font-semibold">Page not found</h1><a href="#/console" className="underline">Return to Observatory</a></div>;

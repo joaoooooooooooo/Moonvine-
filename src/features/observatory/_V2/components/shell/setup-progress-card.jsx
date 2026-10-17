@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CircleCheckIcon, CircleIcon } from '@/components/ui/icons';
-import { Progress } from '@/components/ui/progress';
+import { Progress, ProgressTrack, ProgressIndicator } from '@/components/ui/progress';
+import './setup-progress-card.css';
 
 const steps = [
   { label: 'Account', completed: true },
@@ -16,33 +16,36 @@ export function SetupProgressCard() {
   const progressValue = (completedSteps / steps.length) * 100;
 
   return (
-    <div className="w-full rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
-      <div className="w-full space-y-4 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <h2 className="text-sm font-medium">Setup progress</h2>
-          <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{completedSteps} of {steps.length}</span>
+    <section className="setup-progress w-full rounded-lg bg-card text-card-foreground" aria-label="Getting started" data-complete={completedSteps === steps.length || undefined}>
+        <div className="setup-progress__header flex items-baseline justify-between gap-3 px-2.5">
+          <h2 className="text-sm font-medium">Getting started</h2>
+          <span aria-hidden="true" className="shrink-0 text-xs tabular-nums text-muted-foreground"><span key={completedSteps} className="setup-progress__count text-foreground">{completedSteps}</span>/{steps.length}</span>
         </div>
-        <Progress value={progressValue} aria-label="Setup progress" />
-        <ol className="flex flex-col gap-1">
+        <Progress value={progressValue} aria-label="Getting started" aria-valuetext={`${completedSteps} of ${steps.length} steps complete`} className="setup-progress__progress">
+          <ProgressTrack className="h-1 bg-muted">
+            <ProgressIndicator className="setup-progress__fill relative h-full bg-info-foreground"><span key={completedSteps} className="setup-progress__shine" /></ProgressIndicator>
+          </ProgressTrack>
+        </Progress>
+        <span className="sr-only" role="status">{completedSteps} of {steps.length} steps complete</span>
+        <ol className="flex flex-col">
           {steps.map((step, index) => {
             const isCompleted = completed[index];
-            const Icon = isCompleted ? CircleCheckIcon : CircleIcon;
             return (
-              <li key={step.label}>
+              <li key={step.label} className="setup-progress__row" style={{ '--step-index': index }}>
                 <Button
                   variant="ghost"
-                  className={`w-full justify-start px-2 ${isCompleted ? 'text-sidebar-accent-foreground' : 'text-muted-foreground'}`}
-                  aria-pressed={isCompleted}
+                  className="setup-progress__step w-full justify-start gap-2.5 rounded-md px-2.5 text-sm font-normal"
+                  role="checkbox"
+                  aria-checked={isCompleted}
                   onClick={() => setCompleted((current) => current.map((value, stepIndex) => stepIndex === index ? !value : value))}
                 >
-                  <Icon aria-hidden="true" className={`size-4 ${isCompleted ? 'text-success-foreground' : ''}`} />
-                  <span>{step.label}</span>
+                  <span className="setup-progress__check" aria-hidden="true"><svg viewBox="0 0 24 24" className="size-3"><path d="M6.5 12.5l3.5 3.5 7.5-8" pathLength="1" /></svg></span>
+                  <span className="setup-progress__label min-w-0 text-start whitespace-normal"><span>{step.label}</span></span>
                 </Button>
               </li>
             );
           })}
         </ol>
-      </div>
-    </div>
+    </section>
   );
 }

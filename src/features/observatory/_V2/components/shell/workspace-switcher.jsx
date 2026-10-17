@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { SidebarControlTooltip } from './sidebar-control-tooltip';
+import { useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,20 +26,18 @@ function workspaceRoute(workspaceId) {
 
 function WorkspaceLabel({ workspace }) {
   return (
-    <span className="flex min-w-0 items-center gap-2">
-      <Avatar className="size-8 shrink-0 rounded-[6px]">
+    <span className="flex min-w-0 items-center gap-2 ">
+      <Avatar className="size-5 shrink-0 rounded-[4px]">
         <AvatarImage src={workspace.imageSrc} alt="" />
         <AvatarFallback className="rounded-[6px]">{workspace.initials}</AvatarFallback>
       </Avatar>
-      <span className="flex min-w-0 flex-col text-left">
-        <span className="truncate font-medium">{workspace.name}</span>
-        <span className="truncate text-xs text-muted-foreground">{workspace.domain}</span>
-      </span>
+      <span data-slot="workspace-name" className="truncate font-medium">{workspace.name}</span>
     </span>
   );
 }
 
 export function WorkspaceSwitcher({ model }) {
+  const popupAnchorRef = useRef(null);
   const { setOpenMobile } = useSidebar();
   const [open, setOpen] = useState(false);
   const selected = model.accounts.find((item) => item.id === model.selectedAccountId) ?? model.accounts[0];
@@ -61,14 +60,16 @@ export function WorkspaceSwitcher({ model }) {
         setOpenMobile(false);
       }}
     >
-      <SelectTrigger aria-label="Switch workspace" className="h-auto min-w-0 border-transparent bg-transparent py-1.5 shadow-none before:hidden dark:bg-transparent">
-        <SelectValue>{(id) => {
-          const workspace = model.accounts.find((item) => item.id === id);
-          return workspace ? <WorkspaceLabel workspace={workspace} /> : null;
-        }}</SelectValue>
-      </SelectTrigger>
+      <div ref={popupAnchorRef} className="w-full min-w-0">
+        <SidebarControlTooltip label={`Switch workspace: ${selected?.name ?? 'Workspace'}`}><SelectTrigger aria-label="Switch workspace" className="h-auto min-w-0 origin-center border-transparent bg-transparent py-1.5 shadow-none before:hidden transition-transform duration-[190ms] ease-out active:duration-0 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100 hover:bg-accent/50 dark:bg-transparent dark:hover:bg-accent/50 [&_[data-slot=select-icon]]:text-muted-foreground/60 [&_[data-slot=select-icon]>svg]:me-0">
+          <SelectValue>{(id) => {
+            const workspace = model.accounts.find((item) => item.id === id);
+            return workspace ? <WorkspaceLabel workspace={workspace} /> : null;
+          }}</SelectValue>
+        </SelectTrigger></SidebarControlTooltip>
+      </div>
       <SelectPopup
-        className="space-y-1"
+        anchor={popupAnchorRef}
         footer={model.accounts.length > visibleLimit && (
           <div className="px-1 pb-1">
             <Button variant="ghost" className="w-full justify-start" onClick={() => {

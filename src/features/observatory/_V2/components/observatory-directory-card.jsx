@@ -29,7 +29,7 @@ export function ObservatoryDirectoryCard({ id, icon: Icon, label, detail, mobile
           }}
           dangerouslySetInnerHTML={{ __html: artwork[id] }}
         />
-        <div className="v2-card-tagline relative z-10 flex items-center justify-between gap-3">
+        <div className="v2-card-tagline v2-directory-card-tagline relative z-10 flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 text-sm/normal font-normal">
             {Icon && <Icon aria-hidden="true" className="size-4 shrink-0" />}
             {label}

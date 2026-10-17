@@ -20,6 +20,12 @@
     "hooks": "@/hooks"
   },
   "registries": {
+    "@affectui": {
+      "url": "https://www.affectui.com/r/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${AFFECTUI_TOKEN}"
+      }
+    },
     "@coss": "https://coss.com/ui/r/{name}.json",
     "@lucide-animated": "https://lucide-animated.com/r/{name}.json",
     "@efferd": "https://efferd.com/r/{style}/{name}.json",

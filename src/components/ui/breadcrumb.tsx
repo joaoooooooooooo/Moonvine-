@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { ChevronRight, MoreHorizontal } from "@/components/ui/icons";
+import { MoreHorizontal } from "@/components/ui/icons";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -85,7 +85,7 @@ export function BreadcrumbSeparator({
       role="presentation"
       {...props}
     >
-      {children ?? <ChevronRight />}
+      {children ?? "/"}
     </li>
   );
 }

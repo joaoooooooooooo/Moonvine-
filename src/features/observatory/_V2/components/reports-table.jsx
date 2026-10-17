@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronUp, ChevronDown } from '@/components/ui/icons';
+import { Button } from '@/components/ui/button';
 import { TableHeader, TableHead, TableRow, TableBody, TableCell } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ReportRecipients } from './report-recipients';
@@ -35,7 +36,7 @@ export function ReportsTable({ account, pageSize = 10, label = 'Reports' }) {
           <TableCell className="whitespace-normal"><div className="flex items-center gap-3"><Avatar className="size-6 sm:hidden"><AvatarImage src={report.accountImageSrc} alt="" /><AvatarFallback><img src="/report-logos/company.svg" alt="" className="size-full object-cover" /></AvatarFallback></Avatar><div className="min-w-0"><span className="flex items-center gap-2 text-sm leading-5"><ReportStatusDot unread={!isOpened(report.id)} />{report.name}</span><span className="mt-1 block text-xs leading-5 text-muted-foreground sm:hidden">{report.accountName}</span></div></div></TableCell>
           <TableCell className="hidden whitespace-normal text-muted-foreground sm:table-cell"><div className="flex items-center gap-3"><Avatar className="size-6"><AvatarImage src={report.accountImageSrc} alt="" /><AvatarFallback><img src="/report-logos/company.svg" alt="" className="size-full object-cover" /></AvatarFallback></Avatar><span>{report.accountName}</span></div></TableCell>
           <TableCell className="hidden lg:table-cell"><ReportRecipients recipients={report.recipients} /></TableCell>
-          <TableCell><button type="button" onClick={() => setSelectedReport(report)} className="inline-flex cursor-pointer items-center justify-center text-muted-foreground outline-none after:absolute after:inset-0" aria-label={`Open ${report.name} for ${report.accountName}`}><ChevronRight aria-hidden="true" className="size-4" /></button></TableCell>
+          <TableCell><Button type="button" size="icon-sm" variant="ghost" onClick={() => setSelectedReport(report)} className="text-muted-foreground after:absolute after:inset-0" aria-label={`Open ${report.name} for ${report.accountName}`}><ChevronRight aria-hidden="true" className="size-4" /></Button></TableCell>
         </TableRow>)}
           {!filtered.length && <TableRow><TableCell colSpan={4} className="h-24 text-center text-muted-foreground">No reports found.</TableCell></TableRow>}
         </TableBody>

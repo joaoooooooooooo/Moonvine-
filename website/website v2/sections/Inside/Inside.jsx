@@ -11,10 +11,9 @@ import { intelligenceItems } from '../../../../src/features/observatory/_V2/data
 import '../../../../src/features/movi-showcase/movi-showcase.css'
 import { ReportsMultiSeriesLineChart } from '../../../../src/features/Reports/components/line/line'
 import { SiteStatCard } from '../../../../src/features/Reports/components/siteStatCard/components/site-stat-card'
-import { ObservatoryTable } from '../../../../src/features/observatory/_V2/components/observatory-table'
-import { PageFixRow } from '../../../../src/features/observatory/_V2/components/site-health/page-fix-row'
+import { ObservatoryCollapsibleTable } from '../../../../src/features/observatory/_V2/components/observatory-collapsible-table'
 import { getSiteFixes } from '../../../../src/features/observatory/_V2/data/site-fixes'
-import { TableBody } from '../../../../src/components/ui/table'
+import { FileText } from '../../../../src/components/ui/icons'
 import { RankedMetricRow } from '../../../../src/features/observatory/_V2/components/ranked-metric-row'
 import { ProviderLogo } from '../../../../src/features/observatory/_V2/components/ai-visibility/provider-logo'
 import { TableProfileAvatar } from '../../../../src/features/observatory/_V2/components/table-profile-avatar'
@@ -67,6 +66,7 @@ const crossIntelligenceSources = ['source:gsc', 'source:social'].map(lens => {
   const source = intelligenceItems.find(item => item.lens === lens)
   return { name: source.label, domain: lens, href: '/observatory-v2' + accountHref('northstar', lens), icon: source.icon, image: '' }
 })
+const showcasePageColumns = [{ id: 'page', header: 'Page', render: page => <span className="flex items-center gap-2 font-medium"><FileText aria-hidden="true" className="size-4" />{page.label}</span> }]
 
 function FeatureAsset({ index }) {
   if (index === 1) {
@@ -126,9 +126,14 @@ function FeatureAsset({ index }) {
     </div>
   }
 
-  return <div className="mv-feature-action"><ObservatoryTable label="Pages to review">
-    <TableBody>{getSiteFixes('canopy.example').slice(3, 10).map(page => <PageFixRow key={page.path} page={page} showWarnings={false} issueVariant="warning" />)}</TableBody>
-  </ObservatoryTable></div>
+  return <div className="mv-feature-action"><ObservatoryCollapsibleTable
+    columns={showcasePageColumns}
+    getRowId={page => page.path}
+    getRowLabel={page => page.label}
+    label="Pages to review"
+    renderDetails={page => <p className="text-base text-muted-foreground">{page.issues[0]?.fix ?? '-'}</p>}
+    rows={getSiteFixes('canopy.example').slice(3, 10)}
+  /></div>
 }
 
 function FeatureCard({ feature, index }) {

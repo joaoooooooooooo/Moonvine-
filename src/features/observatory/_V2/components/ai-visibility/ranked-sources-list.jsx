@@ -10,7 +10,7 @@ export function RankedSourcesList({ title, items, competitorNames = [], accountN
         <ol aria-label={title} className="flex w-full flex-col gap-2">
           {items.map(({ name, count, imageSrc }) => {
             const share = total ? count / total * 100 : 0;
-            return <RankItem key={name} label={name} imageSrc={imageSrc} value={count} valueLabel="answers" fillPercentage={share}
+            return <RankItem key={name} label={name} imageSrc={imageSrc} value={count} valueLabel="answers" fillPercentage={share} badge={false}
               isCompetitor={name !== accountName && competitorNames.includes(name)}
               percentageLabel={`${share.toFixed(0)}%`}
               className="min-h-12 rounded-md bg-transparent px-3 py-2 [&_p]:text-sm"

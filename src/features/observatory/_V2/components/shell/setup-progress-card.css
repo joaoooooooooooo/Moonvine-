@@ -1,0 +1,119 @@
+.setup-progress {
+  --setup-ease: cubic-bezier(.22, 1, .36, 1);
+  padding: 14px 6px 6px;
+  box-shadow: 0 0 0 .5px var(--border), 0 1px 2px color-mix(in srgb, var(--foreground) 5%, transparent);
+  animation: setup-enter 520ms var(--setup-ease) both;
+}
+
+.setup-progress__progress {
+  margin: 10px 10px 8px;
+  width: calc(100% - 20px);
+}
+
+.setup-progress__fill {
+  overflow: hidden;
+  transition: width 1100ms var(--setup-ease);
+}
+
+.setup-progress__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 30%, color-mix(in srgb, var(--color-white) 80%, transparent) 50%, transparent 70%) 0 0 / 220% 100% no-repeat;
+  animation: setup-shine 1400ms ease-out both;
+}
+
+.setup-progress__count {
+  display: inline-block;
+  animation: setup-count 560ms var(--setup-ease);
+}
+
+.setup-progress__row {
+  animation: setup-enter 640ms var(--setup-ease) both;
+  animation-delay: calc(180ms + var(--step-index) * 90ms);
+}
+
+.setup-progress__step {
+  height: auto;
+  min-height: 34px;
+  padding-block: 6px;
+}
+
+.setup-progress__check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 25%, transparent);
+  transition: background-color 220ms var(--setup-ease), box-shadow 220ms var(--setup-ease);
+}
+
+.setup-progress__check svg {
+  fill: none;
+  stroke: var(--color-white);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 1;
+  transition: stroke-dashoffset 120ms ease-in;
+}
+
+.setup-progress__step[aria-checked="true"] .setup-progress__check {
+  background: var(--info-foreground);
+  box-shadow: none;
+  animation: setup-pop 560ms var(--setup-ease);
+}
+
+.setup-progress__step[aria-checked="true"] .setup-progress__check svg {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 420ms var(--setup-ease) 160ms;
+}
+
+.setup-progress__label {
+  transition: color 300ms ease;
+}
+
+.setup-progress__label > span {
+  background: linear-gradient(var(--muted-foreground), var(--muted-foreground)) 0 60% / 0% 1px no-repeat;
+  transition: background-size 380ms var(--setup-ease);
+}
+
+.setup-progress__step[aria-checked="true"] .setup-progress__label {
+  color: var(--muted-foreground);
+}
+
+.setup-progress__step[aria-checked="true"] .setup-progress__label > span {
+  background-size: 100% 1px;
+  transition-delay: 220ms;
+}
+
+@media (pointer: coarse) {
+  .setup-progress__step { min-height: 44px; padding-block: 10px; }
+}
+
+@keyframes setup-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes setup-count {
+  from { opacity: 0; transform: translateY(60%); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes setup-pop {
+  0% { transform: scale(.9); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+@keyframes setup-shine {
+  from { background-position: 120% 0; opacity: 1; }
+  to { background-position: -20% 0; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .setup-progress, .setup-progress * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

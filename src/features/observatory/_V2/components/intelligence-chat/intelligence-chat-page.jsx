@@ -12,13 +12,20 @@ import '../signals-grid.css';
 export function IntelligenceChatPage({ model }) {
   const threads = useChatThreads();
   const [messages, setMessages] = useState(() => threads.find((thread) => thread.id === model.route.threadId && thread.accountId === model.account.id)?.messages || []);
-  const [draft, setDraft] = useState('');
+  const [draft, setDraft] = useState(() => model.route.prompt || '');
   const [isReplying, setIsReplying] = useState(false);
   const replyTimer = useRef(null);
+  const autoSent = useRef(false);
   const end = useRef(null);
   useEffect(() => () => window.clearTimeout(replyTimer.current), []);
   useEffect(() => { if (model.route.threadId) updateChatThread(model.route.threadId, { unread: false }); }, [model.route.threadId]);
   useEffect(() => { if (messages.length) end.current?.scrollIntoView({ block: 'nearest' }); }, [messages.length]);
+  useEffect(() => {
+    if (!autoSent.current && model.route.autoSend && model.route.prompt) {
+      autoSent.current = true;
+      send(model.route.prompt);
+    }
+  }, [model.route.autoSend, model.route.prompt]);
 
   function send(text = draft) {
     const prompt = text.trim();

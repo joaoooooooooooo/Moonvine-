@@ -9,12 +9,12 @@ export const scoreDescriptions = {
 // Local sample checks, matching the Reports audit card presentation.
 export function siteChecks(domain) {
   return [
-    { title: 'Crawlability', status: 'good', description: 'The sampled pages can be reached by automated crawlers.' },
-    { title: 'Page descriptions', status: 'warning', description: 'Some sampled pages need clearer descriptions of their content.' },
-    { title: 'LLMs file', status: 'missing', description: `No llms.txt file was found at https://${domain}/llms.txt. This file can guide AI tools to useful public content.` },
-    { title: 'Robots file', status: 'good', description: 'The check found robots.txt and a sitemap reference.' },
-    { title: 'Visible FAQs', status: 'missing', description: 'No visible FAQ sections were detected on the 25 public pages in the sitemap sample.' },
-    { title: 'Structured data', status: 'warning', description: 'Organization identity and services are incomplete in the structured data found on the sampled pages.' },
+    { title: 'Crawlability', area: 'SEO', status: 'good', description: 'The sampled pages can be reached by automated crawlers.' },
+    { title: 'Page descriptions', area: 'Performance', status: 'warning', impact: '+12.8%', description: 'Some sampled pages need clearer descriptions of their content.' },
+    { title: 'LLMs file', area: 'AI readiness', status: 'missing', impact: '+8.6%', description: `No llms.txt file was found at https://${domain}/llms.txt. This file can guide AI tools to useful public content.` },
+    { title: 'Robots file', area: 'Best Practices', status: 'good', description: 'The check found robots.txt and a sitemap reference.' },
+    { title: 'Visible FAQs', area: 'Accessibility', status: 'missing', impact: '+6.8%', description: 'No visible FAQ sections were detected on the 25 public pages in the sitemap sample.' },
+    { title: 'Structured data', area: 'AI readiness', status: 'warning', impact: '+14.3%', description: 'Organization identity and services are incomplete in the structured data found on the sampled pages.' },
   ];
 }
 

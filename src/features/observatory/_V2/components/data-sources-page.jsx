@@ -699,6 +699,7 @@ const competitorSuggestions = [
 function CompetitorsDataSourcePage({ workspace, onSave }) {
   const defaultCompetitors = workspace?.competitors ?? competitorSuggestions.slice(0, 3);
   const [competitors, setCompetitors] = useState(defaultCompetitors);
+  const [availableCompetitors, setAvailableCompetitors] = useState(() => [...defaultCompetitors, ...competitorSuggestions.filter((item) => !defaultCompetitors.some((selected) => selected.id === item.id))]);
   const [draftCompetitors, setDraftCompetitors] = useState(defaultCompetitors);
   const [open, setOpen] = useState(false);
   const [activeCompetitorId, setActiveCompetitorId] = useState(null);
@@ -709,6 +710,8 @@ function CompetitorsDataSourcePage({ workspace, onSave }) {
   useEffect(() => {
     const nextCompetitors = workspace?.competitors ?? competitorSuggestions.slice(0, 3);
     setCompetitors(nextCompetitors);
+    setAvailableCompetitors([...nextCompetitors, ...competitorSuggestions.filter((item) => !nextCompetitors.some((selected) => selected.id === item.id))]);
+    setAvailableCompetitors((current) => [...nextCompetitors, ...current.filter((item) => !nextCompetitors.some((selected) => selected.id === item.id))]);
     setDraftCompetitors(nextCompetitors);
     setOpen(false);
     setActiveCompetitorId(null);
@@ -779,6 +782,15 @@ function CompetitorsDataSourcePage({ workspace, onSave }) {
     setActiveCompetitorId(null);
   }
 
+  function toggleWatching(competitor) {
+    const watching = competitors.some((item) => item.id === competitor.id);
+    if (!watching && competitors.length >= 3) return;
+    saveCompetitors(watching ? competitors.filter((item) => item.id !== competitor.id) : [...competitors, competitor], {
+      description: `${competitor.name} is ${watching ? 'no longer being watched' : 'now being watched'}.`,
+      title: watching ? 'Competitor unwatched' : 'Competitor watched',
+    });
+  }
+
   return <div className="v2-page-sections">
     <div className="space-y-2">
       <PageHeading title="Competitors" />
@@ -786,13 +798,13 @@ function CompetitorsDataSourcePage({ workspace, onSave }) {
     </div>
     <PanelFrame className="w-full max-w-2xl">
       <PanelFrameHeader className="!min-h-10 grid grid-cols-3 gap-0 px-0 py-0 font-medium text-sm">
-        <span className="flex h-10 items-center gap-2 ps-5">Competitor <span className="text-muted-foreground tabular-nums">{competitors.length}/3</span></span>
+        <span className="flex h-10 items-center gap-2 ps-5">Competitor <span className="text-muted-foreground tabular-nums">{competitors.length}/3 watching</span></span>
         <span className="flex h-10 items-center px-2.5">Website</span>
         <span className="flex h-10 items-center pe-5 ps-2.5">Status</span>
       </PanelFrameHeader>
       <PanelFrameContent>
         <Table className="table-fixed">
-          <TableBody>{competitors.map((competitor) => <EditDialog key={competitor.id} title={competitor.name} description="Update the website Moonvine watches for this competitor."
+          <TableBody>{availableCompetitors.map((competitor) => <EditDialog key={competitor.id} title={competitor.name} description="Update the website Moonvine watches for this competitor."
             open={activeCompetitorId === competitor.id} onOpenChange={(nextOpen) => { if (!competitorChecking) setCompetitorDialogOpen(competitor, nextOpen); }}
             dirty={normalizeDomain(draftCompetitorDomain.trim()) !== competitor.domain} busy={competitorChecking}
             valid={isValidDomain(normalizeDomain(draftCompetitorDomain.trim())) && !competitorError} onSave={() => saveCompetitorDomain(competitor)}
@@ -815,7 +827,7 @@ function CompetitorsDataSourcePage({ workspace, onSave }) {
                 <span className="truncate">{competitor.name}</span>
               </span></TableCell>
               <TableCell className="text-muted-foreground">{competitor.domain}</TableCell>
-              <TableCell className="pe-5"><span className="inline-flex items-center gap-2"><span aria-hidden="true" className="size-2 rounded-full bg-success-foreground" />Watching</span></TableCell>
+              <TableCell className="pe-5"><span className="inline-flex items-center gap-2" onPointerDown={(event) => event.stopPropagation()} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}><Checkbox checked={competitors.some((item) => item.id === competitor.id)} disabled={!competitors.some((item) => item.id === competitor.id) && competitors.length >= 3} onCheckedChange={() => toggleWatching(competitor)} aria-label={`${competitors.some((item) => item.id === competitor.id) ? 'Stop watching' : 'Watch'} ${competitor.name}`} />{competitors.some((item) => item.id === competitor.id) ? 'Watching' : 'Not watching'}</span></TableCell>
             </TableRow>}>
             <Field invalid={Boolean(competitorError) || !isValidDomain(normalizeDomain(draftCompetitorDomain.trim()))} name={`${competitor.id}-domain`}>
               {competitorChecking ? <InputGroup variant="muted">

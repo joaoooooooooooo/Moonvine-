@@ -1,22 +1,36 @@
+import { SidebarControlTooltip } from './sidebar-control-tooltip';
+import { useRef } from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { BookOpenIcon, CreditCardIcon, LifeBuoyIcon, LogOutIcon, MoonIcon, SunIcon, UserIcon } from '@/components/ui/icons';
-import { Menu, MenuCheckboxItem, MenuGroup, MenuGroupLabel, MenuItem, MenuLinkItem, MenuPopup, MenuSeparator, MenuTrigger } from '@/components/ui/menu';
+import { Menu, MenuGroup, MenuGroupLabel, MenuItem, MenuLinkItem, MenuPopup, MenuSeparator, MenuTrigger } from '@/components/ui/menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import { Tabs, TabsList, TabsTab } from '@/components/ui/tabs';
 import { useThemePreference } from '@/components/navigation/avatar-menu/hooks/use-theme-preference';
 
 export function FooterUserMenu() {
-  const { isMobile, setOpenMobile } = useSidebar();
+  const accountAnchorRef = useRef(null);
+  const { isMobile, setOpenMobile, state } = useSidebar();
   const { resolvedTheme, setTheme } = useThemePreference();
+  const collapsed = !isMobile && state === 'collapsed';
 
   return (
-    <SidebarMenu>
+    <div className={collapsed ? 'flex flex-col items-center gap-2' : 'flex items-center gap-2'}>
+    <Tabs aria-label="Appearance" className={collapsed ? 'order-1' : 'order-2'} orientation={collapsed ? 'vertical' : 'horizontal'} size="sm" value={resolvedTheme} onValueChange={setTheme}>
+      <TabsList>
+        <TabsTab aria-label="Use light appearance" title="Light" value="light"><SunIcon aria-hidden="true" className="size-4" weight="light" /></TabsTab>
+        <TabsTab aria-label="Use dark appearance" title="Dark" value="dark"><MoonIcon aria-hidden="true" className="size-4" weight="light" /></TabsTab>
+      </TabsList>
+    </Tabs>
+    <SidebarMenu className={collapsed ? 'order-2 w-full min-w-0' : 'order-1 min-w-0 flex-1'}>
       <SidebarMenuItem>
         <Menu>
-          <MenuTrigger render={<SidebarMenuButton className="h-10" aria-label="Open account menu" />}>
-            <Avatar className="size-6"><AvatarFallback>A</AvatarFallback></Avatar>
-            <span className="min-w-0 flex-1 truncate text-left font-medium">Apta</span>
-          </MenuTrigger>
-          <MenuPopup align="start" side={isMobile ? 'bottom' : 'right'} sideOffset={8} className="min-w-52">
+          <div ref={accountAnchorRef} className="w-full min-w-0">
+            <SidebarControlTooltip label="Apta: Account menu"><MenuTrigger render={<SidebarMenuButton className="h-10" aria-label="Open account menu" />}>
+              <Avatar className="size-6"><AvatarFallback>A</AvatarFallback></Avatar>
+              <span className="min-w-0 flex-1 truncate text-left font-medium">Apta</span>
+            </MenuTrigger></SidebarControlTooltip>
+          </div>
+          <MenuPopup anchor={accountAnchorRef} align="start" side={isMobile ? 'bottom' : 'right'} sideOffset={8} className="min-w-52">
             <MenuGroup>
               <MenuGroupLabel>Account</MenuGroupLabel>
               <MenuLinkItem href="#/console/accounts" onClick={() => setOpenMobile(false)}>
@@ -31,14 +45,11 @@ export function FooterUserMenu() {
               <MenuItem><LifeBuoyIcon aria-hidden="true" />Contact</MenuItem>
             </MenuGroup>
             <MenuSeparator />
-            <MenuCheckboxItem variant="switch" checked={resolvedTheme === 'dark'} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}>
-              <span className="flex items-center gap-2">{resolvedTheme === 'dark' ? <MoonIcon aria-hidden="true" className="size-4" /> : <SunIcon aria-hidden="true" className="size-4" />}Dark mode</span>
-            </MenuCheckboxItem>
-            <MenuSeparator />
             <MenuItem variant="destructive" closeOnClick><LogOutIcon aria-hidden="true" />Log out</MenuItem>
           </MenuPopup>
         </Menu>
       </SidebarMenuItem>
     </SidebarMenu>
+    </div>
   );
 }

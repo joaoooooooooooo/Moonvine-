@@ -68,7 +68,7 @@
 }
 
 .v2-card-tagline {
-  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  color: var(--foreground);
   border-bottom: 1px solid var(--border);
   @apply not-dark:border-border/64;
   --tagline-overlay: color-mix(in srgb, var(--muted) 72%, transparent);
@@ -77,5 +77,9 @@
   padding: 0.75rem 1rem;
   background: linear-gradient(var(--tagline-overlay), var(--tagline-overlay)), var(--card);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.v2-directory-card-tagline {
+  background: var(--primary-foreground);
 }
 

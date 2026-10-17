@@ -1,7 +1,6 @@
 import { FileText } from '@/components/ui/icons';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { analyticsTopPages } from '../../data/analytics-top-pages';
-import { Badge } from '@/components/ui/badge';
 import { formatMetric } from '../../utils/observatory-model';
 
 export function LandingPagesCard({ lens, account }) {
@@ -21,7 +20,7 @@ export function LandingPagesCard({ lens, account }) {
                 <span aria-hidden="true" className="absolute inset-y-0 left-0 -z-10 bg-secondary" style={{ width: `${share}%` }} />
                 <img src={preview} alt="" title="Mock page preview" loading="lazy" className="size-8 shrink-0 rounded-sm object-cover" />
                 <span className="min-w-0 flex-1 truncate">{path}</span>
-                <Badge variant="secondary">{formatMetric(visits)} visits</Badge>
+                <span className="shrink-0 tabular-nums">{formatMetric(visits)} visits</span>
                 <span className="shrink-0 tabular-nums text-muted-foreground">{share.toFixed(0)}%</span>
                 <span className="sr-only"> (opens in a new tab)</span>
               </a>

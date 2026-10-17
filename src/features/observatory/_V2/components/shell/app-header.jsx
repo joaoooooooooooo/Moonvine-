@@ -1,12 +1,15 @@
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
+import { Badge } from '@/components/ui/badge';
 import { LiveBreadcrumbs } from '../live-breadcrumbs';
 import { activeShellItem } from './navigation';
 import { intelligenceItems } from '../../data/intelligence-navigation';
 import { findDirectoryPerson } from '../../data/directory-rows';
 import { dataSourceSections } from '../../data/data-source-navigation';
-import { Brain, Building2, LayoutGrid, MessageCircle, Plug, SatelliteDish, Settings, Users } from '@/components/ui/icons';
+import { Brain, Building2, LayoutGrid, MessageCircle, Plug, PlugConnected, SatelliteDish, Settings, Users } from '@/components/ui/icons';
+import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function AppHeader({ model }) {
+  const { open: sidebarOpen } = useSidebar();
   const item = activeShellItem(model.route);
   const dataSourceLabels = {
     organization: 'Organization',
@@ -42,10 +45,20 @@ export function AppHeader({ model }) {
   const currentIcon = isDataSource ? source?.icon ?? Building2 : isPerson || model.route.path === '/console/people' ? Users : model.route.path === '/console/accounts' ? Building2 : model.route.path === '/console/reports' || model.route.lensId === 'report:history' ? SatelliteDish : model.route.path.startsWith('/intelligence/') ? intelligenceItems.find((entry) => entry.lens === model.route.lensId)?.icon ?? Brain : root.icon;
   const breadcrumbs = title === root.label ? [root] : [root, ...(parent ? [parent] : []), { label: title, icon: currentIcon }];
   return (
-    <header className="sticky top-0 z-30 flex min-h-16 shrink-0 items-center justify-between gap-2 border-b bg-card px-5 py-2 sm:h-16 md:px-8">
+    <header className="sticky top-0 z-30 flex min-h-16 shrink-0 items-center justify-between gap-2 border-b bg-background px-5 py-2 sm:h-16 md:px-8">
+      <TooltipProvider delay={150} timeout={500}>
+        <Tooltip>
+          <TooltipTrigger render={<SidebarTrigger className="hidden md:absolute md:start-4 md:top-1/2 md:inline-flex md:-translate-y-1/2" aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'} aria-controls="observatory-v2-sidebar" aria-expanded={sidebarOpen} />} />
+          <TooltipPopup side="bottom" sideOffset={8}>{sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}</TooltipPopup>
+        </Tooltip>
+      </TooltipProvider>
       <div className={`mx-auto flex w-full ${model.route.lensId === 'intelligence:chat' ? 'max-w-3xl' : 'max-w-4xl'} min-w-0 flex-wrap items-center gap-2 sm:flex-nowrap`}>
         <SidebarTrigger className="md:hidden" aria-label="Open navigation" />
         <LiveBreadcrumbs items={breadcrumbs} />
+        {isDataSource && typeof source?.connected === 'boolean' && <Badge variant={source.connected ? 'success' : 'secondary'} size="lg" className={source.connected ? undefined : 'text-muted-foreground'}>
+          {source.connected ? <PlugConnected aria-hidden="true" weight="fill" /> : <Plug aria-hidden="true" weight="fill" />}
+          {source.connected ? 'Connected' : 'No Source'}
+        </Badge>}
       </div>
     </header>
   );

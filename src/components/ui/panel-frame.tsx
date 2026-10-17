@@ -32,7 +32,7 @@ export function PanelFrameHeader({
 }: useRender.ComponentProps<"header">): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "flex min-h-12 items-center gap-2 border-b border-border/64 bg-muted/72 px-4 py-3 text-muted-foreground dark:border-border",
+      "flex min-h-12 items-center gap-2 border-b border-border/64 bg-muted/72 px-4 py-3 text-foreground [&_svg]:text-foreground [&_svg]:opacity-100 dark:border-border",
       className,
     ),
     "data-slot": "panel-frame-header",

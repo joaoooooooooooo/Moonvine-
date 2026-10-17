@@ -19,7 +19,7 @@ export function SocialHandles({ handles, account }) {
             <TableCell className="whitespace-normal break-all text-foreground"><span className={connected ? '' : 'opacity-50'}>{handle ?? (connected ? `@${account.id}` : '-')}</span></TableCell>
             <TableCell>
               {connected ? <span className="inline-flex h-8 items-center gap-2 text-sm sm:h-7" role="status">
-                <span aria-hidden="true" className="relative size-[7px] shrink-0 rounded-full bg-success-foreground before:absolute before:inset-0 before:animate-ping before:rounded-full before:bg-success-foreground before:opacity-75 motion-reduce:before:animate-none" />Connected
+                <span aria-hidden="true" className="relative size-[7px] shrink-0 rounded-full bg-success-foreground" />Connected
               </span> : <Button size="sm" variant="secondary" aria-label={`Connect ${name}`} onClick={() => setConnectedPlatforms((current) => [...current, name])}>Connect</Button>}
             </TableCell>
           </TableRow>
