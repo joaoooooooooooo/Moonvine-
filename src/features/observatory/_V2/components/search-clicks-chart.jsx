@@ -28,7 +28,7 @@ const LEGEND = [
   { key: "previous", label: "Last week", swatch: "bg-[#d4d4d4] dark:bg-[#525252]" },
 ];
 
-function ReportsLineChartCanvas({ className, data = chartData, curveType = 'linear', color, percentage = false, compact = false, hideAxes = compact, hideYAxis = false }) {
+function ReportsLineChartCanvas({ className, data = chartData, curveType = 'smooth', color, percentage = false, compact = false, hideAxes = compact, hideYAxis = false }) {
   return (
     <div className={cn("min-h-0 w-full", compact ? "h-40" : "h-[16rem] sm:h-[18rem] lg:h-[20rem]", className)}>
       <EChartsLineChart
@@ -55,7 +55,7 @@ function ReportsLineChartCanvas({ className, data = chartData, curveType = 'line
   );
 }
 
-export function MetricLineChart({ className, variant = "default", data: sourceData = chartData, dataReady = true, href, title = 'Google Search', metricLabel = 'Google Search clicks', icon: Icon = Search, curveType = 'linear', color, percentage = false, metricValue, comparisonLabel, compact = false, hideAxes = compact, hideYAxis = false }) {
+export function MetricLineChart({ className, variant = "default", data: sourceData = chartData, dataReady = true, href, title = 'Google Search', metricLabel = 'Google Search clicks', icon: Icon = Search, curveType = 'smooth', color, percentage = false, metricValue, comparisonLabel, compact = false, hideAxes = compact, hideYAxis = false }) {
 const data = dataReady ? sourceData : sourceData.map(item => ({ ...item, current: 0, previous: 0 }));
 const TOTAL = data.reduce((sum, { current }) => sum + current, 0);
 const PREVIOUS_TOTAL = data.reduce((sum, { previous }) => sum + previous, 0);

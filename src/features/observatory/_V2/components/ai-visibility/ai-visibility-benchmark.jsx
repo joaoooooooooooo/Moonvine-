@@ -1,4 +1,4 @@
-import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
+import { ReportSignalSummary } from '../report-signal-summary';
 import { referenceSources } from './ai-visibility-content';
 import '../signals-grid.css';
 
@@ -25,19 +25,13 @@ export function AiVisibilityBenchmark({ lens }) {
     },
   ];
 
-  return <section aria-label="AI visibility benchmark summary" className="v2-signals-grid">
-    <FrameCard withFill className="w-full overflow-hidden">
-      <FrameCardContent className="p-0!">
-        <dl className="grid w-full divide-y divide-border bg-linear-to-r from-warning/20 via-warning/10 to-destructive/15 md:grid-cols-3 md:divide-x md:divide-y-0">
-          {insights.map(insight => <div key={insight.label} className="min-w-0 space-y-2 p-5">
-            <dt className="text-sm/normal font-medium text-foreground">{insight.label}</dt>
-            <dd className="space-y-2">
-              <p className="text-lg/normal font-medium tabular-nums">{insight.title}</p>
-              <p className="text-sm/normal text-muted-foreground tabular-nums">{insight.description}</p>
-            </dd>
-          </div>)}
-        </dl>
-      </FrameCardContent>
-    </FrameCard>
+  return <section aria-label="AI visibility benchmark summary">
+    <ReportSignalSummary data={{
+      // Reuse the existing preview's 60/30 visibility bands.
+      status: lens.value >= 60 ? 'Healthy' : lens.value >= 30 ? 'Watch' : 'Critical',
+      headline: insights[0].title, description: insights[0].description,
+      result: insights[1].title, resultDescription: insights[1].description,
+      next: insights[2].title, reason: insights[2].description,
+    }} />
   </section>;
 }

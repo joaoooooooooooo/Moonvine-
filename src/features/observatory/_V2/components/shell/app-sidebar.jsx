@@ -44,7 +44,7 @@ export function AppSidebar({ model }) {
       {group !== 'main' && (
         <div data-slot="sidebar-back-link" className="group/back-link relative shrink-0 p-2">
           <SidebarControlTooltip label="Go Back"><Button variant="ghost" className="w-full justify-start text-muted-foreground" render={<a href="#/console" aria-label="Go Back" />} onClick={() => setOpenMobile(false)}>
-            <ChevronLeft aria-hidden="true" className="size-4" />
+            <ChevronLeft aria-hidden="true" className="size-3 text-muted-foreground" />
             <span data-slot="sidebar-back-label">Go Back</span>
           </Button></SidebarControlTooltip>
         </div>
@@ -73,7 +73,7 @@ export function AppSidebar({ model }) {
                   </Badge>}
                   {item.label === 'Reports' && hasUnread && <ReportStatusDot unread count={unreadCount} />}
                   {item.label === 'Intelligence' && <SiteFixStatus count={siteFixCount} />}
-                  {(item.label === 'Chat' || item.label === 'Intelligence' || item.label === 'Settings' || item.label === 'Data Sources') && <ChevronRight aria-hidden="true" className="size-3.5 shrink-0 text-muted-foreground/60" />}
+                  {(item.label === 'Chat' || item.label === 'Intelligence' || item.label === 'Settings' || item.label === 'Data Sources') && <ChevronRight aria-hidden="true" className="size-3 shrink-0 text-muted-foreground" />}
                 </span>
               </SidebarMenuButton>
             </SidebarMenuItem>)}</SidebarMenu>

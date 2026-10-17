@@ -7,6 +7,8 @@ import { AnalyticsTrends } from '../analytics-v2/analytics-trends';
 import { SourceDistributionCard } from '../source-pages/source-distribution-card';
 import { SearchQueries } from './search-queries';
 import { searchConsoleData } from '../../data/search-console';
+import { searchSummary } from '../../data/report-summaries';
+import { ReportSignalSummary } from '../report-signal-summary';
 import '../signals-grid.css';
 
 export function SearchConsolePage({ account, lens }) {
@@ -17,6 +19,7 @@ export function SearchConsolePage({ account, lens }) {
       <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">See how people discover {account.name}, what they search for, and what earns a click.</p>
       <Button className="mt-3" variant="default" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Search Console</Button>
     </div>
+    <ReportSignalSummary data={searchSummary(data)} />
     <AnalyticsTrends metrics={data.metrics} title="Search performance over the week" />
     <SectionDivider />
     <SearchQueries rows={data.queries} />

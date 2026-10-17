@@ -63,6 +63,23 @@
   flex: 1 1 0%;
 }
 
+.v2-sidebar button[aria-label="Switch workspace"] {
+  padding: 0 !important;
+}
+
+.v2-sidebar [aria-label="Switch workspace"] [data-slot="avatar"] {
+  width: var(--v2-sidebar-control);
+  height: var(--v2-sidebar-control);
+  flex-basis: var(--v2-sidebar-control);
+}
+
+.v2-sidebar [data-slot="select-icon"] svg {
+  width: 12px;
+  height: 12px;
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
 .v2-sidebar [aria-label="Search commands"] > span {
   gap: 8px;
 }

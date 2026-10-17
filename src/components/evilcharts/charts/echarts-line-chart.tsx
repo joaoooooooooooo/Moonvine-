@@ -1354,7 +1354,7 @@ export function EChartsLineChart<TData extends Record<string, unknown>>({
   renderer = DEFAULT_ECHARTS_RENDERER,
   xDataKey,
   className,
-  curveType = "linear",
+  curveType = "smooth",
   animation = true,
   animationType = "left-to-right",
   enableHoverHighlight = false,

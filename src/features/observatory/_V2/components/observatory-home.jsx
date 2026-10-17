@@ -59,7 +59,7 @@ export function ObservatoryHome({ model }) {
         <h1 className="max-w-[32rem] font-heading text-4xl font-normal leading-tight tracking-tight text-foreground sm:text-[2.625rem]">How can I help you today?</h1>
       </div>
       <div className="flex w-full max-w-[49.25rem] flex-col gap-4">
-        <nav aria-label="Start a conversation" className="v2-signals-grid grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <nav aria-label="Start a conversation" className="v2-signals-grid v2-home-starters grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {starters.map(({ label, detail, prompt, icon, variant }) => (
             <FrameCard
               key={label}

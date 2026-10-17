@@ -13,7 +13,7 @@ export function NavUser({ model }) {
       <Menu>
         <MenuTrigger render={<SidebarMenuButton className="h-10 text-muted-foreground" aria-label="Open workspace menu" />}>
           <Avatar className="size-5"><AvatarFallback>A</AvatarFallback></Avatar>
-          <span className="text-sm font-medium">Apta</span><ChevronsUpDown className="ml-auto size-3.5!" />
+          <span className="text-sm font-medium">Apta</span><ChevronsUpDown className="ml-auto size-3! text-muted-foreground" />
         </MenuTrigger>
         <MenuPopup align="start" side={isMobile ? 'bottom' : 'right'} sideOffset={4} className="min-w-56">
           <MenuGroup><MenuGroupLabel>Apta workspace</MenuGroupLabel>

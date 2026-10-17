@@ -83,3 +83,17 @@
   background: var(--primary-foreground);
 }
 
+.v2-signals-grid [data-card-caret],
+.v2-signals-grid [data-card-caret] svg {
+  color: var(--muted-foreground);
+}
+
+.dark .v2-home-starters > [data-slot="frame-card"],
+.dark .v2-home-starters > [data-slot="frame-card"]:hover {
+  border-color: transparent;
+}
+
+.dark .v2-home-starters > [data-slot="frame-card"]::before {
+  box-shadow: none;
+}
+

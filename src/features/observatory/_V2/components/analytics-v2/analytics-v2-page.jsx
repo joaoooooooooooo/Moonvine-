@@ -8,6 +8,8 @@ import { AnalyticsTrends } from './analytics-trends';
 import { AnalyticsLandingPages } from './analytics-landing-pages';
 import { VisitorSourcesChart } from '../analytics/visitor-sources-chart';
 import { analyticsV2Data } from '../../data/analytics-v2';
+import { analyticsSummary } from '../../data/report-summaries';
+import { ReportSignalSummary } from '../report-signal-summary';
 import '../signals-grid.css';
 
 export function AnalyticsV2Page({ account, lens, period }) {
@@ -15,6 +17,7 @@ export function AnalyticsV2Page({ account, lens, period }) {
   const mobileShare = data.total ? Math.round((data.devices.find((device) => device.label === 'Mobile')?.value ?? 0) / data.total * 100) : 0;
   return <div className="v2-page-sections">
     <div className="space-y-2"><PageHeading title="Understand every visit." /><p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Traffic, engagement, and the paths people take through {account.name}.</p><Button className="mt-3" variant="default" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Analytics</Button></div>
+    <ReportSignalSummary data={analyticsSummary(data)} />
     <AnalyticsTrends metrics={data.metrics} />
     <SectionDivider />
     <section aria-labelledby="analytics-v2-channels" className="space-y-10"><SectionHeading id="analytics-v2-channels" title="Where visits came from" description="See how each channel contributes to your traffic, and how the mix changes over time." /><div className="v2-signals-grid"><VisitorSourcesChart lens={lens} rows={data.channels} reportPeriod={period} /></div></section>
