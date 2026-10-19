@@ -7,6 +7,8 @@ These rules apply to Observatory data-source pages and other editable settings. 
 - Chart, frame, and table header titles and icons use `foreground`; reporting dates and inactive tabs use `muted-foreground`; muted header surfaces remain unchanged. Chart controls sit in the header, with the icon before the title and month immediately beside it. Summary metric labels sit below values, and footer category names include their matching square marker.
 
 - Use `v2-page-sections` for the page stack and `PageHeading` for the page introduction.
+- Observatory non-table cards use `ObservatoryBasicFrame` from `components/observatory-basic-frame.jsx`. Do not use Reports `SocialCard`, Reports card wrappers, or a feature-local frame recreation for Observatory cards.
+- `ObservatoryBasicFrame` has one compact `radius-md` surface with the shared edge highlight. Its content fills the frame width; do not add a second visible border, nested card, oversized radius, or horizontal layout when the card pattern is vertically stacked.
 - Page descriptions use the established section-copy measure and typography: `max-w-[36ch] text-base leading-6 text-muted-foreground`.
 - Group related settings in `PanelFrame`, using `PanelFrameHeader`, `PanelFrameTitle`, and `PanelFrameContent`.
 - Use the compact framed-card treatment: one visible border, `radius-md`, `bg-card`, the shared edge highlight, and a muted header row.
@@ -55,6 +57,14 @@ These rules apply to Observatory data-source pages and other editable settings. 
 - Align dialog footer actions to the left. Put Save first and Cancel second. Save is disabled until the draft differs from the saved value and the value passes synchronous validation.
 - Cancel discards the draft. A successful save updates the visible preview and the workspace model.
 - When a dialog opens, initialize its draft from the current saved value. Select an existing single-line value when immediate replacement is likely, such as the watched domain.
+
+## Observatory popups and dialogs
+
+- Use the existing Data Sources dialog composition as the reference: `Dialog`, `DialogPopup`, `DialogHeader`, `DialogTitle`, optional `DialogDescription`, `DialogPanel`, and `DialogFooter`.
+- Forms inside a dialog use `className="contents"` so the header, panel, and footer remain one continuous popup surface. Never allow the footer to become a detached block.
+- Popups use `rounded-md`, `before:rounded-[calc(var(--radius-md)-1px)]`, `overflow-hidden`, and `sm:max-w-md` unless the content genuinely needs a larger bounded selection surface.
+- Dialog panels are content-driven. Do not add arbitrary minimum heights, empty spacer bands, or feature-level top padding.
+- Field controls use the muted, borderless Observatory input treatment. Dialog actions are left aligned, with the primary action first and Cancel second.
 
 ## Validation and feedback
 

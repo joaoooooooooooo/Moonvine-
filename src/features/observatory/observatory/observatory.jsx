@@ -16,6 +16,7 @@ import { PersonDetailPage } from './components/person-detail-page';
 import { ToastProvider } from '@/components/ui/toast';
 import { NewsMediaPage } from './components/news-media/news-media-page';
 import { AnalyticsV2Page } from './components/analytics-v2/analytics-v2-page';
+import { BookmarksPage } from './components/bookmarks-page';
 
 export function Observatory() {
   const model = useObservatory();
@@ -23,9 +24,11 @@ export function Observatory() {
   const selectedWorkspace = model.accounts.find((item) => item.id === model.selectedAccountId) ?? model.accounts[0];
   const personPathMatch = route.path.match(/^\/console\/people\/([^/]+)$/);
   const personId = route.personId ?? (personPathMatch ? decodeURIComponent(personPathMatch[1]) : null);
+  const bookmarkWorkspaceId = route.path.match(/^\/console\/bookmarks\/([^/]+)$/)?.[1] ?? null;
   const directory = ['accounts', 'people', 'entities'].find((id) => route.path === '/console/' + id);
   let page;
-  if (route.path === '/console' && account && route.threadId) page = <IntelligenceChatPage key={account.id + route.threadId} model={model} />;
+  if (route.path.startsWith('/console/bookmarks')) page = <BookmarksPage model={model} workspaceId={bookmarkWorkspaceId} />;
+  else if (route.path === '/console' && account && route.threadId) page = <IntelligenceChatPage key={account.id + route.threadId} model={model} />;
   else if (route.path === '/console') page = <ObservatoryHome model={model} />;
   else if (personId) page = <PersonDetailPage personId={personId} workspaces={model.accounts} />;
   else if (route.path.startsWith('/console/data-sources')) page = <DataSourcesPage sectionId={route.path.split('/')[3]} workspace={selectedWorkspace} onSaveWorkspace={model.saveWorkspaceProfile} />;

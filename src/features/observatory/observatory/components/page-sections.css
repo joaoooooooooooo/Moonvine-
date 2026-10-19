@@ -4,6 +4,33 @@
   @apply space-y-16;
 }
 
+/* Observatory basic frame: the shared compact surface for non-table cards. */
+.v2-observatory-frame {
+  @apply text-card-foreground shadow-xs/5 not-dark:bg-clip-padding not-dark:border-border/64;
+  border-radius: var(--radius-md);
+  border-width: 1px;
+  padding: 0;
+  transition: border-color 150ms ease;
+}
+
+.v2-observatory-frame::before {
+  @apply pointer-events-none absolute inset-0 shadow-[0_1px_--theme(--color-black/4%)] dark:shadow-[0_-1px_--theme(--color-white/6%)];
+  content: "";
+  border-radius: calc(var(--radius-md) - 1px);
+  z-index: 1;
+}
+
+.v2-observatory-frame-content,
+.v2-observatory-frame-content::before {
+  border-radius: var(--radius-md);
+  border-width: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.v2-observatory-frame-content::before { display: none; }
+.v2-observatory-frame:is(:hover, :focus-within) { border-color: var(--input); }
+
 .v2-sidebar {
   --v2-sidebar-icon: 18px;
   --v2-sidebar-inset: 9px;

@@ -32,6 +32,7 @@ import {
   Copy as PhosphorCopy,
   CreditCard as PhosphorCreditCard,
   DotsThree as PhosphorDotsThree,
+  DotsThreeVertical as PhosphorDotsThreeVertical,
   Eye as PhosphorEye,
   FileArrowDown as PhosphorFileArrowDown,
   FileText as PhosphorFileText,
@@ -80,6 +81,7 @@ import {
   Stack as PhosphorStack,
   Sun as PhosphorSun,
   Table as PhosphorTable,
+  Trash as PhosphorTrash,
   User as PhosphorUser,
   UserCircle as PhosphorUserCircle,
   UserFocus as PhosphorUserFocus,
@@ -178,6 +180,7 @@ export const Moon = regularIcon(PhosphorMoon);
 export const MoonIcon = regularIcon(PhosphorMoon);
 export const MoreHorizontal = regularIcon(PhosphorDotsThree);
 export const MoreHorizontalIcon = regularIcon(PhosphorDotsThree);
+export const MoreVertical = regularIcon(PhosphorDotsThreeVertical);
 export const Network = regularIcon(PhosphorGraph);
 export const NetworkIcon = regularIcon(PhosphorGraph);
 export const Newspaper = regularIcon(PhosphorNewspaper);
@@ -205,6 +208,7 @@ export const Shapes = regularIcon(PhosphorShapes);
 export const ShieldCheckIcon = regularIcon(PhosphorShieldCheck);
 export const Sparkles = regularIcon(PhosphorSparkle);
 export const SquarePen = regularIcon(PhosphorNotePencil);
+export const Trash = regularIcon(PhosphorTrash);
 export const Sun = regularIcon(PhosphorSun);
 export const SunIcon = regularIcon(PhosphorSun);
 export const Table2 = regularIcon(PhosphorTable);

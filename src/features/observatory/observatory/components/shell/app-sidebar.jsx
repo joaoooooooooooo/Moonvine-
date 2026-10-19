@@ -1,13 +1,12 @@
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { SidebarControlTooltip } from './sidebar-control-tooltip';
 import { SidebarTooltipContent } from './sidebar-tooltip-content';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from '@/components/ui/icons';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sidebar, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator, useSidebar } from '@/components/ui/sidebar';
-import { SidebarGroupTransition } from './sidebar-group-transition';
 import { WorkspaceSwitcher } from './workspace-switcher';
 import { SearchCommand } from './search-command';
 import { FooterUserMenu } from './footer-user-menu';
@@ -22,16 +21,20 @@ import { ReportStatusDot } from '../report-status-dot';
 import { dataSourceSections } from '../../data/data-source-navigation';
 import { getSiteFixCount } from '../../data/site-fixes';
 import { SiteFixStatus } from '../site-health/site-fix-status';
+import { initialBookmarkWorkspaces } from '../../data/bookmarks';
+import { FolderIcon } from '@/components/ui/icons';
 
 const connectableSources = dataSourceSections.filter((section) => typeof section.connected === 'boolean');
 const connectedSourceCount = connectableSources.filter((section) => section.connected).length;
 const connectedSourceProgress = (connectedSourceCount / connectableSources.length) * 100;
 
 export function AppSidebar({ model }) {
+  const [bookmarkWorkspaces, setBookmarkWorkspaces] = useState(initialBookmarkWorkspaces);
   const { hasUnread, unreadCount } = useReportReadState(model.selectedAccountId);
   const sidebarAccount = model.account ?? model.accounts.find((item) => item.id === model.selectedAccountId) ?? model.accounts[0];
   const siteFixCount = sidebarAccount ? getSiteFixCount(sidebarAccount.domain) : 0;
   const { setOpenMobile } = useSidebar();
+  useEffect(() => { const sync = () => { try { setBookmarkWorkspaces(JSON.parse(window.localStorage.getItem('observatory-bookmark-workspaces')) || initialBookmarkWorkspaces); } catch { setBookmarkWorkspaces(initialBookmarkWorkspaces); } }; sync(); window.addEventListener('observatory-bookmarks-change', sync); return () => window.removeEventListener('observatory-bookmarks-change', sync); }, []);
   useEffect(() => { setOpenMobile(false); }, [model.route, setOpenMobile]);
   const active = activeShellItem(model.route);
   const group = model.route.path === '/console/data-sources/access' || model.route.path === '/console/accounts' || model.route.path.startsWith('/console/people') ? 'settings' : model.route.path.startsWith('/console/data-sources') ? 'data-sources' : model.route.lensId === 'intelligence:chat' && model.route.path !== '/console' ? 'chat' : model.account && model.route.path.startsWith('/intelligence/') ? 'intelligence' : 'main';
@@ -52,7 +55,7 @@ export function AppSidebar({ model }) {
       <SidebarSeparator />
       <ScrollArea data-slot="sidebar-content" data-sidebar="content" className="v2-sidebar-content h-auto min-h-0 flex-1" overscrollContain scrollFade>
         <nav aria-label="Main navigation" className="overflow-x-clip [&_[data-slot=sidebar-group]]:p-2">
-          <SidebarGroupTransition group={group}>
+          <>
           {group === 'data-sources' ? <DataSourcesNavigation route={model.route} onNavigate={() => setOpenMobile(false)} /> : group === 'settings' ? <SettingsNavigation route={model.route} onNavigate={() => setOpenMobile(false)} /> : group === 'chat' ? <ChatNavigation model={model} onNavigate={() => setOpenMobile(false)} /> : group === 'intelligence' ? <IntelligenceNavigation model={model} onNavigate={() => setOpenMobile(false)} /> : <>
           <SidebarGroup>
             <SidebarMenu className="gap-1">{shellGroups.flatMap((group) => group.items).map((item) => <SidebarMenuItem key={item.href}>
@@ -78,10 +81,11 @@ export function AppSidebar({ model }) {
               </SidebarMenuButton>
             </SidebarMenuItem>)}</SidebarMenu>
           </SidebarGroup>
+          {active.href === '#/console/bookmarks' && <SidebarGroup className="pt-0"><div className="mb-1 flex items-center justify-between px-2 text-xs font-medium text-muted-foreground"><span>Workspaces</span><span className="tabular-nums">{bookmarkWorkspaces.length}</span></div><SidebarMenu className="gap-1">{bookmarkWorkspaces.map((workspace) => <SidebarMenuItem key={workspace.id}><SidebarMenuButton className="h-8 px-3 text-muted-foreground" isActive={model.route.path === `/console/bookmarks/${workspace.id}`} render={<a href={`#/console/bookmarks/${workspace.id}`} aria-label={`Open ${workspace.name}`} aria-current={model.route.path === `/console/bookmarks/${workspace.id}` ? 'page' : undefined} />} onClick={() => setOpenMobile(false)}><FolderIcon aria-hidden="true" className="size-4" /><span className="min-w-0 truncate">{workspace.name}</span></SidebarMenuButton></SidebarMenuItem>)}</SidebarMenu></SidebarGroup>}
           <SidebarSeparator />
           <ChatNavigation model={model} onNavigate={() => setOpenMobile(false)} />
           </>}
-          </SidebarGroupTransition>
+          </>
         </nav>
       </ScrollArea>
       <SidebarFooter className="p-2 pb-3">
