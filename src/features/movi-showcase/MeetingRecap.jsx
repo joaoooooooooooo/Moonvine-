@@ -1,4 +1,4 @@
-import { ObservatoryTable } from '../observatory/_V2/components/observatory-table'
+import { ObservatoryTable } from '../observatory/observatory/components/observatory-table'
 import { TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/ui/table'
 
 const rows = [

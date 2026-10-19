@@ -7,7 +7,7 @@ import { Connections } from './sections/Connections/Connections'
 import { HowItWorks } from './sections/HowItWorks/HowItWorks'
 import { Pricing } from './sections/Pricing/Pricing'
 import { Editorial } from './sections/Editorial/Editorial'
-import '../../src/features/observatory/_V2/components/signals-grid.css'
+import '../../src/features/observatory/observatory/components/signals-grid.css'
 import './website.css'
 
 export default function WebsiteHome() {

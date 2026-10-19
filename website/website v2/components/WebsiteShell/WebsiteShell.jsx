@@ -6,7 +6,7 @@ import wordmark from '../../../../src/assets/Logo type - Light.svg'
 import './WebsiteShell.css'
 
 export const APP_URL = 'https://moonvine-product-design.vercel.app/login'
-export const OBSERVATORY_URL = 'https://moonvine-ds.vercel.app/observatory-v2'
+export const OBSERVATORY_URL = 'https://moonvine-ds.vercel.app/observatory'
 export const WIREFRAME_MODE = true
 
 function Wordmark() { return <a className="mv-wordmark" href="#top" aria-label="Moonvine home"><img src={wordmark} alt="Moonvine" /></a> }

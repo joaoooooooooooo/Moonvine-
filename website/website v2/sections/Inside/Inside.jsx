@@ -3,20 +3,20 @@ import { ArrowLeft, ArrowRight } from '@phosphor-icons/react'
 import { animate, motion, useInView, useMotionValue, useReducedMotion } from 'motion/react'
 import { FrameCard, FrameCardContent } from '../../../../src/components/ui/frame-card'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../src/components/ui/card'
-import { ChatComposer } from '../../../../src/features/observatory/_V2/components/intelligence-chat/chat-composer'
+import { ChatComposer } from '../../../../src/features/observatory/observatory/components/intelligence-chat/chat-composer'
 import { Message, MessageContent } from '../../../../src/components/agents/message'
 import StreamingText from '../../../../src/features/movi-showcase/StreamingText'
-import { accountHref } from '../../../../src/features/observatory/_V2/utils/observatory-model'
-import { intelligenceItems } from '../../../../src/features/observatory/_V2/data/intelligence-navigation'
+import { accountHref } from '../../../../src/features/observatory/observatory/utils/observatory-model'
+import { intelligenceItems } from '../../../../src/features/observatory/observatory/data/intelligence-navigation'
 import '../../../../src/features/movi-showcase/movi-showcase.css'
 import { ReportsMultiSeriesLineChart } from '../../../../src/features/Reports/components/line/line'
 import { SiteStatCard } from '../../../../src/features/Reports/components/siteStatCard/components/site-stat-card'
-import { ObservatoryCollapsibleTable } from '../../../../src/features/observatory/_V2/components/observatory-collapsible-table'
-import { getSiteFixes } from '../../../../src/features/observatory/_V2/data/site-fixes'
+import { ObservatoryCollapsibleTable } from '../../../../src/features/observatory/observatory/components/observatory-collapsible-table'
+import { getSiteFixes } from '../../../../src/features/observatory/observatory/data/site-fixes'
 import { FileText } from '../../../../src/components/ui/icons'
-import { RankedMetricRow } from '../../../../src/features/observatory/_V2/components/ranked-metric-row'
-import { ProviderLogo } from '../../../../src/features/observatory/_V2/components/ai-visibility/provider-logo'
-import { TableProfileAvatar } from '../../../../src/features/observatory/_V2/components/table-profile-avatar'
+import { RankedMetricRow } from '../../../../src/features/observatory/observatory/components/ranked-metric-row'
+import { ProviderLogo } from '../../../../src/features/observatory/observatory/components/ai-visibility/provider-logo'
+import { TableProfileAvatar } from '../../../../src/features/observatory/observatory/components/table-profile-avatar'
 import { WebsiteSection, SectionIntro } from '../../components'
 import './inside.css'
 
@@ -64,7 +64,7 @@ const crossIntelligenceAnswer = [
 ]
 const crossIntelligenceSources = ['source:gsc', 'source:social'].map(lens => {
   const source = intelligenceItems.find(item => item.lens === lens)
-  return { name: source.label, domain: lens, href: '/observatory-v2' + accountHref('northstar', lens), icon: source.icon, image: '' }
+  return { name: source.label, domain: lens, href: '/observatory' + accountHref('northstar', lens), icon: source.icon, image: '' }
 })
 const showcasePageColumns = [{ id: 'page', header: 'Page', render: page => <span className="flex items-center gap-2 font-medium"><FileText aria-hidden="true" className="size-4" />{page.label}</span> }]
 

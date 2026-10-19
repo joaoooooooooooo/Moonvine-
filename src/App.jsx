@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { ConsoleShell } from "@/layouts/ConsoleShell";
 import { Accounts } from "@/pages/Accounts";
 import { Entities } from "@/pages/Entities";
-import { Observatory } from "@/pages/Observatory";
 import { People } from "@/pages/People";
 import { Reports } from "@/pages/Reports";
 import { Settings } from "@/pages/Settings";
@@ -35,9 +34,6 @@ function App() {
     if (currentPath === "#/brand-tools" || currentPath.startsWith("#/brand-tools/")) {
       return <BrandTools />;
     }
-    if (currentPath === "#/observatory") {
-      return <Observatory />;
-    }
     if (currentPath === "#/accounts") {
       return <Accounts />;
     }
@@ -57,7 +53,7 @@ function App() {
       return <Settings />;
     }
 
-    return <ConsolePagePlaceholder title={activeItem?.title ?? "Observatory"} />;
+    return <ConsolePagePlaceholder title={activeItem?.title ?? "Console"} />;
   }, [activeItem?.title, currentPath]);
 
   return (

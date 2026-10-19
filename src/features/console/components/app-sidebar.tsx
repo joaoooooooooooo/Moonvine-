@@ -70,7 +70,7 @@ export function AppSidebar() {
 						<SidebarMenuItem>
 							<SidebarMenuButton
 								className="h-10 font-medium"
-								render={<a href="#/observatory" />}
+								render={<a href="#/reports" />}
 								tooltip="Back to console"
 							>
 								<ChevronLeftIcon />

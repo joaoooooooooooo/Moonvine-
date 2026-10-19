@@ -4,7 +4,6 @@ import {
   BookOpenIcon,
   FingerprintIcon,
   HelpCircleIcon,
-  LayoutGridIcon,
   NetworkIcon,
   SatelliteDishIcon,
   SendIcon,
@@ -27,21 +26,12 @@ export type SidebarNavGroup = {
 	items: SidebarNavItem[];
 };
 
-const DEFAULT_PATH = "#/observatory";
+const DEFAULT_PATH = "#/reports";
 
 export const navGroups: SidebarNavGroup[] = [
 	{
 		label: "Console",
 		items: [
-			{
-				title: "Observatory",
-				url: "#/observatory",
-				icon: (
-					<LayoutGridIcon
-					/>
-				),
-				badgeVariant: "success",
-			},
 			{
 				title: "Reports",
 				url: "#/reports",

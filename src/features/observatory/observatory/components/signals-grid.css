@@ -1,0 +1,104 @@
+@reference "../../../../styles/index.css";
+
+.v2-signals-grid > [data-slot="frame-card"] {
+  @apply text-card-foreground shadow-xs/5 not-dark:bg-clip-padding not-dark:border-border/64;
+  background-color: var(--v2-signal-surface, var(--card));
+  border-radius: var(--radius-md);
+  border-width: 1px;
+  padding: 0;
+}
+
+.v2-question-cards {
+  --v2-signal-surface: var(--muted);
+}
+
+.v2-signals-grid > [data-slot="frame-card"] > [data-slot="frame-card-content"].p-6 {
+  padding: 1.25rem;
+}
+
+/* Match CardFrame's edge treatment used by ObservatoryTable. */
+.v2-signals-grid > [data-slot="frame-card"]::before {
+  @apply pointer-events-none absolute inset-0 shadow-[0_1px_--theme(--color-black/4%)] dark:shadow-[0_-1px_--theme(--color-white/6%)];
+  content: "";
+  border-radius: calc(var(--radius-md) - 1px);
+  z-index: 1;
+}
+
+.v2-signals-grid > [data-slot="frame-card"] > [data-slot="frame-card-content"],
+.v2-signals-grid > [data-slot="frame-card"] > [data-slot="frame-card-content"]::before {
+  border-radius: var(--radius-md);
+  border-width: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.v2-signals-grid > [data-slot="frame-card"] > [data-slot="frame-card-content"]::before {
+  display: none;
+}
+
+.v2-signals-grid > a[data-slot="frame-card"]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.v2-signals-grid > a[data-slot="frame-card"] {
+  transition: border-color 150ms ease;
+}
+
+.v2-interactive-card .v2-card-tagline :is(h2, h3),
+.v2-interactive-card .v2-card-tagline [data-card-caret] {
+  transition: color 150ms ease;
+}
+
+.v2-interactive-card:is(:hover, :focus-within) .v2-card-tagline :is(h2, h3),
+.v2-interactive-card:is(:hover, :focus-within) .v2-card-tagline [data-card-caret] {
+  color: var(--foreground);
+}
+
+@keyframes v2-caret-nudge {
+  0%, 50%, 100% { transform: translateX(0); }
+  25%, 75% { transform: translateX(2px); }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .v2-interactive-card:hover [data-card-caret] svg {
+    animation: v2-caret-nudge 600ms ease-in-out 1;
+  }
+}
+
+@media (hover: hover) {
+  .v2-signals-grid > a[data-slot="frame-card"]:hover {
+    border-color: var(--input);
+  }
+}
+
+.v2-card-tagline {
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+  @apply not-dark:border-border/64;
+  --tagline-overlay: color-mix(in srgb, var(--muted) 72%, transparent);
+  width: calc(100% + 2.5rem);
+  margin: -1.25rem -1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(var(--tagline-overlay), var(--tagline-overlay)), var(--card);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.v2-directory-card-tagline {
+  background: var(--primary-foreground);
+}
+
+.v2-signals-grid [data-card-caret],
+.v2-signals-grid [data-card-caret] svg {
+  color: var(--muted-foreground);
+}
+
+.dark .v2-home-starters > [data-slot="frame-card"],
+.dark .v2-home-starters > [data-slot="frame-card"]:hover {
+  border-color: transparent;
+}
+
+.dark .v2-home-starters > [data-slot="frame-card"]::before {
+  box-shadow: none;
+}
+

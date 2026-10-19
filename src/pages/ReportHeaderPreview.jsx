@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ReportSignalSummary } from '@/features/observatory/_V2/components/report-signal-summary';
-import { PageHeading } from '@/features/observatory/_V2/components/page-heading';
-import '@/features/observatory/_V2/components/signals-grid.css';
+import { ReportSignalSummary } from '@/features/observatory/observatory/components/report-signal-summary';
+import { PageHeading } from '@/features/observatory/observatory/components/page-heading';
+import '@/features/observatory/observatory/components/signals-grid.css';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTab } from '@/components/ui/tabs';
 

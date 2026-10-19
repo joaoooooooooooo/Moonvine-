@@ -1,11 +1,11 @@
 import { MeetingRecap } from './MeetingRecap'
-import { intelligenceItems } from '../observatory/_V2/data/intelligence-navigation'
-import { accountHref } from '../observatory/_V2/utils/observatory-model'
+import { intelligenceItems } from '../observatory/observatory/data/intelligence-navigation'
+import { accountHref } from '../observatory/observatory/utils/observatory-model'
 import StreamingText from './StreamingText'
 import { useEffect, useRef, useState } from 'react'
 import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from 'motion/react'
-import { ChatMessage } from '../observatory/_V2/components/intelligence-chat/chat-message'
-import { ChatComposer } from '../observatory/_V2/components/intelligence-chat/chat-composer'
+import { ChatMessage } from '../observatory/observatory/components/intelligence-chat/chat-message'
+import { ChatComposer } from '../observatory/observatory/components/intelligence-chat/chat-composer'
 import { Message, MessageContent } from '../../components/agents/message'
 import { ReasoningText } from '../../components/agents/loading-states/reasoning-text'
 import { ScrollArea } from '../../components/ui/scroll-area'
@@ -15,7 +15,7 @@ import './movi-showcase.css'
 const reasoningDuration = 3600
 const sourceDetails = ['source:gsc', 'source:social', 'source:ga4'].map(lens => {
   const tab = intelligenceItems.find(item => item.lens === lens)
-  return { name: tab.label, domain: lens, href: '/observatory-v2' + accountHref('northstar', lens), icon: tab.icon, image: '' }
+  return { name: tab.label, domain: lens, href: '/observatory' + accountHref('northstar', lens), icon: tab.icon, image: '' }
 })
 
 export function MoviShowcase({ playing = true, speed = 1, loop = false, autoAdvance = false, singleTurn = false, onFirstQuestionSent, onPhaseChange }) {
