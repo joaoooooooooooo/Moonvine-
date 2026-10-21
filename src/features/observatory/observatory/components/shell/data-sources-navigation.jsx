@@ -4,7 +4,7 @@ import { dataSourceSections } from '../../data/data-source-navigation';
 import { SidebarTooltipContent } from './sidebar-tooltip-content';
 
 export function DataSourcesNavigation({ route, onNavigate }) {
-  return <SidebarGroup><SidebarMenu className="gap-1">
+  return <SidebarGroup data-tour="sources"><SidebarMenu className="gap-1">
     {dataSourceSections.map((section) => <DataSourceItem key={section.id} section={section} route={route} onNavigate={onNavigate} />)}
   </SidebarMenu></SidebarGroup>;
 }

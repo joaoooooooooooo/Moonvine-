@@ -13,7 +13,7 @@ export function ChatComposer({ value, onChange, onSend, isReplying, embedded = f
   }) : value;
   return (
     <div className={embedded ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-card via-card/95 to-transparent px-5 pb-5 pt-10" : "v2-chat-composer pointer-events-none fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-background via-background/95 to-transparent px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-10 md:bottom-3 md:left-(--sidebar-width) md:right-3 md:px-8"}>
-      <form className={`pointer-events-auto mx-auto flex w-full ${wide ? 'max-w-5xl' : 'max-w-3xl'} items-center gap-2 rounded-full bg-muted p-3`}
+      <form data-tour={embedded ? undefined : "chat"} className={`pointer-events-auto mx-auto flex w-full ${wide ? 'max-w-5xl' : 'max-w-3xl'} items-center gap-2 rounded-full bg-muted p-3`}
         onSubmit={(event) => { event.preventDefault(); onSend(); }}>
         {multiline && readOnly ? <div role="textbox" aria-readonly="true" aria-label="Message Intelligence" className="min-w-0 flex-1 whitespace-pre-wrap break-words px-2 py-1 text-base leading-6">{stableText || <span className="text-muted-foreground">Ask about your company…</span>}</div> : <Input type="text" unstyled readOnly={readOnly} className="min-w-0 flex-1" aria-label="Message Intelligence" placeholder="Ask about your company…" value={value}
           onChange={(event) => onChange(event.target.value)}

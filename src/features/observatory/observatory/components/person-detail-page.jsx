@@ -16,10 +16,10 @@ const emptyActivity = [
   ['Shared link views', '0'],
 ];
 
-export function PersonDetailPage({ personId, workspaces }) {
-  const person = findDirectoryPerson(personId, workspaces);
+export function PersonDetailPage({ personId, workspaces, onSetupAction, peopleModel }) {
+  const person = peopleModel.addedPeople.find((item) => item.id === personId) ?? findDirectoryPerson(personId, workspaces);
   const workspace = workspaces.find((item) => item.id === person?.accountId);
-  const initialProfile = { name: person?.name ?? '', email: person?.email ?? '', title: '', company: workspace?.name ?? '', linkedin: '', website: '' };
+  const initialProfile = peopleModel.personProfiles[personId] ?? { name: person?.name ?? '', email: person?.email ?? '', title: '', company: workspace?.name ?? '', linkedin: '', website: '' };
   const [savedProfile, setSavedProfile] = useState(initialProfile);
   const [profile, setProfile] = useState(initialProfile);
   const changed = Object.keys(profile).some((key) => profile[key] !== savedProfile[key]);
@@ -39,6 +39,8 @@ export function PersonDetailPage({ personId, workspaces }) {
   function saveProfile(event) {
     event.preventDefault();
     setSavedProfile(profile);
+    peopleModel.setPersonProfiles((current) => ({ ...current, [personId]: profile }));
+    onSetupAction?.('profile', person.accountId);
     toastManager.add({ title: 'Profile updated', description: `${profile.name}'s profile was saved.`, type: 'success' });
   }
 

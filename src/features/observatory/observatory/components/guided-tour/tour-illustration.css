@@ -1,0 +1,24 @@
+.tour-art {
+  --art-line: color-mix(in srgb, var(--foreground) 14%, var(--popover));
+  --art-ink: color-mix(in srgb, var(--foreground) 44%, var(--popover));
+  --art-wash: color-mix(in srgb, var(--foreground) 5%, var(--popover));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 8px;
+}
+.tour-art__canvas { width: 100%; height: 100%; }
+.tour-art__surface {
+  fill: var(--popover);
+  stroke: var(--border);
+  stroke-width: 1;
+  filter: drop-shadow(0 2px 2px color-mix(in srgb, var(--color-black) 6%, transparent));
+}
+.tour-art__surface--muted { fill: var(--art-wash); }
+.tour-art__paper { fill: var(--popover); }
+.tour-art__wash { fill: var(--art-wash); }
+.tour-art__line { fill: var(--art-line); }
+.tour-art__ink { fill: var(--art-ink); }
+.tour-art__stroke { fill: none; stroke: var(--art-ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tour-art__divider { fill: none; stroke: var(--border); stroke-width: 1; }
+.tour-art__connector { fill: none; stroke: var(--art-line); stroke-width: 2; stroke-linecap: round; }

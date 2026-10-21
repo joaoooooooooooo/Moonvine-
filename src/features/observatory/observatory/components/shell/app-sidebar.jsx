@@ -1,3 +1,4 @@
+import { useTour } from '../guided-tour/use-tour';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { SidebarControlTooltip } from './sidebar-control-tooltip';
 import { SidebarTooltipContent } from './sidebar-tooltip-content';
@@ -33,13 +34,15 @@ export function AppSidebar({ model }) {
   const { hasUnread, unreadCount } = useReportReadState(model.selectedAccountId);
   const sidebarAccount = model.account ?? model.accounts.find((item) => item.id === model.selectedAccountId) ?? model.accounts[0];
   const siteFixCount = sidebarAccount ? getSiteFixCount(sidebarAccount.domain) : 0;
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, isMobile } = useSidebar();
+  const tour = useTour();
+  const tourMobile = isMobile && Boolean(tour?.step);
   useEffect(() => { const sync = () => { try { setBookmarkWorkspaces(JSON.parse(window.localStorage.getItem('observatory-bookmark-workspaces')) || initialBookmarkWorkspaces); } catch { setBookmarkWorkspaces(initialBookmarkWorkspaces); } }; sync(); window.addEventListener('observatory-bookmarks-change', sync); return () => window.removeEventListener('observatory-bookmarks-change', sync); }, []);
   useEffect(() => { setOpenMobile(false); }, [model.route, setOpenMobile]);
   const active = activeShellItem(model.route);
   const group = model.route.path === '/console/data-sources/access' || model.route.path === '/console/accounts' || model.route.path.startsWith('/console/people') ? 'settings' : model.route.path.startsWith('/console/data-sources') ? 'data-sources' : model.route.lensId === 'intelligence:chat' && model.route.path !== '/console' ? 'chat' : model.account && model.route.path.startsWith('/intelligence/') ? 'intelligence' : 'main';
   return (
-    <TooltipProvider delay={150} timeout={500}><Sidebar id="observatory-sidebar" className="v2-sidebar static min-h-full group-data-[collapsible=offcanvas]:hidden" collapsible="icon" variant="sidebar">
+    <TooltipProvider delay={150} timeout={500}><Sidebar id="observatory-sidebar" className={tourMobile ? `v2-sidebar !fixed inset-y-0 left-0 z-50 !w-72 ${tour.step.id === 'chat' ? 'hidden' : ''}` : "v2-sidebar static min-h-full group-data-[collapsible=offcanvas]:hidden"} collapsible={tourMobile ? "none" : "icon"} variant="sidebar">
       <SidebarHeader className="gap-1 p-2 pt-3">
         <WorkspaceSwitcher model={model} />
         <SearchCommand model={model} />
@@ -59,7 +62,7 @@ export function AppSidebar({ model }) {
           {group === 'data-sources' ? <DataSourcesNavigation route={model.route} onNavigate={() => setOpenMobile(false)} /> : group === 'settings' ? <SettingsNavigation route={model.route} onNavigate={() => setOpenMobile(false)} /> : group === 'chat' ? <ChatNavigation model={model} onNavigate={() => setOpenMobile(false)} /> : group === 'intelligence' ? <IntelligenceNavigation model={model} onNavigate={() => setOpenMobile(false)} /> : <>
           <SidebarGroup>
             <SidebarMenu className="gap-1">{shellGroups.flatMap((group) => group.items).map((item) => <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton data-collapsed-status={item.label === 'Data Sources' ? (connectedSourceCount ? 'info' : 'muted') : item.label === 'Reports' && hasUnread ? 'info' : item.label === 'Intelligence' && siteFixCount > 0 ? 'warning' : undefined} className={`h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5${item.label === 'Reports' ? ' group/report-status' : ''}${item.label === 'Intelligence' ? ' group/site-health' : ''}`} isActive={active.href === item.href} render={<a href={item.label === 'Reports' ? `#/console/reports?account=${encodeURIComponent(model.selectedAccountId)}` : item.label === 'Intelligence' ? accountHref(model.selectedAccountId) : item.href} aria-label={item.label} aria-current={active.href === item.href ? 'page' : undefined} />} tooltip={{ children: <SidebarTooltipContent title={item.label}>
+              <SidebarMenuButton data-tour={item.label === 'Reports' ? 'reports' : item.label === 'Intelligence' ? 'intelligence' : undefined} data-collapsed-status={item.label === 'Data Sources' ? (connectedSourceCount ? 'info' : 'muted') : item.label === 'Reports' && hasUnread ? 'info' : item.label === 'Intelligence' && siteFixCount > 0 ? 'warning' : undefined} className={`h-9.5 px-[calc(--spacing(3)-1px)] sm:h-8.5${item.label === 'Reports' ? ' group/report-status' : ''}${item.label === 'Intelligence' ? ' group/site-health' : ''}`} isActive={active.href === item.href} render={<a href={item.label === 'Reports' ? `#/console/reports?account=${encodeURIComponent(model.selectedAccountId)}` : item.label === 'Intelligence' ? accountHref(model.selectedAccountId) : item.href} aria-label={item.label} aria-current={active.href === item.href ? 'page' : undefined} />} tooltip={{ children: <SidebarTooltipContent title={item.label}>
                 {item.label === 'Data Sources' && <Badge variant="info" size="lg">{connectedSourceCount}/{connectableSources.length} connected</Badge>}
                 {item.label === 'Reports' && hasUnread && <Badge variant="info" size="lg">{unreadCount} unread {unreadCount === 1 ? 'report' : 'reports'}</Badge>}
                 {item.label === 'Intelligence' && siteFixCount > 0 && <Badge variant="warning" size="lg">{siteFixCount} {siteFixCount === 1 ? 'issue' : 'issues'}</Badge>}

@@ -18,6 +18,13 @@ function readRoute() {
 export function useObservatory() {
   const [route, setRoute] = useState(readRoute);
   const [profiles, setProfiles] = useState({});
+  const [setupActions, setSetupActions] = useState({});
+  const [addedPeople, setAddedPeople] = useState([]);
+  const [recipients, setRecipients] = useState({});
+  const [personProfiles, setPersonProfiles] = useState({});
+  function recordSetupAction(step, workspaceId, complete = true) {
+    setSetupActions((current) => ({ ...current, [workspaceId]: { ...current[workspaceId], [step]: complete } }));
+  }
   const [selectedAccountId, setSelectedAccountId] = useState(() => window.localStorage.getItem('observatory-workspace') || 'canopy');
   const { resolvedTheme, setTheme } = useThemePreference();
   const dark = resolvedTheme === 'dark';
@@ -46,17 +53,22 @@ export function useObservatory() {
   const lenses = currentAccount ? buildLenses(currentAccount, route.period) : [];
   const lens = lenses.find((item) => item.sourceId === route.lensId);
   function saveProfile(values) {
-    setProfiles((current) => ({ ...current, [account.id]: values }));
+    setProfiles((current) => ({ ...current, [account.id]: { ...current[account.id], ...values } }));
+    recordSetupAction('account', account.id);
     window.location.hash = '/intelligence/client/' + account.id + '/current';
   }
   function saveWorkspaceProfile(workspaceId, values) {
     setProfiles((current) => ({ ...current, [workspaceId]: { ...current[workspaceId], ...values } }));
+    if (values.firstPartyConnections) recordSetupAction('sources', workspaceId, Object.values(values.firstPartyConnections).some(Boolean));
+    if (values.socialAccounts) recordSetupAction('sources', workspaceId, values.socialAccounts.length > 0);
+    if (values.competitors) recordSetupAction('competitors', workspaceId, values.competitors.length > 0);
+    if (values.prompts) recordSetupAction('prompts', workspaceId, values.prompts.length > 0);
   }
   function selectWorkspace(workspaceId) {
     setSelectedAccountId(workspaceId);
     window.localStorage.setItem('observatory-workspace', workspaceId);
   }
-  return { route, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile, saveWorkspaceProfile, selectWorkspace };
+  return { route, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile, saveWorkspaceProfile, selectWorkspace, recordSetupAction, setupActions, addedPeople, setAddedPeople, recipients, setRecipients, personProfiles, setPersonProfiles };
 }
 
 

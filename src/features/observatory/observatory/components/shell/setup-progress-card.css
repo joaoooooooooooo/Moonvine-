@@ -1,9 +1,17 @@
-.setup-progress {
+.setup-progress, .setup-flow {
   --setup-ease: cubic-bezier(.22, 1, .36, 1);
-  padding: 14px 6px 6px;
-  box-shadow: 0 0 0 .5px var(--border), 0 1px 2px color-mix(in srgb, var(--foreground) 5%, transparent);
-  animation: setup-enter 520ms var(--setup-ease) both;
 }
+
+.setup-progress__summary { padding: 14px 6px 6px; }
+body:has([data-slot="dialog-popup"]:not([data-setup-state])) [data-slot="setup-overlay"][data-base-ui-inert] { visibility: hidden; pointer-events: none; }
+[data-setup-dialog-portal] [data-slot="dialog-backdrop"] { backdrop-filter: none; }
+.setup-flow__dialog { scale: none; will-change: auto; }
+body:has([data-setup-state]) [data-agentation-root] { visibility: hidden; }
+.setup-flow__illustration { height: 200px; }
+.setup-progress__check[data-checked="true"] { background: var(--info-foreground); box-shadow: none; }
+.setup-progress__check[data-checked="true"] svg { stroke-dashoffset: 0; }
+.setup-progress__step[data-completed="true"] .setup-progress__label { color: var(--muted-foreground); }
+.setup-progress__step[data-completed="true"] .setup-progress__label > span { background-size: 100% 1px; }
 
 .setup-progress__progress {
   margin: 10px 10px 8px;
@@ -112,7 +120,7 @@
   to { background-position: -20% 0; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .setup-progress, .setup-progress * {
+  .setup-progress, .setup-progress *, .setup-flow, .setup-flow * {
     animation: none !important;
     transition: none !important;
   }

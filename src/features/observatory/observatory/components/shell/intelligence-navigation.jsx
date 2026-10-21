@@ -12,7 +12,7 @@ export function IntelligenceNavigation({ model, onNavigate }) {
   const { hasUnread, unreadCount } = useReportReadState(model.account.id);
   const siteFixCount = getSiteFixCount(model.account.domain);
   return (
-    <SidebarGroup>
+    <SidebarGroup data-tour="intelligence-navigation">
       <SidebarMenu className="gap-1">
         {intelligenceItems.map(({ label, lens, icon: Icon }) => {
           const active = (model.route.lensId ?? '') === lens;

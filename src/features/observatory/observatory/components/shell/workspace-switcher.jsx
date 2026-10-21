@@ -1,5 +1,6 @@
 import { SidebarControlTooltip } from './sidebar-control-tooltip';
 import { useRef, useState } from 'react';
+import { useTour } from '../guided-tour/use-tour';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -37,6 +38,8 @@ function WorkspaceLabel({ workspace }) {
 }
 
 export function WorkspaceSwitcher({ model }) {
+  const tour = useTour();
+  const touring = Boolean(tour?.step);
   const popupAnchorRef = useRef(null);
   const { setOpenMobile } = useSidebar();
   const [open, setOpen] = useState(false);
@@ -50,8 +53,9 @@ export function WorkspaceSwitcher({ model }) {
     <Select
       items={visible.map((workspace) => ({ label: workspace.name, value: workspace.id }))}
       value={selected?.id ?? null}
-      open={open}
-      onOpenChange={setOpen}
+      modal={!touring}
+      open={touring ? tour.step.id === 'workspace' : open}
+      onOpenChange={(next) => { if (!touring) setOpen(next); }}
       onValueChange={(id) => {
         if (!id) return;
         model.selectWorkspace(id);
@@ -61,7 +65,7 @@ export function WorkspaceSwitcher({ model }) {
       }}
     >
       <div ref={popupAnchorRef} className="w-full min-w-0">
-        <SidebarControlTooltip label={`Switch workspace: ${selected?.name ?? 'Workspace'}`}><SelectTrigger aria-label="Switch workspace" className="h-auto min-w-0 origin-center border-transparent bg-transparent shadow-none before:hidden transition-transform duration-[190ms] ease-out active:duration-0 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground dark:bg-transparent dark:hover:bg-sidebar-accent [&_[data-slot=select-icon]>svg]:me-0">
+        <SidebarControlTooltip label={`Switch workspace: ${selected?.name ?? 'Workspace'}`}><SelectTrigger data-tour="workspace" aria-label="Switch workspace" className="h-auto min-w-0 origin-center border-transparent bg-transparent shadow-none before:hidden transition-transform duration-[190ms] ease-out active:duration-0 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground dark:bg-transparent dark:hover:bg-sidebar-accent [&_[data-slot=select-icon]>svg]:me-0">
           <SelectValue>{(id) => {
             const workspace = model.accounts.find((item) => item.id === id);
             return workspace ? <WorkspaceLabel workspace={workspace} /> : null;
@@ -69,6 +73,9 @@ export function WorkspaceSwitcher({ model }) {
         </SelectTrigger></SidebarControlTooltip>
       </div>
       <SelectPopup
+        data-tour="workspace-menu"
+        finalFocus={touring ? false : undefined}
+        alignItemWithTrigger={touring ? false : undefined}
         anchor={popupAnchorRef}
         footer={model.accounts.length > visibleLimit && (
           <div className="px-1 pb-1">

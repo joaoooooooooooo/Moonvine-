@@ -5,6 +5,7 @@ import { AppSidebar } from './app-sidebar';
 import { AppHeader } from './app-header';
 import { ReportWeekPicker } from '../report-week-picker';
 import '../page-sections.css';
+import { GuidedTour } from '../guided-tour/guided-tour';
 
 // Local adaptation of the prototype Console AppShell; page routes stay inside V2.
 export function AppShell({ model, children }) {
@@ -31,6 +32,7 @@ export function AppShell({ model, children }) {
             </div>
           </ScrollArea>
         </SidebarInset>
+        <GuidedTour model={model} />
       </SidebarProvider>
     </div>
   );

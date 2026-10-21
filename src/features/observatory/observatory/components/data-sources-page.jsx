@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { PromptsDataSourcePage } from './prompts-data-source-page';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AlertDialog, AlertDialogClose, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogPopup, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
@@ -1163,6 +1164,7 @@ function IndexDataSourcePage({ workspace, onSave }) {
 
 export function DataSourcesPage({ sectionId, workspace, onSaveWorkspace }) {
   const current = dataSourceSections.find((section) => section.id === sectionId) ?? dataSourceSections[0];
+  if (current.id === 'prompts') return <PromptsDataSourcePage key={workspace?.id} workspace={workspace} onSave={onSaveWorkspace} />;
   if (current.id === 'organization') return <OrganizationDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;
   if (current.id === 'competitors') return <CompetitorsDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;
   if (current.id === 'social-accounts') return <SocialAccountsDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;

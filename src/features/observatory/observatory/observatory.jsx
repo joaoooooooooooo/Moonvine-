@@ -1,5 +1,5 @@
 import { Agentation } from 'agentation';
-import { createPortal } from 'react-dom';
+import { TourProvider } from './components/guided-tour/tour-context';
 import { SetupProgressCard } from './components/shell/setup-progress-card';
 import { useObservatory } from './hooks/use-observatory';
 import { AppShell } from './components/shell/app-shell';
@@ -30,9 +30,9 @@ export function Observatory() {
   if (route.path.startsWith('/console/bookmarks')) page = <BookmarksPage model={model} workspaceId={bookmarkWorkspaceId} />;
   else if (route.path === '/console' && account && route.threadId) page = <IntelligenceChatPage key={account.id + route.threadId} model={model} />;
   else if (route.path === '/console') page = <ObservatoryHome model={model} />;
-  else if (personId) page = <PersonDetailPage personId={personId} workspaces={model.accounts} />;
+  else if (personId) page = <PersonDetailPage key={personId} personId={personId} workspaces={model.accounts} onSetupAction={model.recordSetupAction} peopleModel={model} />;
   else if (route.path.startsWith('/console/data-sources')) page = <DataSourcesPage sectionId={route.path.split('/')[3]} workspace={selectedWorkspace} onSaveWorkspace={model.saveWorkspaceProfile} />;
-  else if (directory) page = <DirectoryPage key={directory} type={directory} workspaces={model.accounts} />;
+  else if (directory) page = <DirectoryPage key={directory} type={directory} workspaces={model.accounts} onSetupAction={model.recordSetupAction} selectedWorkspaceId={model.selectedAccountId} peopleModel={model} />;
   else if (route.path === '/console/reports') page = <ReportHistory key={account?.id ?? 'all-reports'} account={account} />;
   else if (account && route.lensId === 'account:summary') page = <AccountProfile key={account.id} model={model} />;
   else if (account && route.lensId === 'report:history') page = <ReportHistory key={account.id} account={account} />;
@@ -45,14 +45,14 @@ export function Observatory() {
   else page = <div className="space-y-3"><h1 className="text-xl font-semibold">Page not found</h1><a href="#/console" className="underline">Return to Observatory</a></div>;
 
   return (
-    <ToastProvider bottomOffset="14.75rem">
+    <TourProvider><ToastProvider bottomOffset="14.75rem">
       <div className="min-h-dvh bg-background font-sans text-foreground antialiased" data-observatory-live-recreation>
         <AppShell model={model}>
           {page}
         </AppShell>
-        {createPortal(<div data-slot="setup-overlay" className="fixed right-4 bottom-4 z-40 w-[calc(100%-2rem)] max-w-72 font-sans text-foreground"><SetupProgressCard /></div>, document.body)}
+        <SetupProgressCard key={model.selectedAccountId} model={model} />
         {import.meta.env.DEV && <Agentation />}
       </div>
-    </ToastProvider>
+    </ToastProvider></TourProvider>
   );
 }

@@ -75,22 +75,23 @@ function AddPersonDialog({ onAdd, trigger }) {
   </Dialog>;
 }
 
-export function DirectoryPage({ type, workspaces }) {
+export function DirectoryPage({ type, workspaces, onSetupAction, selectedWorkspaceId, peopleModel }) {
   const [query, setQuery] = useState('');
   const [ascending, setAscending] = useState(true);
   const [pageIndex, setPageIndex] = useState(0);
-  const [recipients, setRecipients] = useState({});
-  const [addedPeople, setAddedPeople] = useState([]);
+  const { recipients, setRecipients, addedPeople, setAddedPeople } = peopleModel;
   const [copiedId, setCopiedId] = useState(null);
   const pageSize = 10;
   const SortIcon = ascending ? ChevronUp : ChevronDown;
   const surface = directorySurfaces.find((item) => item.id === type);
   const baseRows = directoryRows(type, workspaces);
-  const rows = type === 'people' ? [...addedPeople, ...baseRows] : baseRows;
+  const rows = type === 'people' ? [...addedPeople, ...baseRows].map((person) => ({ ...person, ...peopleModel.personProfiles[person.id] })) : baseRows;
   const filtered = rows.filter((row) => `${row.name} ${row.email ?? ''} ${row.domain}`.toLowerCase().includes(query.toLowerCase())).sort((a, b) => a.name.localeCompare(b.name) * (ascending ? 1 : -1));
 
   function addPerson(person) {
-    const workspace = workspaces[0];
+    const workspace = workspaces.find((item) => item.id === selectedWorkspaceId) ?? workspaces[0];
+    onSetupAction?.('access', workspace?.id);
+    if (person.recipient) onSetupAction?.('reports', workspace?.id);
     setAddedPeople((current) => [{ ...person, id: `person-${Date.now()}`, domain: workspace?.name ?? 'Workspace', accountId: workspace?.id, accountImageSrc: workspace?.imageSrc, imageSrc: '' }, ...current]);
     toastManager.add({ description: `${person.name} has been added to this workspace.`, title: 'Person added', type: 'success' });
   }
@@ -156,7 +157,7 @@ export function DirectoryPage({ type, workspaces }) {
               {type !== 'people' && <TableCell className="hidden text-muted-foreground sm:table-cell">{type === 'accounts' ? <Badge variant="info" size="lg">{dataSourceSections.filter((source) => source.connected).length}/{dataSourceSections.filter((source) => typeof source.connected === 'boolean').length} connected</Badge> : <div className="flex items-center gap-3"><TableProfileAvatar src={row.accountImageSrc} /><span>{row.domain}</span></div>}</TableCell>}
               {type === 'people' && <TableCell className="hidden lg:table-cell"><Tag>Account user</Tag></TableCell>}
               {type === 'people' && <TableCell>
-                <Tabs className="gap-0" size="sm" value={recipients[row.id] ?? (row.recipient ? 'yes' : 'no')} onValueChange={(value) => setRecipients((current) => ({ ...current, [row.id]: value }))}>
+                <Tabs className="gap-0" size="sm" value={recipients[row.id] ?? (row.recipient ? 'yes' : 'no')} onValueChange={(value) => { setRecipients((current) => ({ ...current, [row.id]: value })); onSetupAction?.('reports', row.accountId, rows.some((person) => person.accountId === row.accountId && (person.id === row.id ? value === 'yes' : (recipients[person.id] ?? (person.recipient ? 'yes' : 'no')) === 'yes'))); }}>
                   <TabsList><TabsTab value="yes">Yes</TabsTab><TabsTab value="no">No</TabsTab></TabsList>
                 </Tabs>
               </TableCell>}
