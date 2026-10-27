@@ -85,7 +85,7 @@ export function SearchCommand({ model }) {
   }
 
   function select(item) {
-    if (item.href) window.location.hash = item.href.slice(1);
+    if (item.href) window.location.hash = model.route.mapMode ? '/console/map?page=' + encodeURIComponent(item.href.slice(1)) : item.href.slice(1);
     else model.setDark(item.theme);
     setOpen(false);
   }

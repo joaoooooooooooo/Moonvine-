@@ -1,3 +1,4 @@
+import { NavigationMap, keepMapNavigation } from './components/navigation-map';
 import { FreeAccountOverview } from './components/free-account-overview';
 import { UpgradeDialog } from './components/upgrade-dialog';
 import { IntelligencePreview } from './components/intelligence-preview';
@@ -41,7 +42,8 @@ export function Observatory() {
   const gated = freeIntelligence && Boolean(route.lensId);
   const declineUpgrade = () => { window.location.hash = model.previousPage || '/console'; };
   let page;
-  if (gated) page = <IntelligencePreview model={model} />;
+  if (route.mapMode) page = <NavigationMap route={route} />;
+  else if (gated) page = <IntelligencePreview model={model} />;
   else if (freeIntelligence) page = <FreeAccountOverview model={model} />;
   else if (route.path.startsWith('/console/bookmarks')) page = <BookmarksPage key={model.selectedAccountId} model={model} workspaceId={bookmarkWorkspaceId} />;
   else if (route.path === '/console' && account && route.threadId) page = <IntelligenceChatPage key={account.id + route.threadId} model={model} />;
@@ -64,12 +66,12 @@ export function Observatory() {
 
   return (
     <TourProvider><ObservatoryToasts>
-      <div className="min-h-dvh bg-background font-sans text-foreground antialiased" data-observatory-live-recreation>
+      <div className="min-h-dvh bg-background font-sans text-foreground antialiased" data-observatory-live-recreation onClickCapture={route.mapMode ? keepMapNavigation : undefined} onAuxClickCapture={route.mapMode ? keepMapNavigation : undefined}>
         <AppShell model={model}>
           {page}
         </AppShell>
-        {gated && <UpgradeDialog key={route.path + route.lensId} lensId={route.lensId} onDecline={declineUpgrade} />}
-        {!gated && <SetupProgressCard key={model.selectedAccountId} model={model} />}
+        {!route.mapMode && gated && <UpgradeDialog key={route.path + route.lensId} lensId={route.lensId} onDecline={declineUpgrade} />}
+        {!route.mapMode && !gated && <SetupProgressCard key={model.selectedAccountId} model={model} />}
         {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
       </div>
     </ObservatoryToasts></TourProvider>

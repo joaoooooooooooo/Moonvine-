@@ -26,13 +26,13 @@ export function AppShell({ model, children }) {
           <ScrollArea ref={scrollArea} className="relative h-auto min-w-0 flex-1" overscrollContain>
             <div className="p-5 pt-8 md:p-8 md:pt-12">
               <div className={`mx-auto flex w-full ${isChatPage || isHomeChat ? 'max-w-5xl' : isIntelligencePage ? 'max-w-6xl' : 'max-w-7xl'} min-w-0 flex-col gap-4`} data-v2-page-content>
-                {model.account && route.lensId !== 'intelligence:chat' && route.path !== '/console/reports' && <div className="min-w-0 pb-2"><ReportWeekPicker account={model.account} route={route} /></div>}
+                {!route.mapMode && model.account && route.lensId !== 'intelligence:chat' && route.path !== '/console/reports' && <div className="min-w-0 pb-2"><ReportWeekPicker account={model.account} route={route} /></div>}
                 {children}
               </div>
             </div>
           </ScrollArea>
         </SidebarInset>
-        <GuidedTour model={model} />
+        {!route.mapMode && <GuidedTour model={model} />}
       </SidebarProvider>
     </div>
   );

@@ -4,7 +4,13 @@ import { buildLenses } from '../utils/observatory-model';
 import { useThemePreference } from '@/components/navigation/avatar-menu/hooks/use-theme-preference';
 
 function readRoute() {
-  const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
+  const outer = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
+  const mapMode = outer.pathname === '/console/map';
+  return { ...readAppRoute(mapMode ? outer.searchParams.get('page') || '/console' : outer.pathname + outer.search), mapMode };
+}
+
+function readAppRoute(hash) {
+  const url = new URL(hash, window.location.origin);
   const pathname = url.pathname === '/console/data-sources/organization' ? '/console/data-sources/domains' : url.pathname;
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   const chat = path.match(/^\/chat\/([^/]+)\/([^/]+)$/);
@@ -43,7 +49,7 @@ export function useObservatory() {
   function recordSetupAction(step, workspaceId, complete = true) {
     setSetupActions((current) => ({ ...current, [workspaceId]: { ...current[workspaceId], [step]: complete } }));
   }
-  const [selectedAccountId, setSelectedAccountId] = useState(() => window.localStorage.getItem('observatory-workspace') || 'northstar');
+  const [selectedAccountId, setSelectedAccountId] = useState(() => window.localStorage.getItem(readRoute().mapMode ? 'observatory-map-workspace' : 'observatory-workspace') || 'northstar');
   const { resolvedTheme, setTheme } = useThemePreference();
   const dark = resolvedTheme === 'dark';
   const setDark = (nextDark) => setTheme(nextDark ? 'dark' : 'light');
@@ -64,9 +70,9 @@ export function useObservatory() {
   useEffect(() => {
     if (route.accountId && accounts.some((item) => item.id === route.accountId)) {
       setSelectedAccountId(route.accountId);
-      window.localStorage.setItem('observatory-workspace', route.accountId);
+      window.localStorage.setItem(route.mapMode ? 'observatory-map-workspace' : 'observatory-workspace', route.accountId);
     }
-  }, [route.accountId]);
+  }, [route.accountId, route.mapMode]);
 
   const selectedAccount = accounts.find((item) => item.id === selectedAccountId) ?? accounts[0];
   const account = accounts.find((item) => item.id === route.accountId)
@@ -90,7 +96,7 @@ export function useObservatory() {
   function selectWorkspace(workspaceId) {
     recordSetupAction('workspaces', workspaceId);
     setSelectedAccountId(workspaceId);
-    window.localStorage.setItem('observatory-workspace', workspaceId);
+    window.localStorage.setItem(route.mapMode ? 'observatory-map-workspace' : 'observatory-workspace', workspaceId);
   }
   return { route, previousPage, visitedPaidTabs, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile, saveWorkspaceProfile, selectWorkspace, recordSetupAction, setupActions, addedPeople, setAddedPeople, recipients, setRecipients, personProfiles, setPersonProfiles };
 }

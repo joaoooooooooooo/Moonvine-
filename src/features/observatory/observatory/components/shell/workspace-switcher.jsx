@@ -8,8 +8,9 @@ import { useSidebar } from '@/components/ui/sidebar';
 
 const visibleLimit = 4;
 
-function workspaceRoute(workspaceId) {
-  const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
+function workspaceRoute(workspaceId, route) {
+  const outer = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
+  const url = route.mapMode ? new URL(outer.searchParams.get('page') || '/console', window.location.origin) : outer;
   const path = url.pathname;
   if (path === '/console') {
     url.searchParams.delete('chat');
@@ -22,7 +23,8 @@ function workspaceRoute(workspaceId) {
   } else if (path === '/console/reports') {
     url.searchParams.set('account', workspaceId);
   }
-  return url.pathname + url.search;
+  const target = url.pathname + url.search;
+  return route.mapMode ? '/console/map?page=' + encodeURIComponent(target) : target;
 }
 
 function WorkspaceLabel({ workspace }) {
@@ -59,7 +61,7 @@ export function WorkspaceSwitcher({ model }) {
       onValueChange={(id) => {
         if (!id) return;
         model.selectWorkspace(id);
-        window.location.hash = workspaceRoute(id);
+        window.location.hash = workspaceRoute(id, model.route);
         setOpen(false);
         setOpenMobile(false);
       }}
@@ -83,7 +85,7 @@ export function WorkspaceSwitcher({ model }) {
             <Button variant="ghost" className="w-full justify-start" onClick={() => {
               setOpen(false);
               setOpenMobile(false);
-              window.location.hash = '/console/accounts';
+              window.location.hash = model.route.mapMode ? '/console/map?page=' + encodeURIComponent('/console/accounts') : '/console/accounts';
             }}>See All</Button>
           </div>
         </>}
