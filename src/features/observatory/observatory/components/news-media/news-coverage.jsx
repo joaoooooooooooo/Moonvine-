@@ -13,7 +13,7 @@ export function NewsCoverage({ data }) {
   const publisherItems = [{ value: 'all', label: 'All publishers' }, ...data.publishers.map((label) => ({ value: label, label }))];
   const filtered = data.articles.filter((article) => (category === 'all' || article.category === category) && (publisher === 'all' || article.publisher === publisher));
   return <section aria-labelledby="news-coverage" className="space-y-10">
-    <SectionHeading id="news-coverage" title="The stories behind the numbers" description="Explore coverage of your organization, your competitors, and the topics you follow." />
+    <SectionHeading id="news-coverage" title={filtered.length ? 'Your selected sources have new coverage.' : 'No coverage matches this selection.'} description="Explore coverage of your organization, your competitors, and the topics you follow." />
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <ResponsiveChartTabs label="Filter news by category" value={category} onValueChange={setCategory} className="tabular-nums" items={[{ id: 'all', label: 'All', count: data.articles.length }, ...newsCategories.map(item => ({ ...item, count: data.counts[item.id] }))].map(item => ({ value: item.id, label: `${item.label} ${item.count}` }))} />

@@ -1,3 +1,5 @@
+import { seriesHeadline } from '../../data/section-insights';
+import { SectionHeading } from '../section-heading';
 import { useState } from 'react';
 import { ResponsiveChartTabs } from '@/components/ui/responsive-chart-tabs';
 import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
@@ -8,6 +10,7 @@ export function AnalyticsTrends({ metrics, title = 'Traffic over the week' }) {
   const [metricId, setMetricId] = useState(metrics[0].id);
   const active = metrics.find((metric) => metric.id === metricId) ?? metrics[0];
   return <section aria-label={title} className="space-y-10">
+    <SectionHeading title={seriesHeadline(active.data, { up: active.id === 'position' ? 'Search rankings have slipped.' : active.label + ' increased this period.', down: active.id === 'position' ? 'Search rankings have improved.' : active.label + ' fell this period.', steady: active.label + ' held steady.' })} />
     <div className="v2-signals-grid">
       <FrameCard className="w-full" withFill><FrameCardContent className="gap-6 p-6">
         <div className="v2-card-tagline flex flex-wrap items-center justify-between gap-3">

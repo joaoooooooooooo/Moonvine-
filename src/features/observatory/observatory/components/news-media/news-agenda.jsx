@@ -1,4 +1,5 @@
-﻿import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
+import { leaderHeadline } from '../../data/section-insights';
+import { FrameCard, FrameCardContent } from '@/components/ui/frame-card';
 import { Newspaper } from '@/components/ui/icons';
 import { SectionHeading } from '../section-heading';
 import { SourceDistributionCard } from '../source-pages/source-distribution-card';
@@ -7,7 +8,7 @@ import { NewsStoryCard } from './news-story-card';
 export function NewsAgenda({ data }) {
   const dominant = Math.round(data.topics[0].value / data.articles.length * 100);
   return <section className="space-y-10" aria-labelledby="media-agenda">
-    <SectionHeading id="media-agenda" title="The media agenda" description="The themes setting the pace across this collection." />
+    <SectionHeading id="media-agenda" title={leaderHeadline(data.topics, 'leads the captured conversation.') } description="The themes setting the pace across this collection." />
     <div className="v2-signals-grid grid gap-3 grid-cols-[repeat(auto-fit,minmax(min(100%,22rem),1fr))]">
       <SourceDistributionCard title="Conversation mix" rows={data.topics} unit="stories" icon={Newspaper} />
       <FrameCard withFill><FrameCardContent className="h-full gap-6 p-6">

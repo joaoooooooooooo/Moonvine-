@@ -19,6 +19,7 @@ type Props = {
   format?: (value: number) => string;
   comparison?: ReactNode;
   description?: string;
+  showFooter?: boolean;
   month?: string;
   icon?: ReactNode;
   className?: string;
@@ -48,7 +49,7 @@ function CountingNumber({ value, format, reduced }: { value: number; format: (va
   return <span className="compact-breakdown__number tabular-nums" aria-label={format(value)}><span ref={element} aria-hidden="true">{initialText}</span></span>;
 }
 
-export function CompactBreakdown({ title, items, periods = [], period, onPeriodChange, totalLabel = 'Total', emptyLabel = 'No visits in this period.', format = formatCount, comparison, description, month, icon, className }: Props) {
+export function CompactBreakdown({ title, items, periods = [], period, onPeriodChange, totalLabel = 'Total', emptyLabel = 'No visits in this period.', format = formatCount, comparison, description, month, icon, className, showFooter = true }: Props) {
   const titleId = useId();
   const reduced = !!useReducedMotion();
   const [hovered, setHovered] = useState<string | null>(null);
@@ -97,10 +98,10 @@ export function CompactBreakdown({ title, items, periods = [], period, onPeriodC
         </ol>
         {!total && <p className="text-sm/normal text-muted-foreground">{emptyLabel}</p>}
       </div>
-      <div className="compact-breakdown__footer text-sm/normal text-muted-foreground">
+      {showFooter && <div className="compact-breakdown__footer text-sm/normal text-muted-foreground">
         <p className="flex items-center gap-2">Largest: <span className="inline-flex items-center gap-2 font-medium text-foreground">{total > 0 && largest && <BreakdownMarker item={largest} />}{total ? largest?.label : '–'}</span></p>
         {description && <p>{description}</p>}
-      </div>
+      </div>}
     </FrameCardContent>
   </FrameCard>;
 }

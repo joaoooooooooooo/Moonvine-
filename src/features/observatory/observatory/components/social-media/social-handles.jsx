@@ -8,7 +8,7 @@ export function SocialHandles({ handles, account }) {
   const [connectedPlatforms, setConnectedPlatforms] = useState([]);
   return (
     <section aria-labelledby="social-handles" className="space-y-10">
-      <SectionHeading id="social-handles" title="Your social handles" description="Saved social profiles for this account." />
+      <SectionHeading id="social-handles" title={handles.length && handles.every((handle) => handle.handle || connectedPlatforms.includes(handle.name)) ? 'Your social profiles are ready to track.' : 'Some social profiles still need connecting.'} description="Saved social profiles for this account." />
       <ObservatoryTable label="Your social handles">
         <TableHeader><TableRow><TableHead>Platform</TableHead><TableHead>Profile</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
         <TableBody>{handles.map(({ name, imageSrc, handle }) => {

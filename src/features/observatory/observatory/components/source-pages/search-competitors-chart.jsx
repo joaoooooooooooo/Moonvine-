@@ -7,6 +7,7 @@ export function SearchCompetitorsChart({ lens, account, period }) {
   const data = searchCompetitorBreakdown(lens, account, window, period);
   return <CompactBreakdown
     title="Search competitors"
+    showFooter={false}
     icon={<ScanSearch weight="regular" />}
     month={data.month}
     periods={searchCompetitorPeriods}

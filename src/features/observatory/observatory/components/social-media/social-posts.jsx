@@ -11,7 +11,7 @@ export function SocialPosts({ account, posts }) {
   const visible = posts.filter((post) => filter === 'all' || post.ownership === filter);
   return (
     <section aria-labelledby="social-posts" className="space-y-10">
-      <SectionHeading id="social-posts" title={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'} captured this week`} description="Saved posts from your account and the organizations you watch, for the selected report week." />
+      <SectionHeading id="social-posts" title={!posts.length ? 'No social activity was captured.' : !posts.some((post) => post.ownership === 'owned') ? 'Watched accounts are posting while you are quiet.' : posts.filter((post) => post.ownership === 'owned').length > posts.length / 2 ? 'Your posts lead the captured activity.' : 'Watched accounts lead the captured activity.'} description="Saved posts from your account and the organizations you watch, for the selected report week." />
       <div className="space-y-4">
         <div className="flex border-b"><ResponsiveChartTabs label="Filter posts" value={filter} onValueChange={setFilter} items={[{ value: 'all', label: 'All' }, { value: 'owned', label: 'You' }, { value: 'watched', label: 'Watched' }]} /></div>
         {visible.length ? <div className="v2-signals-grid grid items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3">

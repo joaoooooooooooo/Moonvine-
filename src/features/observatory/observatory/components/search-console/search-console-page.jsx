@@ -1,3 +1,4 @@
+import { leaderHeadline } from '../../data/section-insights';
 import { Button } from '@/components/ui/button';
 import { Globe, ChartNoAxesCombined } from '@/components/ui/icons';
 import { PageHeading } from '../page-heading';
@@ -22,10 +23,10 @@ export function SearchConsolePage({ account, lens }) {
     <ReportSignalSummary data={searchSummary(data)} />
     <AnalyticsTrends metrics={data.metrics} title="Search performance over the week" />
     <SectionDivider />
-    <SearchQueries rows={data.queries} />
+    <SearchQueries rows={data.queries} change={lens.delta} />
     <SectionDivider />
     <section className="space-y-10" aria-labelledby="search-audience">
-      <SectionHeading id="search-audience" title="Where search reached people" description="The devices and locations behind your visits from Google Search." />
+      <SectionHeading id="search-audience" title={leaderHeadline(data.devices, 'brings the most search clicks.')} description="The devices and locations behind your visits from Google Search." />
       <div className="v2-signals-grid grid items-stretch gap-3 min-[760px]:grid-cols-2">
         <SourceDistributionCard title="Devices" rows={data.devices} unit="clicks" icon={ChartNoAxesCombined} donut />
         <SourceDistributionCard title="Locations" rows={data.countries} unit="clicks" icon={Globe} />

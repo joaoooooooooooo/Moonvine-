@@ -1,3 +1,4 @@
+import { trendHeadline } from '../../data/section-insights';
 import { SectionHeading } from '../section-heading';
 import { SectionDivider } from '../section-divider';
 
@@ -5,7 +6,7 @@ export function SourceInsights({ lens, presentation }) {
   return (
     <section aria-labelledby={`${lens.id}-insights`} className="space-y-10">
       <SectionDivider />
-      <SectionHeading id={`${lens.id}-insights`} title={presentation.insights} description={presentation.description} />
+      <SectionHeading id={`${lens.id}-insights`} title={trendHeadline(lens.delta, { up: lens.label + ' activity increased.', down: lens.label + ' activity declined.', steady: lens.label + ' activity held steady.' })} description={presentation.description} />
       <ul className="space-y-6">
         {lens.evidence.map((text) => <li key={text} className="max-w-[36ch] text-base leading-6 text-muted-foreground">{text}</li>)}
       </ul>

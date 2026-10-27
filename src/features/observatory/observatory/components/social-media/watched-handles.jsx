@@ -6,7 +6,7 @@ import { TableProfileAvatar } from '../table-profile-avatar';
 export function WatchedHandles({ organizations }) {
   return (
     <section aria-labelledby="watched-handles" className="space-y-10">
-      <SectionHeading id="watched-handles" title="Watched handles" description="Saved social profiles for the organizations you watch." />
+      <SectionHeading id="watched-handles" title={organizations.length ? 'Your watchlist has social profiles to follow.' : 'Your social watchlist is empty.'} description="Saved social profiles for the organizations you watch." />
       <ObservatoryTable label="Watched social handles">
         <TableHeader><TableRow><TableHead>Organization</TableHead><TableHead>Profiles</TableHead></TableRow></TableHeader>
         <TableBody>{organizations.map((organization) => (

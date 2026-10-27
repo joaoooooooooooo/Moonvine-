@@ -1,3 +1,4 @@
+import { trendHeadline } from '../../data/section-insights';
 import { useState } from 'react';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChevronDown, ChevronUp } from '@/components/ui/icons';
@@ -5,13 +6,13 @@ import { ObservatoryTable } from '../observatory-table';
 import { ObservatoryInput } from '../observatory-input';
 import { SectionHeading } from '../section-heading';
 
-export function SearchQueries({ rows }) {
+export function SearchQueries({ rows, change }) {
   const [query, setQuery] = useState('');
   const [descending, setDescending] = useState(true);
   const filtered = rows.filter((row) => row.query.toLowerCase().includes(query.toLowerCase())).sort((a, b) => descending ? b.clicks - a.clicks : a.clicks - b.clicks);
   const SortIcon = descending ? ChevronDown : ChevronUp;
   return <section className="space-y-10" aria-labelledby="search-queries">
-    <SectionHeading id="search-queries" title="What people searched for" description="The queries that put your site in front of people, and the clicks they brought." />
+    <SectionHeading id="search-queries" title={trendHeadline(change, { up: 'Search queries are bringing more clicks.', down: 'Search queries are bringing fewer clicks.', steady: 'Search clicks are holding steady.' })} description="The queries that put your site in front of people, and the clicks they brought." />
     <div className="space-y-4">
       <ObservatoryInput aria-label="Filter search queries" placeholder="Find a query…" value={query} onChange={(event) => setQuery(event.target.value)} className="max-w-sm" />
       <ObservatoryTable label="Search query performance" layout="auto">

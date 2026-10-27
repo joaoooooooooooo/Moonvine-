@@ -49,7 +49,7 @@ export function PagesToReview({ account }) {
       </div>}
       rows={visiblePages}
       toolbar={<div className="space-y-2">
-        <h2 className="max-w-[32rem] font-heading text-3xl font-normal leading-tight tracking-tight text-foreground sm:text-4xl">Pages to review</h2>
+        <h2 className="max-w-[32rem] font-heading text-3xl font-normal leading-tight tracking-tight text-foreground sm:text-4xl">{pages.some((page) => page.issues.some((issue) => issue.severity === 'warning')) ? 'Some pages need your attention.' : 'No page warnings were found.'}</h2>
         <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Review affected pages and the fixes saved for each one.</p>
       </div>}
     />

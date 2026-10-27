@@ -1,3 +1,4 @@
+import { trendHeadline } from '../../data/section-insights';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from '@/components/ui/icons';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +14,7 @@ export function SearchCompetitorsTable({ lens, account }) {
   const SortIcon = descending ? ChevronDown : ChevronUp;
 
   return <section className="space-y-10" aria-labelledby="search-rankings-heading">
-    <SectionHeading id="search-rankings-heading" title="Who shares your search audience" description="Organizations ranked by shared search terms, with tracked competitors distinguished from search overlaps." />
+    <SectionHeading id="search-rankings-heading" title={trendHeadline(lens.delta, { up: 'More search terms overlap with other organizations.', down: 'Fewer search terms overlap with other organizations.', steady: 'Your search overlap is holding steady.' })} description="Organizations ranked by shared search terms, with tracked competitors distinguished from search overlaps." />
     <ObservatoryTable label="Search rankings" layout="auto">
       <TableHeader><TableRow>
         <TableHead>Organization</TableHead>

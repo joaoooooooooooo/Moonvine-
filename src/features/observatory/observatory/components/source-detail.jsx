@@ -27,7 +27,7 @@ export function SourceDetail({ model }) {
       <div className="v2-page-sections">
         <AiVisibilitySummary account={account} lens={lens} period={route.period} />
         <AiVisibilityMethod lens={lens} />
-        <AiVisibilityQuestions account={account} surfaced={Math.round(lens.sampleQuestions * lens.value / 100)} />
+        <AiVisibilityQuestions account={account} visibility={lens.value} />
         <AiVisibilitySources account={account} competitorNames={model.lenses.find(({ id }) => id === 'competitors')?.rows.map(([name]) => name) ?? []} />
         <AiVisibilityNextSteps account={account} />
         <AiVisibilityProcess />

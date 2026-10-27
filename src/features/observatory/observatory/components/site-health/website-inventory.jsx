@@ -67,7 +67,7 @@ export function WebsiteInventory({ account }) {
 
   return <section aria-labelledby="website-inventory-title" className="space-y-3">
     <div className="space-y-2">
-      <h2 id="website-inventory-title" className="max-w-[32rem] font-heading text-3xl font-normal leading-tight tracking-tight text-foreground sm:text-4xl">Website inventory</h2>
+      <h2 id="website-inventory-title" className="max-w-[32rem] font-heading text-3xl font-normal leading-tight tracking-tight text-foreground sm:text-4xl">{pages.some((page) => page.issues.length) ? 'Issues remain across your mapped pages.' : pages.length ? 'Your mapped pages have no recorded issues.' : 'No pages have been mapped yet.'}</h2>
       <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Browse the saved site tree and open any mapped page.</p>
     </div>
     <CardFrame className="w-full overflow-hidden rounded-md before:rounded-[calc(var(--radius-md)-1px)]">
