@@ -13,7 +13,7 @@ export function SourceBreakdown({ lens, presentation, account }) {
           {Icon && <Icon aria-hidden="true" weight="regular" className="size-4 shrink-0" />}
           <h2 className="text-sm/normal font-normal">{presentation.breakdown}</h2>
         </div>
-        <h3 className="max-w-[32rem] font-heading text-xl font-normal leading-tight tracking-tight">Percentages show each item’s share of the listed {presentation.unit}.</h3>
+        <h3 className="max-w-[40rem] font-heading text-xl font-normal leading-tight tracking-tight">Percentages show each item’s share of the listed {presentation.unit}.</h3>
         <ol aria-label={presentation.breakdown} className="flex w-full flex-col gap-2">
           {[...lens.rows].sort((a, b) => b[1] - a[1]).map(([name, value]) => {
             const share = total ? value / total * 100 : 0;

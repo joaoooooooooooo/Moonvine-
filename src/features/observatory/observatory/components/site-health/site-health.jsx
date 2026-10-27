@@ -1,4 +1,3 @@
-import { SectionHeading } from '../section-heading';
 import { SiteStatCard } from './site-stat-card';
 import { Badge } from '@/components/ui/badge';
 import { CircleAlertIcon, CircleCheckIcon } from '@/components/ui/icons';
@@ -62,7 +61,6 @@ export function SiteHealth({ lens, account }) {
         {lens.rows.map(([title, score]) => <SiteStatCard key={title} title={title} icon={siteHealthAreaIcons[title]} score={score} description={scoreDescriptions[title]} change={scoreComparisons[title]?.change} negative={scoreComparisons[title]?.negative} className="h-full max-w-none" />)}
         <SiteStatCard title="AI readiness" icon={siteHealthAreaIcons['AI readiness']} score={aiReadinessScore(account.domain)} description={scoreDescriptions['AI readiness']} change={scoreComparisons['AI readiness'].change} className="h-full max-w-none" />
       </div>
-      <div className="space-y-10 pt-10"><SectionHeading title={siteChecks(account.domain).some((check) => check.status !== 'good') ? 'Some site checks still need attention.' : 'Your site checks are in good shape.'} />
       <ObservatoryCollapsibleTable
         columns={auditColumns}
         getRowId={(check) => check.title}
@@ -70,7 +68,7 @@ export function SiteHealth({ lens, account }) {
         label="Site checks"
         renderDetails={(check) => <p className="w-full max-w-[48ch] text-sm/normal text-muted-foreground [overflow-wrap:anywhere] [text-wrap:pretty] md:w-1/4 md:max-w-none">{check.description}</p>}
         rows={siteChecks(account.domain)}
-      /></div>
+      />
     </section>
   );
 }

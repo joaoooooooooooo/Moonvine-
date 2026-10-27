@@ -24,7 +24,7 @@ export function NewsCoverage({ data }) {
         const rows = filtered.filter((article) => article.category === item.id);
         if (!rows.length) return null;
         return <section key={item.id} aria-labelledby={`news-category-${item.id}`} className="space-y-4">
-          <div className="space-y-2"><h3 id={`news-category-${item.id}`} className="max-w-[32rem] text-xl/normal font-normal">{item.title}</h3><p className="max-w-[36ch] text-base leading-6 text-muted-foreground">{item.description}</p></div>
+          <div className="space-y-2"><h3 id={`news-category-${item.id}`} className="max-w-[40rem] text-xl/normal font-normal">{item.title}</h3><p className="max-w-[36ch] text-base leading-6 text-muted-foreground">{item.description}</p></div>
           <div className={`v2-signals-grid grid items-stretch gap-3 ${rows.length > 1 ? 'grid-cols-[repeat(auto-fit,minmax(min(100%,24rem),1fr))]' : ''}`}>{rows.map((article) => <NewsStoryCard key={article.id} article={article} />)}</div>
         </section>;
       }) : <Empty><EmptyHeader><EmptyTitle>No stories match these filters</EmptyTitle><EmptyDescription>Try another publisher or include all categories.</EmptyDescription></EmptyHeader><Button variant="secondary" onClick={() => { setCategory('all'); setPublisher('all'); }}>Clear filters</Button></Empty>}

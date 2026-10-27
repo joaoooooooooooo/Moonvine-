@@ -11,7 +11,7 @@ export function LatestReports({ account }) {
   return (
     <section aria-label="Latest reports" className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="max-w-[32rem] text-base font-medium">{headline}</h2>
+        <h2 className="max-w-[40rem] text-base font-medium">{headline}</h2>
         <Button render={<a href={accountHref(account.id, 'report:history')} />} variant="link" size="sm">View all reports</Button>
       </div>
       <ReportsTable key={account.id} account={account} label="Latest reports" />

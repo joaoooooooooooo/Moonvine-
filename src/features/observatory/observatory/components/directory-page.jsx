@@ -123,7 +123,7 @@ export function DirectoryPage({ type, workspaces, onSetupAction, selectedWorkspa
 
   return (
     <div className="v2-page-sections">
-      <div className="max-w-lg"><PageHeading title={surface.detail} /></div>
+      <div className="max-w-[40rem]"><PageHeading title={surface.detail} /></div>
       <ObservatoryTable label={surface.label} layout="auto" totalRows={rows.length} pagination={{ total: filtered.length, pageIndex, pageSize, onPageChange: setPageIndex }} toolbar={
         <div className="flex flex-wrap items-center gap-3">
           {type === 'people'

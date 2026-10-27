@@ -66,7 +66,7 @@ export function FixableWebsiteIssues({ account }) {
       renderDetails={(issue) => <IssueExplanation issue={issue} />}
       rows={issues}
       toolbar={<div className="space-y-2">
-        <h2 className="max-w-[32rem] font-heading text-3xl font-normal leading-tight tracking-tight text-foreground sm:text-4xl">{issues.length ? 'Your site has issues worth fixing.' : 'No fixable issues were found.'}</h2>
+        <h2 className="max-w-[40rem] font-heading text-3xl font-normal leading-tight tracking-tight text-foreground sm:text-4xl">{issues.length ? 'Your site has issues worth fixing.' : 'No fixable issues were found.'}</h2>
         <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Saved issue types from the latest website checks.</p>
       </div>}
     />
