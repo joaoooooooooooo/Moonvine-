@@ -17,6 +17,7 @@ export const chatShellItem = { label: 'Chat', href: '#/console', icon: MessageCi
 export const shellItems = [...shellGroups.flatMap((group) => group.items), chatShellItem];
 
 export function activeShellItem(route) {
+  if (route.lensId === 'intelligence:chat' && route.threadId) return chatShellItem;
   if (route.path.startsWith('/console/bookmarks')) return shellItems.find((item) => item.label === 'Bookmarks');
   if (route.path === '/console/your-account' || route.path === '/console/accounts' || route.path.startsWith('/console/people') || route.path === '/console/data-sources/access') return shellItems.find((item) => item.label === 'Settings');
   if (route.path.startsWith('/console/data-sources')) return shellItems.find((item) => item.label === 'Data Sources');
