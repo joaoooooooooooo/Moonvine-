@@ -37,7 +37,7 @@ export function FooterUserMenu() {
           <MenuPopup data-tour="account-menu" finalFocus={touring ? false : undefined} anchor={accountAnchorRef} align="start" side={isMobile ? 'bottom' : 'right'} sideOffset={8} className="min-w-52">
             <MenuGroup>
               <MenuGroupLabel>Account</MenuGroupLabel>
-              <MenuLinkItem href="#/console/accounts" onClick={() => setOpenMobile(false)}>
+              <MenuLinkItem href="#/console/your-account" onClick={() => setOpenMobile(false)}>
                 <UserIcon aria-hidden="true" />Settings
               </MenuLinkItem>
               <MenuItem><CreditCardIcon aria-hidden="true" />Billing</MenuItem>

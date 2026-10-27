@@ -175,7 +175,7 @@ export function SearchCommand({ model }) {
               <div className="p-5">
                 {!generating && !response && <p className="py-12 text-center text-muted-foreground text-sm">Ask about reports, sources, workspaces, or anything in Observatory.</p>}
                 {generating && <div className="flex items-center gap-2 text-muted-foreground text-sm"><Spinner className="size-4" />Generating response...</div>}
-                {response && <div aria-live="polite" className="space-y-4 text-sm leading-6"><p>{response}</p><div className="flex flex-wrap gap-2"><Button size="sm" variant="secondary" render={<a href="#/console/reports" />}>Open reports</Button><Button size="sm" variant="secondary" render={<a href="#/console/data-sources/organization" />}>Manage data sources</Button></div></div>}
+                {response && <div aria-live="polite" className="space-y-4 text-sm leading-6"><p>{response}</p><div className="flex flex-wrap gap-2"><Button size="sm" variant="secondary" render={<a href="#/console/reports" />}>Open reports</Button><Button size="sm" variant="secondary" render={<a href="#/console/data-sources/domains" />}>Manage data sources</Button></div></div>}
               </div>
             </ScrollArea>
           </CommandPanel>

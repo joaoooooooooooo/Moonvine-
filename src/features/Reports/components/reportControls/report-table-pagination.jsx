@@ -16,16 +16,16 @@ export function ReportTablePagination({ table, label = "Table pages" }) {
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-3">
       <p className="text-xs text-muted-foreground" aria-live="polite">
-        Viewing {total === 0 ? "0" : `${start}\u2013${end}`} of {total} results
+        Viewing {total <= pageSize ? total : `${start}\u2013${end}`} of {total} results
       </p>
-    <Pagination className="mx-0 w-auto justify-end" aria-label={label}>
+    {table.getPageCount() > 1 && <Pagination className="mx-0 w-auto justify-end" aria-label={label}>
       <span className="sr-only" aria-live="polite">Page {table.getRowCount() ? table.getState().pagination.pageIndex + 1 : 0} of {table.getPageCount()}</span>
       <PaginationContent>
         {controls.map(({ label: actionLabel, icon: Icon, ...props }) => (
           <PaginationItem key={actionLabel}><Button {...props} aria-label={actionLabel} size="icon-sm" variant="outline"><Icon aria-hidden="true" /></Button></PaginationItem>
         ))}
       </PaginationContent>
-    </Pagination>
+    </Pagination>}
     </div>
   );
 }

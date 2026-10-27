@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { ResponsiveChartTabs } from '@/components/ui/responsive-chart-tabs';
 import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/select';
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
 import { NewsStoryCard } from './news-story-card';
@@ -15,9 +16,7 @@ export function NewsCoverage({ data }) {
     <SectionHeading id="news-coverage" title="The stories behind the numbers" description="Explore coverage of your organization, your competitors, and the topics you follow." />
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1" role="group" aria-label="Filter news by category">
-          {[{ id: 'all', label: 'All', count: data.articles.length }, ...newsCategories.map((item) => ({ ...item, count: data.counts[item.id] }))].map((item) => <Button key={item.id} size="sm" variant={category === item.id ? 'secondary' : 'ghost'} aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}<span className="text-muted-foreground tabular-nums">{item.count}</span></Button>)}
-        </div>
+        <ResponsiveChartTabs label="Filter news by category" value={category} onValueChange={setCategory} className="tabular-nums" items={[{ id: 'all', label: 'All', count: data.articles.length }, ...newsCategories.map(item => ({ ...item, count: data.counts[item.id] }))].map(item => ({ value: item.id, label: `${item.label} ${item.count}` }))} />
         <Select items={publisherItems} value={publisher} onValueChange={setPublisher}><SelectTrigger className="w-auto min-w-40 border-transparent bg-muted shadow-none before:hidden" aria-label="Filter by publisher"><SelectValue /></SelectTrigger><SelectPopup>{publisherItems.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectPopup></Select>
       </div>
       <p role="status" className="text-sm/normal text-muted-foreground">{filtered.length} {filtered.length === 1 ? 'story' : 'stories'} in this view</p>

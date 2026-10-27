@@ -4,7 +4,7 @@ import { reportRecipients } from './report-recipients';
 
 // Local sample reports; no production reports or delivery actions.
 const weeks = reportWeeks.map(({ start }) => `${weekLabel(start)}, ${weekDate(start).getFullYear()}`);
-export const reports = weeks.flatMap((week, index) => accounts.map((account) => ({
+export const reports = weeks.flatMap((week, index) => accounts.filter((account) => account.hasSampleData).map((account) => ({
   id: `${account.id}-week-${index}`,
   accountId: account.id,
   accountName: account.name,

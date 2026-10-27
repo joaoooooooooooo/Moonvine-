@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { ResponsiveChartTabs } from '@/components/ui/responsive-chart-tabs';
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
 import { SocialCard } from '@/features/Reports/components/social-card';
 import { SectionHeading } from '../section-heading';
@@ -13,11 +13,7 @@ export function SocialPosts({ account, posts }) {
     <section aria-labelledby="social-posts" className="space-y-10">
       <SectionHeading id="social-posts" title={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'} captured this week`} description="Saved posts from your account and the organizations you watch, for the selected report week." />
       <div className="space-y-4">
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter posts">
-          {[['all', 'All'], ['owned', 'You'], ['watched', 'Watched']].map(([value, label]) => (
-            <Button key={value} size="sm" variant={filter === value ? 'secondary' : 'ghost'} aria-pressed={filter === value} onClick={() => setFilter(value)}>{label}</Button>
-          ))}
-        </div>
+        <div className="flex border-b"><ResponsiveChartTabs label="Filter posts" value={filter} onValueChange={setFilter} items={[{ value: 'all', label: 'All' }, { value: 'owned', label: 'You' }, { value: 'watched', label: 'Watched' }]} /></div>
         {visible.length ? <div className="v2-signals-grid grid items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((post) => <SocialCard key={post.id} name={post.name} avatarSrc={post.avatarSrc} metaLabel={post.platform}
             title={post.title} description={post.description} thumbnailSrc={post.imageUrl} thumbnailAlt={post.imageAlt} thumbnailClassName="object-cover"

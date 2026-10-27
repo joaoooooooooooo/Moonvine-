@@ -5,10 +5,19 @@ import { useThemePreference } from '@/components/navigation/avatar-menu/hooks/us
 
 function readRoute() {
   const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
-  const path = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') : url.pathname;
+  const pathname = url.pathname === '/console/data-sources/organization' ? '/console/data-sources/domains' : url.pathname;
+  const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   const chat = path.match(/^\/chat\/([^/]+)\/([^/]+)$/);
-  if (path === '/console' && url.searchParams.get('chat')) return { path, accountId: url.searchParams.get('account'), threadId: url.searchParams.get('chat'), lensId: 'intelligence:chat', period: 'current' };
-  if (chat) return { path, accountId: decodeURIComponent(chat[1]), threadId: chat[2] === 'new' ? null : decodeURIComponent(chat[2]), prompt: url.searchParams.get('prompt') || '', autoSend: url.searchParams.get('send') === '1', lensId: 'intelligence:chat', period: 'current' };
+  if (path === '/console' && url.searchParams.get('chat')) return { path, accountId: url.searchParams.get('account'), threadId: url.searchParams.get('chat'), prompt: url.searchParams.get('prompt') || '', autoSend: url.searchParams.get('send') === '1', lensId: 'intelligence:chat', period: 'current' };
+  if (chat) {
+    const prompt = url.searchParams.get('prompt') || '';
+    const threadId = chat[2] === 'new' ? (prompt ? crypto.randomUUID() : null) : decodeURIComponent(chat[2]);
+    const params = new URLSearchParams({ account: decodeURIComponent(chat[1]) });
+    if (threadId) params.set('chat', threadId);
+    if (prompt) { params.set('prompt', prompt); params.set('send', '1'); }
+    window.history.replaceState(null, '', '#/console?' + params);
+    return { path: '/console', accountId: decodeURIComponent(chat[1]), threadId, prompt, autoSend: Boolean(prompt), lensId: threadId ? 'intelligence:chat' : null, period: 'current' };
+  }
   const person = path.match(/^\/console\/people\/([^/]+)$/);
   if (person) return { path, personId: decodeURIComponent(person[1]), lensId: null, period: 'current' };
   const match = path.match(/^\/(?:intelligence|console)\/client\/([^/]+)\/current$/);
@@ -17,21 +26,34 @@ function readRoute() {
 
 export function useObservatory() {
   const [route, setRoute] = useState(readRoute);
+  const [previousPage, setPreviousPage] = useState('/console');
+  const [visitedPaidTabs, setVisitedPaidTabs] = useState({});
+  useEffect(() => {
+    const workspace = accounts.find((item) => item.id === route.accountId);
+    if (workspace?.scenario !== 'free' || !route.path.startsWith('/intelligence/') || !route.lensId) return;
+    setVisitedPaidTabs((current) => current[workspace.id]?.includes(route.lensId) ? current : {
+      ...current, [workspace.id]: [...(current[workspace.id] ?? []), route.lensId],
+    });
+  }, [route.accountId, route.path, route.lensId]);
   const [profiles, setProfiles] = useState({});
-  const [setupActions, setSetupActions] = useState({});
+  const [setupActions, setSetupActions] = useState(() => Object.fromEntries(accounts.map((item) => [item.id, item.hasSampleData ? { workspaces: true, domain: true, account: true, sources: true, reports: true, competitors: true, prompts: true } : {}])));
   const [addedPeople, setAddedPeople] = useState([]);
   const [recipients, setRecipients] = useState({});
   const [personProfiles, setPersonProfiles] = useState({});
   function recordSetupAction(step, workspaceId, complete = true) {
     setSetupActions((current) => ({ ...current, [workspaceId]: { ...current[workspaceId], [step]: complete } }));
   }
-  const [selectedAccountId, setSelectedAccountId] = useState(() => window.localStorage.getItem('observatory-workspace') || 'canopy');
+  const [selectedAccountId, setSelectedAccountId] = useState(() => window.localStorage.getItem('observatory-workspace') || 'northstar');
   const { resolvedTheme, setTheme } = useThemePreference();
   const dark = resolvedTheme === 'dark';
   const setDark = (nextDark) => setTheme(nextDark ? 'dark' : 'light');
 
   useEffect(() => {
-    const handleRoute = () => {
+    const handleRoute = (event) => {
+      const oldHash = new URL(event.oldURL).hash.slice(1) || '/console';
+      // Keep a safe return destination when history crosses another locked preview.
+      const oldUrl = new URL(oldHash, window.location.origin);
+      if (!oldUrl.pathname.startsWith('/intelligence/client/meridian/') || !oldUrl.searchParams.get('lens')) setPreviousPage(oldHash);
       setRoute(readRoute());
       window.scrollTo(0, 0);
     };
@@ -54,21 +76,23 @@ export function useObservatory() {
   const lens = lenses.find((item) => item.sourceId === route.lensId);
   function saveProfile(values) {
     setProfiles((current) => ({ ...current, [account.id]: { ...current[account.id], ...values } }));
-    recordSetupAction('account', account.id);
+    recordSetupAction('domain', account.id);
     window.location.hash = '/intelligence/client/' + account.id + '/current';
   }
   function saveWorkspaceProfile(workspaceId, values) {
     setProfiles((current) => ({ ...current, [workspaceId]: { ...current[workspaceId], ...values } }));
+    if (['domain', 'name', 'imageSrc', 'nicknames', 'description'].some((key) => key in values)) recordSetupAction('domain', workspaceId);
     if (values.firstPartyConnections) recordSetupAction('sources', workspaceId, Object.values(values.firstPartyConnections).some(Boolean));
     if (values.socialAccounts) recordSetupAction('sources', workspaceId, values.socialAccounts.length > 0);
     if (values.competitors) recordSetupAction('competitors', workspaceId, values.competitors.length > 0);
     if (values.prompts) recordSetupAction('prompts', workspaceId, values.prompts.length > 0);
   }
   function selectWorkspace(workspaceId) {
+    recordSetupAction('workspaces', workspaceId);
     setSelectedAccountId(workspaceId);
     window.localStorage.setItem('observatory-workspace', workspaceId);
   }
-  return { route, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile, saveWorkspaceProfile, selectWorkspace, recordSetupAction, setupActions, addedPeople, setAddedPeople, recipients, setRecipients, personProfiles, setPersonProfiles };
+  return { route, previousPage, visitedPaidTabs, account: currentAccount, selectedAccountId, accounts: accounts.map((item) => ({ ...item, ...profiles[item.id] })), lenses, lens, dark, setDark, saveProfile, saveWorkspaceProfile, selectWorkspace, recordSetupAction, setupActions, addedPeople, setAddedPeople, recipients, setRecipients, personProfiles, setPersonProfiles };
 }
 
 

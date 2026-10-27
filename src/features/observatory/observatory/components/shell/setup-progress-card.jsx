@@ -7,14 +7,13 @@ import { ChevronDown } from '@/components/ui/icons';
 import { Dialog, DialogPopup, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Progress, ProgressTrack, ProgressIndicator } from '@/components/ui/progress';
 import { useTour } from '../guided-tour/use-tour';
-import { directoryRows } from '../../data/directory-rows';
 import { TourIllustration } from '../guided-tour/tour-illustration';
 import './setup-progress-card.css';
 
 const steps = [
-  { id: 'account', action: 'Set up account', label: 'Account', heading: 'Set up your account', description: 'Confirm your organization’s name and website so your workspace has the right details.' },
-  { id: 'access', action: 'Add team members', label: 'Access', heading: 'Bring your team into Moonvine', description: 'Add a person to your workspace so you can manage their access and report preferences.' },
-  { id: 'profile', action: 'Edit profile', label: 'Profile', optional: true, heading: 'Complete your profile', description: 'Add the details that help your team recognize you. You can skip this step and come back later.' },
+  { id: 'workspaces', action: 'Manage workspaces', label: 'Workspaces', heading: 'Choose your workspace', description: 'Open Settings to view your workspaces and choose one to work in.' },
+  { id: 'domain', action: 'Manage domains', label: 'Domain', heading: 'Set up your domain', description: 'Confirm the website and details Moonvine watches for your workspace.' },
+  { id: 'account', action: 'Edit your account', label: 'Account', heading: 'Complete your account', description: 'Review your personal profile and account access in Settings.' },
   { id: 'sources', action: 'Connect data sources', label: 'Sources and integrations', heading: 'Connect your data sources', description: 'Connect a website to Google Analytics or Search Console to bring your own data into Moonvine.' },
   { id: 'reports', action: 'Manage report recipients', label: 'Access and reports', heading: 'Choose who receives reports', description: 'Choose a person in your workspace and enable their report recipient setting.' },
   { id: 'competitors', action: 'Add competitors', label: 'Competitors', heading: 'Choose your competitors', description: 'Add the organizations you want to follow and compare with your own.' },
@@ -68,12 +67,10 @@ export function SetupProgressCard({ model }) {
     else { setActive(next); setMode('preview'); }
   }
   function beginStep() {
-    const workspaceId = model.selectedAccountId;
-    const person = directoryRows('people', model.accounts).find((item) => item.accountId === workspaceId);
     const destinations = {
-      account: `/intelligence/client/${encodeURIComponent(workspaceId)}/current?lens=account:summary`,
-      access: '/console/people',
-      profile: person ? `/console/people/${encodeURIComponent(person.id)}` : '/console/people',
+      workspaces: '/console/accounts',
+      domain: '/console/data-sources/domains',
+      account: '/console/your-account',
       sources: '/console/data-sources/first-party-data',
       reports: '/console/people',
       competitors: '/console/data-sources/competitors',
@@ -86,7 +83,7 @@ export function SetupProgressCard({ model }) {
   const checklist = <Checklist completed={completed} skipped={skipped} onSelect={openStep} expanded={expanded} onExpandedChange={setExpanded} />;
   const detail = <>
     <div className="space-y-5 p-4">
-      <TourIllustration step={step.id === 'competitors' ? 'workspace' : step.id === 'prompts' ? 'chat' : step.id} className="setup-flow__illustration" />
+      <TourIllustration step={{ workspaces: 'workspace', domain: 'sources', account: 'profile', competitors: 'workspace', prompts: 'chat' }[step.id] ?? step.id} className="setup-flow__illustration" />
       <div className="flex items-center gap-2">
         <Progress value={completedCount / steps.length * 100} aria-label="Setup steps" aria-valuetext={`${completedCount} of ${steps.length} steps complete`} className="min-w-0 flex-1">
           <ProgressTrack className="h-1 bg-muted">

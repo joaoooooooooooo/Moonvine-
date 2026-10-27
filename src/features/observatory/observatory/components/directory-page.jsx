@@ -6,8 +6,7 @@ import { Tag } from '@/components/ui/tag';
 import { ObservatoryInput as Input } from './observatory-input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { dataSourceSections } from '../data/data-source-navigation';
+import { dataSourceSections, connectedSourceCount } from '../data/data-source-navigation';
 import { Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogPanel, DialogPopup, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -16,7 +15,6 @@ import { Tabs, TabsList, TabsTab } from '@/components/ui/tabs';
 import { toastManager } from '@/components/ui/toast';
 import { directoryRows } from '../data/directory-rows';
 import { directorySurfaces } from '../data/navigation';
-import { accountHref } from '../utils/observatory-model';
 import { PageHeading } from './page-heading';
 import { ObservatoryTable } from './observatory-table';
 
@@ -84,8 +82,8 @@ export function DirectoryPage({ type, workspaces, onSetupAction, selectedWorkspa
   const pageSize = 10;
   const SortIcon = ascending ? ChevronUp : ChevronDown;
   const surface = directorySurfaces.find((item) => item.id === type);
-  const baseRows = directoryRows(type, workspaces);
-  const rows = type === 'people' ? [...addedPeople, ...baseRows].map((person) => ({ ...person, ...peopleModel.personProfiles[person.id] })) : baseRows;
+  const baseRows = directoryRows(type, type === 'accounts' ? workspaces : workspaces.filter((item) => item.id === selectedWorkspaceId));
+  const rows = type === 'people' ? [...addedPeople.filter((person) => person.accountId === selectedWorkspaceId), ...baseRows].map((person) => ({ ...person, ...peopleModel.personProfiles[person.id] })) : baseRows;
   const filtered = rows.filter((row) => `${row.name} ${row.email ?? ''} ${row.domain}`.toLowerCase().includes(query.toLowerCase())).sort((a, b) => a.name.localeCompare(b.name) * (ascending ? 1 : -1));
 
   function addPerson(person) {
@@ -112,10 +110,21 @@ export function DirectoryPage({ type, workspaces, onSetupAction, selectedWorkspa
     window.location.hash = `#/console/people/${encodeURIComponent(row.id)}`;
   }
 
+  function openRow(row) {
+    if (type === 'accounts') {
+      peopleModel.selectWorkspace(row.id);
+      window.location.hash = '#/console';
+    } else if (type === 'people') openPerson(row);
+  }
+
+  const navigable = type === 'people' || type === 'accounts';
+  const connectableSources = dataSourceSections.filter(source => typeof source.connected === 'boolean');
+
+
   return (
     <div className="v2-page-sections">
-      <PageHeading title={surface.detail} />
-      <ObservatoryTable label={surface.label} totalRows={rows.length} pagination={{ total: filtered.length, pageIndex, pageSize, onPageChange: setPageIndex }} toolbar={
+      <div className="max-w-lg"><PageHeading title={surface.detail} /></div>
+      <ObservatoryTable label={surface.label} layout="auto" totalRows={rows.length} pagination={{ total: filtered.length, pageIndex, pageSize, onPageChange: setPageIndex }} toolbar={
         <div className="flex flex-wrap items-center gap-3">
           {type === 'people'
             ? <AddPersonDialog onAdd={addPerson} trigger={<Button type="button"><Plus aria-hidden="true" />Add Person</Button>} />
@@ -128,43 +137,51 @@ export function DirectoryPage({ type, workspaces, onSetupAction, selectedWorkspa
             <TableHead aria-sort={ascending ? 'ascending' : 'descending'}><button type="button" className="flex h-full w-full cursor-pointer select-none items-center justify-start gap-2 rounded-sm text-start focus-visible:outline-2 focus-visible:outline-ring" onClick={() => { setAscending(!ascending); setPageIndex(0); }}>{type === 'accounts' ? 'Workspace' : 'Name'}<SortIcon aria-hidden="true" className="size-4 shrink-0 opacity-80" /></button></TableHead>
             {type === 'people' && <TableHead className="hidden sm:table-cell">Email</TableHead>}
             {type !== 'people' && <TableHead className="hidden sm:table-cell">{type === 'accounts' ? 'Sources Connected' : 'Workspace'}</TableHead>}
-            {type === 'people' && <TableHead className="hidden w-32 lg:table-cell">Tags</TableHead>}
+            {type === 'accounts' && <TableHead>People</TableHead>}
+            {type === 'people' && <TableHead className="hidden lg:table-cell">Tags</TableHead>}
             {type === 'people' && <TableHead>Recipient</TableHead>}
-            {type === 'people' && <TableHead className="w-14"><span className="sr-only">Copy recipient link</span></TableHead>}
+            {type === 'people' && <TableHead>Report link</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
           {filtered.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize).map((row) => (
-            <TableRow key={row.id} className={`h-12 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring${type === 'people' ? ' cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring' : ''}`}
-              tabIndex={type === 'people' ? 0 : undefined} aria-label={type === 'people' ? `Open ${row.name}` : undefined}
-              onClick={(event) => { if (type === 'people' && !event.target.closest('button,[role=tablist]')) openPerson(row); }}
+            <TableRow key={row.id} className={`h-12 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring${navigable ? ' cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring' : ''}`}
+              tabIndex={navigable ? 0 : undefined} aria-label={navigable ? `Open ${row.name}` : undefined}
+              onClick={(event) => { if (navigable && !event.target.closest('button,[role=tablist]')) openRow(row); }}
               onKeyDown={(event) => {
-                if (type === 'people' && event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
+                if (navigable && event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
                   event.preventDefault();
-                  openPerson(row);
+                  openRow(row);
                 }
               }}>
               <TableCell className="whitespace-normal">
                 <div className="flex min-w-0 items-center gap-2.5">
                   <TableProfileAvatar src={row.imageSrc} person={type === 'people'} />
                   <div className="min-w-0 overflow-hidden">
-                    {type === 'accounts' ? <a href={accountHref(row.id)} className="relative z-10 block truncate font-medium leading-5 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-ring">{row.name}</a> : <span className="block truncate leading-5">{row.name}</span>}
+                    <span className={`block truncate leading-5${type === 'accounts' ? ' font-medium' : ''}`}>{row.name}</span>
                     <span className="mt-1 block truncate text-xs leading-5 text-muted-foreground sm:hidden">{row.domain}</span>
                   </div>
                 </div>
               </TableCell>
               {type === 'people' && <TableCell className="hidden truncate text-muted-foreground sm:table-cell">{row.email}</TableCell>}
-              {type !== 'people' && <TableCell className="hidden text-muted-foreground sm:table-cell">{type === 'accounts' ? <Badge variant="info" size="lg">{dataSourceSections.filter((source) => source.connected).length}/{dataSourceSections.filter((source) => typeof source.connected === 'boolean').length} connected</Badge> : <div className="flex items-center gap-3"><TableProfileAvatar src={row.accountImageSrc} /><span>{row.domain}</span></div>}</TableCell>}
+              {type !== 'people' && <TableCell className="hidden text-muted-foreground sm:table-cell">{type === 'accounts' ? <Badge variant="info" size="lg" className="gap-1.5">
+                <svg viewBox="0 0 16 16" className="size-3.5 text-info-foreground opacity-100" role="progressbar" aria-label="Sources connected" aria-valuemin={0} aria-valuemax={connectableSources.length} aria-valuenow={connectedSourceCount(row)} aria-valuetext={`${connectedSourceCount(row)} of ${connectableSources.length} sources connected`}>
+                  <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-20" />
+                  <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" pathLength="100" strokeDasharray={`${connectableSources.length ? connectedSourceCount(row) / connectableSources.length * 100 : 0} 100`} transform="rotate(-90 8 8)" />
+                </svg>
+                <span>{connectedSourceCount(row)}/{connectableSources.length} connected</span>
+              </Badge> : <div className="flex items-center gap-3"><TableProfileAvatar src={row.accountImageSrc} /><span>{row.domain}</span></div>}</TableCell>}
+              {type === 'accounts' && <TableCell>{(row.people ?? 0) + addedPeople.filter(person => person.accountId === row.id).length}</TableCell>}
               {type === 'people' && <TableCell className="hidden lg:table-cell"><Tag>Account user</Tag></TableCell>}
               {type === 'people' && <TableCell>
                 <Tabs className="gap-0" size="sm" value={recipients[row.id] ?? (row.recipient ? 'yes' : 'no')} onValueChange={(value) => { setRecipients((current) => ({ ...current, [row.id]: value })); onSetupAction?.('reports', row.accountId, rows.some((person) => person.accountId === row.accountId && (person.id === row.id ? value === 'yes' : (recipients[person.id] ?? (person.recipient ? 'yes' : 'no')) === 'yes'))); }}>
                   <TabsList><TabsTab value="yes">Yes</TabsTab><TabsTab value="no">No</TabsTab></TabsList>
                 </Tabs>
               </TableCell>}
-              {type === 'people' && <TableCell>{(recipients[row.id] ?? (row.recipient ? 'yes' : 'no')) === 'yes' ? <TooltipProvider><Tooltip><TooltipTrigger render={<Button type="button" aria-label={copiedId === row.id ? 'Recipient link copied' : `Copy recipient link for ${row.name}`} size="icon" variant="ghost" onClick={() => copyRecipientLink(row)} />}>{copiedId === row.id ? <CheckIcon aria-hidden="true" /> : <CopyIcon aria-hidden="true" />}</TooltipTrigger><TooltipPopup>Copy Report Link</TooltipPopup></Tooltip></TooltipProvider> : null}</TableCell>}
+              {type === 'people' && <TableCell>{(recipients[row.id] ?? (row.recipient ? 'yes' : 'no')) === 'yes' ? <Button type="button" aria-label={copiedId === row.id ? `Report link copied for ${row.name}` : `Copy Report Link for ${row.name}`} size="sm" variant="secondary" onClick={() => copyRecipientLink(row)}>{copiedId === row.id ? <CheckIcon aria-hidden="true" /> : <CopyIcon aria-hidden="true" />}{copiedId === row.id ? 'Copied' : 'Copy Report Link'}</Button> : <span className="text-muted-foreground">-</span>}</TableCell>}
             </TableRow>
           ))}
-          {!filtered.length && <TableRow><TableCell colSpan={type === 'accounts' ? 2 : type === 'people' ? 5 : 2}>
+          {!filtered.length && <TableRow><TableCell colSpan={type === 'accounts' ? 3 : type === 'people' ? 5 : 2}>
             <Empty><EmptyHeader><EmptyTitle className="text-base font-medium">No matching {surface.label.toLowerCase()}.</EmptyTitle></EmptyHeader><EmptyContent><Button variant="secondary" size="sm" onClick={() => setQuery('')}>Clear search</Button></EmptyContent></Empty>
           </TableCell></TableRow>}
         </TableBody>

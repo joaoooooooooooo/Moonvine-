@@ -1,35 +1,35 @@
 // Synthetic, deterministic fixtures. Never read production credentials or services.
-export const accounts = [{
-  id: "northstar",
-  imageSrc: "/entity-profiles/northstar.svg",
-  name: "Northstar Studio",
-  domain: "northstar.example",
-  initials: "NS",
-  people: 8,
-  entities: 12,
-  multiplier: 1,
-  description: "Independent strategy and design studio."
-}, {
-  id: "canopy",
-  imageSrc: "/entity-profiles/canopy.svg",
-  name: "Canopy Living",
-  domain: "canopy.example",
-  initials: "CL",
-  people: 5,
-  entities: 9,
-  multiplier: 0.68,
-  description: "Thoughtful products for everyday living."
-}, {
-  id: "meridian",
-  imageSrc: "/entity-profiles/meridian.svg",
-  name: "Meridian Group",
-  domain: "meridian.example",
-  initials: "MG",
-  people: 12,
-  entities: 18,
-  multiplier: 1.4,
-  description: "Advisory services for growing businesses."
-}];
+const emptySetup = {
+  domain: '', imageSrc: '', description: '', people: 0, entities: 0, multiplier: 1,
+  nicknames: [], socialAccounts: [], newsKeywords: [], competitors: [], prompts: [],
+  firstPartyConnections: { analytics: null, searchConsole: null },
+  stockTicker: '', officialCompanySource: '', moonvineIndexEnabled: false,
+  hasSampleData: false,
+};
+
+// Keep stable IDs so existing bookmarks and deep links still resolve.
+export const accounts = [
+  { ...emptySetup, id: 'northstar', name: 'New Account', imageSrc: '/entity-profiles/northstar.svg', initials: 'NA', scenario: 'new' },
+  {
+    ...emptySetup, id: 'canopy', name: 'Set Up Account', imageSrc: '/entity-profiles/canopy.svg', initials: 'SA', scenario: 'configured',
+    domain: 'setup.example', description: 'A configured workspace for exploring sources, people, and reports.',
+    people: 5, entities: 9, multiplier: 0.68, hasSampleData: true,
+    nicknames: ['Set Up Account'],
+    socialAccounts: ['https://www.linkedin.com/company/setup-account', 'https://www.instagram.com/setup-account'],
+    newsKeywords: ['Set Up Account', 'design', 'technology'],
+    competitors: [
+      { id: 'curio-digital', name: 'Curio Digital', domain: 'curiodigital.io' },
+      { id: 'hlabs', name: 'HLabs', domain: 'hlabs.co.uk' },
+      { id: 'superside', name: 'Superside', domain: 'superside.com' },
+    ],
+    prompts: ['Which companies lead in design and technology?', 'How does Set Up Account compare with its competitors?'],
+    firstPartyConnections: {
+      analytics: { id: 'workspace', name: 'Set Up Account', domain: 'setup.example' },
+      searchConsole: { id: 'workspace', name: 'Set Up Account', domain: 'setup.example' },
+    },
+  },
+  { ...emptySetup, id: 'meridian', name: 'Free Account', imageSrc: '/entity-profiles/meridian.svg', initials: 'FA', scenario: 'free' },
+];
 
 export const periods = [{
   value: "current",

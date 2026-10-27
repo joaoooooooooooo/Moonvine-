@@ -1,0 +1,13 @@
+/* Reuse the website hero border effect without changing its shared styling. */
+@media (prefers-reduced-motion: reduce) {
+  .upgrade-plan-glow > .mv-border-glow-edge,
+  .upgrade-plan-glow > .mv-border-glow-halo { animation: none; }
+}
+
+[data-upgrade-portal] [data-slot="dialog-backdrop"] { backdrop-filter: none; }
+
+.upgrade-art { height: auto; aspect-ratio: 280 / 180; width: 100%; margin-bottom: 8px; padding: 0; }
+
+[data-upgrade-portal] [data-slot="dialog-viewport"] { grid-template-rows: minmax(0, 1fr); align-items: center; }
+[data-upgrade-portal] .upgrade-dialog { grid-row-start: 1; overflow-y: auto; }
+.upgrade-plan-glow > .mv-border-glow-halo::before { box-shadow: inset 0 0 0 1px #f5c56bf2, inset 0 0 8px #f5c56b59, 0 0 3px #f5c56ba6, 0 0 8px #f5c56b73, 0 0 18px #b7883752; }

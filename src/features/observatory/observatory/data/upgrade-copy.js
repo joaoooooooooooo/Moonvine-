@@ -1,0 +1,17 @@
+export const upgradeCopy = {
+  '': ['See the bigger picture', 'Bring your signals into one view.'],
+  'insight:ai-visibility': ['See how AI sees your brand', 'Track mentions across AI answers.'],
+  'insight:investor': ['Stay ahead of market signals', 'Follow the moves shaping your market.'],
+  'source:ga4': ['Turn visits into insight', 'See what brings people back.'],
+  'source:ga4-2': ['Turn visits into insight', 'See what brings people back.'],
+  'source:gsc': ['Find your next search opportunity', 'Discover what drives search traffic.'],
+  'source:social': ['Know what resonates', 'See which posts spark engagement.'],
+  'source:news': ['Follow your brand in the news', 'Keep up with coverage that matters.'],
+  'source:news-media': ['Stay close to the conversation', 'Follow stories around your brand.'],
+  'source:site': ['Make every page work harder', 'Find fixes that improve your site.'],
+  'source:semrush': ['Know who shares your audience', 'Discover your search competitors.'],
+  'report:history': ['Make sense of every week', 'Get your signals in one clear report.'],
+  'account:summary': ['Bring your brand into focus', 'Keep your business insights together.'],
+  'account:connections': ['Connect the bigger picture', 'Bring your sources into one view.'],
+  'intelligence:chat': ['Put your intelligence to work', 'Explore your signals with AI.'],
+};

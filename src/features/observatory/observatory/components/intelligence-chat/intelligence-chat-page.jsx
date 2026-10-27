@@ -4,7 +4,7 @@ import { ChatSuggestions } from './chat-suggestions';
 import { PageHeading } from '../page-heading';
 import { ChatMessage } from './chat-message';
 import { ChatComposer } from './chat-composer';
-import { chatHref, saveChatThread, updateChatThread, useChatThreads } from '../../hooks/use-chat-threads';
+import { consoleChatHref, saveChatThread, updateChatThread, useChatThreads } from '../../hooks/use-chat-threads';
 import { ChatReasoning } from './chat-reasoning';
 import { chatReply } from '../../data/intelligence-chat';
 import '../signals-grid.css';
@@ -15,14 +15,30 @@ export function IntelligenceChatPage({ model }) {
   const [draft, setDraft] = useState(() => model.route.prompt || '');
   const [isReplying, setIsReplying] = useState(false);
   const replyTimer = useRef(null);
+  const [pendingReply, setPendingReply] = useState(null);
   const autoSent = useRef(false);
   const end = useRef(null);
-  useEffect(() => () => window.clearTimeout(replyTimer.current), []);
+  useEffect(() => {
+    if (!pendingReply) return;
+    const { prompt, nextMessages, turn, context } = pendingReply;
+    replyTimer.current = window.setTimeout(() => {
+      const completed = [...nextMessages, { id: crypto.randomUUID(), from: 'assistant', ...chatReply(prompt, context, turn) }];
+      setMessages(completed);
+      const id = context.route.threadId || crypto.randomUUID();
+      saveChatThread(id, context.account.id, completed);
+      if (!context.route.threadId) window.location.hash = consoleChatHref(context.account.id, id);
+      setIsReplying(false);
+      setPendingReply(null);
+      replyTimer.current = null;
+    }, 3600);
+    return () => { window.clearTimeout(replyTimer.current); replyTimer.current = null; };
+  }, [pendingReply]);
   useEffect(() => { if (model.route.threadId) updateChatThread(model.route.threadId, { unread: false }); }, [model.route.threadId]);
   useEffect(() => { if (messages.length) end.current?.scrollIntoView({ block: 'nearest' }); }, [messages.length]);
   useEffect(() => {
     if (!autoSent.current && model.route.autoSend && model.route.prompt) {
       autoSent.current = true;
+      window.history.replaceState(null, '', consoleChatHref(model.account.id, model.route.threadId));
       send(model.route.prompt);
     }
   }, [model.route.autoSend, model.route.prompt]);
@@ -31,19 +47,11 @@ export function IntelligenceChatPage({ model }) {
     const prompt = text.trim();
     if (!prompt || replyTimer.current !== null) return;
     const nextMessages = [...messages, { id: crypto.randomUUID(), from: 'user', text: prompt }];
+    if (model.route.threadId) saveChatThread(model.route.threadId, model.account.id, nextMessages);
     setMessages(nextMessages);
     setDraft('');
     setIsReplying(true);
-    // A short local delay previews the loading animation; no API request is made.
-    replyTimer.current = window.setTimeout(() => {
-      const completed = [...nextMessages, { id: crypto.randomUUID(), from: 'assistant', ...chatReply(prompt, model, messages.filter((message) => message.from === 'user').length) }];
-      setMessages(completed);
-      const id = model.route.threadId || crypto.randomUUID();
-      saveChatThread(id, model.account.id, completed);
-      if (!model.route.threadId) window.location.hash = chatHref(model.account.id, id);
-      setIsReplying(false);
-      replyTimer.current = null;
-    }, 3600);
+    setPendingReply({ prompt, nextMessages, turn: messages.filter((message) => message.from === 'user').length, context: model });
   }
   return (
     <div className="mx-auto flex min-h-[calc(100svh-10rem)] w-full max-w-5xl flex-col items-center gap-10 pb-28" data-chat-started={messages.length > 0 || isReplying}>

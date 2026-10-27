@@ -3,10 +3,10 @@ import { useRef, useState } from 'react';
 import { useTour } from '../guided-tour/use-tour';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue, SelectSeparator } from '@/components/ui/select';
 import { useSidebar } from '@/components/ui/sidebar';
 
-const visibleLimit = 5;
+const visibleLimit = 4;
 
 function workspaceRoute(workspaceId) {
   const url = new URL(window.location.hash.slice(1) || '/console', window.location.origin);
@@ -44,10 +44,10 @@ export function WorkspaceSwitcher({ model }) {
   const { setOpenMobile } = useSidebar();
   const [open, setOpen] = useState(false);
   const selected = model.accounts.find((item) => item.id === model.selectedAccountId) ?? model.accounts[0];
-  const firstFive = model.accounts.slice(0, visibleLimit);
-  const visible = selected && !firstFive.some((item) => item.id === selected.id)
-    ? [...firstFive.slice(0, visibleLimit - 1), selected]
-    : firstFive;
+  const firstWorkspaces = model.accounts.slice(0, visibleLimit);
+  const visible = selected && !firstWorkspaces.some((item) => item.id === selected.id)
+    ? [...firstWorkspaces.slice(0, visibleLimit - 1), selected]
+    : firstWorkspaces;
 
   return (
     <Select
@@ -77,15 +77,16 @@ export function WorkspaceSwitcher({ model }) {
         finalFocus={touring ? false : undefined}
         alignItemWithTrigger={touring ? false : undefined}
         anchor={popupAnchorRef}
-        footer={model.accounts.length > visibleLimit && (
+        footer={<>
+          <SelectSeparator />
           <div className="px-1 pb-1">
             <Button variant="ghost" className="w-full justify-start" onClick={() => {
               setOpen(false);
               setOpenMobile(false);
               window.location.hash = '/console/accounts';
-            }}>See all workspaces</Button>
+            }}>See All</Button>
           </div>
-        )}
+        </>}
       >
         {visible.map((workspace) => (
           <SelectItem key={workspace.id} value={workspace.id} className="py-1.5">

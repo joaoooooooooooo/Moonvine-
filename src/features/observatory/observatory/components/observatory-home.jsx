@@ -3,7 +3,7 @@ import { FeatureIcon } from '@/components/ui/feature-icon';
 import { FrameCard } from '@/components/ui/frame-card';
 import { Button } from '@/components/ui/button';
 import { ChartNoAxesCombined, Eye, FileText, SquarePen, Sparkles, Table2, Users } from '@/components/ui/icons';
-import { chatHref } from '../hooks/use-chat-threads';
+import { startChatHref } from '../hooks/use-chat-threads';
 import './signals-grid.css';
 import { ChatComposer } from './intelligence-chat/chat-composer';
 
@@ -50,7 +50,7 @@ export function ObservatoryHome({ model }) {
   function startChat() {
     const prompt = draft.trim();
     if (!prompt) return;
-    window.location.hash = `${chatHref(model.selectedAccountId)}?prompt=${encodeURIComponent(prompt)}&send=1`;
+    window.location.hash = startChatHref(model.selectedAccountId, prompt);
   }
   return (
     <main className="flex flex-col gap-12 pb-28">
@@ -63,7 +63,7 @@ export function ObservatoryHome({ model }) {
           {starters.map(({ label, detail, prompt, icon, variant }) => (
             <FrameCard
               key={label}
-              render={<a href={`${chatHref(model.selectedAccountId)}?prompt=${encodeURIComponent(prompt)}`} />}
+              render={<a href={startChatHref(model.selectedAccountId, prompt)} />}
               withFill
               className="min-h-[179px] min-w-0 cursor-pointer overflow-hidden rounded-md text-left shadow-sm/5 transition-colors hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
@@ -79,7 +79,7 @@ export function ObservatoryHome({ model }) {
         </nav>
         <nav aria-label="Quick actions" className="flex flex-wrap gap-2">
           {quickActions.map(({ label, prompt, icon: Icon }) => (
-            <Button key={label} variant="secondary" size="lg" render={<a href={`${chatHref(model.selectedAccountId)}?prompt=${encodeURIComponent(prompt)}`} />}>
+            <Button key={label} variant="secondary" size="lg" render={<a href={startChatHref(model.selectedAccountId, prompt)} />}>
               <Icon aria-hidden="true" weight="fill" />
               {label}
             </Button>

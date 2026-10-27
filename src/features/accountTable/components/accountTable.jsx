@@ -189,7 +189,7 @@ export function AccountTable() {
     useAccountSignalFilter(data);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
   const [sorting, setSorting] = useState([
     {
@@ -329,7 +329,7 @@ export function AccountTable() {
                 Viewing range
               </Label>
               <p className="text-muted-foreground text-sm">Viewing</p>
-              <Select
+              {table.getPageCount() > 1 ? <Select
                 onValueChange={(value) => table.setPageIndex(Number(value))}
                 value={table.getState().pagination.pageIndex.toString()}
               >
@@ -352,13 +352,13 @@ export function AccountTable() {
                     );
                   })}
                 </SelectContent>
-              </Select>
+              </Select> : <span className="text-sm font-medium tabular-nums">{table.getRowCount()}</span>}
               <p className="text-muted-foreground text-sm">
                 of <span className="text-foreground">{table.getRowCount()}</span> results
               </p>
             </div>
 
-            <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+            {table.getPageCount() > 1 && <Pagination className="mx-0 w-auto justify-start sm:justify-end">
               <PaginationContent>
                 <PaginationItem>
                   <Button
@@ -405,7 +405,7 @@ export function AccountTable() {
                   </Button>
                 </PaginationItem>
               </PaginationContent>
-            </Pagination>
+            </Pagination>}
           </div>
         </CardFrameFooter>
       </CardFrame>

@@ -37,7 +37,7 @@ export function SourceDetail({ model }) {
   return (
     <div className="v2-page-sections">
       <div className="space-y-2">
-        <PageHeading title={lens.description} />
+        <div className="max-w-[32rem]"><PageHeading title={lens.description} /></div>
         {lens.id !== 'website' && <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">{lens.summary}</p>}
         {lens.id === 'analytics' && <Button className="mt-2" variant="secondary" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Analytics</Button>}
         {lens.id === 'search' && <Button className="mt-2" variant="secondary" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Search Console</Button>}
@@ -52,7 +52,7 @@ export function SourceDetail({ model }) {
           <SectionDivider />
           <WebsiteInventory key={`inventory-${account.id}-${route.period}`} account={account} />
         </div>
-      ) : <SourceOverview lens={lens} account={account} />}
+      ) : <SourceOverview lens={lens} account={account} period={route.period} />}
     </div>
   );
 }

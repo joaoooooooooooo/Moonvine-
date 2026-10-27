@@ -25,7 +25,7 @@ const NAME_MAX_LENGTH = 80;
 const DESCRIPTION_MAX_LENGTH = 144;
 
 const dataSourceSections = [
-  { id: 'organization', label: 'Organization' },
+  { id: 'domains', label: 'Domains' },
   { id: 'competitors', label: 'Competitors' },
   { id: 'social-accounts', label: 'Social accounts' },
   { id: 'news-keywords', label: 'News keywords' },
@@ -156,7 +156,7 @@ function TriggerLabel({ children, required = false }) {
   </FieldLabel>;
 }
 
-function OrganizationDataSourcePage({ workspace, onSave }) {
+function DomainsDataSourcePage({ workspace, onSave }) {
   const photoInputId = useId();
   const photoInputRef = useRef(null);
   const domainInputRef = useRef(null);
@@ -202,7 +202,7 @@ function OrganizationDataSourcePage({ workspace, onSave }) {
     onSave?.(workspace?.id, next);
     // Domain changes have their own notification with an Undo action.
     const field = Object.keys(updates).find((key) => key !== 'domain');
-    const labels = { name: 'Organization name', imageSrc: 'Profile picture', nicknames: 'Nicknames', description: 'Description' };
+    const labels = { name: 'Display name', imageSrc: 'Domain icon', nicknames: 'Nicknames', description: 'Description' };
     if (field) toastManager.add({ title: `${labels[field] ?? 'Organization'} updated`, type: 'success' });
   }
 
@@ -278,24 +278,24 @@ function OrganizationDataSourcePage({ workspace, onSave }) {
   }
 
   return <div className="v2-page-sections">
-    <PageHeading title="Manage your organization details." />
+    <PageHeading title="Domains" />
     <PanelFrame className="w-full max-w-7xl">
       <PanelFrameHeader>
         <Building2 aria-hidden="true" className="size-4 shrink-0" />
-        <PanelFrameTitle render={<h2 />}>Watched Organization Details</PanelFrameTitle>
+        <PanelFrameTitle render={<h2 />}>Domain details</PanelFrameTitle>
       </PanelFrameHeader>
       <PanelFrameContent>
-        <EditDialog title="Profile picture" description="PNG, JPG, or WebP." open={openDialog === 'photo'}
+        <EditDialog title="Domain icon" description="PNG, JPG, or WebP." open={openDialog === 'photo'}
           onOpenChange={(open) => setDialog('photo', open)} dirty={draftImageSrc !== imageSrc}
           onSave={() => saveProfile({ imageSrc: draftImageSrc })}
           trigger={<Field className="cursor-pointer gap-3 p-5 outline-none transition-colors hover:bg-accent/50 focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring" name="organization-photo-preview" role="button" tabIndex={0}>
-            <TriggerLabel>Profile picture</TriggerLabel>
+            <TriggerLabel>Domain icon</TriggerLabel>
             <div className="flex items-center gap-4">
               <Avatar className="size-9 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10">
                 <AvatarImage src={imageSrc} alt="" />
                 <AvatarFallback>{workspace?.initials ?? name.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span className="inline-flex h-9 items-center rounded-lg bg-secondary px-[calc(--spacing(3)-1px)] font-medium text-secondary-foreground text-sm sm:h-8">Change picture</span>
+              <span className="inline-flex h-9 items-center rounded-lg bg-secondary px-[calc(--spacing(3)-1px)] font-medium text-secondary-foreground text-sm sm:h-8">Change icon</span>
             </div>
           </Field>}>
           <div className="flex items-center gap-4">
@@ -310,18 +310,18 @@ function OrganizationDataSourcePage({ workspace, onSave }) {
 
         <Separator />
 
-        <EditDialog title="Organization name" description="The name used across reports and your workspace." open={openDialog === 'name'}
+        <EditDialog title="Display name" description="The name used across reports and your workspace." open={openDialog === 'name'}
           onOpenChange={(open) => setDialog('name', open)} dirty={draftName.trim() !== name}
           onSave={() => saveProfile({ name: draftName.trim() })}
           trigger={<Field className="cursor-pointer gap-3 p-5 outline-none transition-colors hover:bg-accent/50 focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring" name="organization-name-preview" role="button" tabIndex={0}>
-            <TriggerLabel required>Organization name</TriggerLabel>
+            <TriggerLabel required>Display name</TriggerLabel>
             <InputGroup variant="muted" className="pointer-events-none">
-              <InputGroupInput readOnly size="lg" aria-label="Organization name" value={name} />
+              <InputGroupInput readOnly size="lg" aria-label="Display name" value={name} />
             </InputGroup>
           </Field>}>
           <Field name="organization-name">
             <InputGroup variant="muted">
-              <InputGroupInput required maxLength={NAME_MAX_LENGTH} size="lg" aria-label="Organization name" name="organization-name" autoComplete="organization" value={draftName} onChange={(event) => setDraftName(event.target.value)} />
+              <InputGroupInput required maxLength={NAME_MAX_LENGTH} size="lg" aria-label="Display name" name="organization-name" autoComplete="organization" value={draftName} onChange={(event) => setDraftName(event.target.value)} />
             </InputGroup>
             <FieldDescription><span className="tabular-nums">{NAME_MAX_LENGTH - draftName.length}</span> characters left</FieldDescription>
           </Field>
@@ -329,7 +329,7 @@ function OrganizationDataSourcePage({ workspace, onSave }) {
 
         <Separator />
 
-        <EditDialog title="Watched domain" description="The primary website Moonvine watches for this organization." open={openDialog === 'domain'}
+        <EditDialog title="Watched domain" description="The website Moonvine watches for this workspace." open={openDialog === 'domain'}
           onOpenChange={(open) => { if (!domainChecking) setDialog('domain', open); }} dirty={normalizeDomain(draftDomain.trim()) !== domain}
           busy={domainChecking}
           valid={isValidDomain(normalizeDomain(draftDomain.trim()))}
@@ -397,16 +397,16 @@ function OrganizationDataSourcePage({ workspace, onSave }) {
 
         <Separator />
 
-        <EditDialog title="Organization description" description="Describe what your organization does." open={openDialog === 'description'}
+        <EditDialog title="Domain description" description="Describe the business or content at this domain." open={openDialog === 'description'}
           onOpenChange={(open) => setDialog('description', open)} dirty={draftDescription !== description}
           onSave={() => saveProfile({ description: draftDescription })}
           trigger={<Field className="cursor-pointer gap-3 p-5 outline-none transition-colors hover:bg-accent/50 focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring" name="organization-description-preview" role="button" tabIndex={0}>
-            <TriggerLabel>Organization description</TriggerLabel>
-            <Textarea readOnly size="lg" aria-label="Organization description" value={description} placeholder="Describe your organization" className="pointer-events-none border-transparent bg-muted shadow-none before:hidden dark:bg-muted" />
+            <TriggerLabel>Domain description</TriggerLabel>
+            <Textarea readOnly size="lg" aria-label="Domain description" value={description} placeholder="Describe this domain" className="pointer-events-none border-transparent bg-muted shadow-none before:hidden dark:bg-muted" />
           </Field>}>
           <Field name="organization-description">
-            <Textarea size="lg" aria-label="Organization description" name="organization-description" maxLength={DESCRIPTION_MAX_LENGTH}
-              placeholder="Describe your organization" value={draftDescription} onChange={(event) => setDraftDescription(event.target.value)}
+            <Textarea size="lg" aria-label="Domain description" name="organization-description" maxLength={DESCRIPTION_MAX_LENGTH}
+              placeholder="Describe this domain" value={draftDescription} onChange={(event) => setDraftDescription(event.target.value)}
               className="border-transparent bg-muted shadow-none before:hidden dark:bg-muted" />
             <FieldDescription><span className="tabular-nums">{DESCRIPTION_MAX_LENGTH - draftDescription.length}</span> characters left</FieldDescription>
           </Field>
@@ -1165,7 +1165,7 @@ function IndexDataSourcePage({ workspace, onSave }) {
 export function DataSourcesPage({ sectionId, workspace, onSaveWorkspace }) {
   const current = dataSourceSections.find((section) => section.id === sectionId) ?? dataSourceSections[0];
   if (current.id === 'prompts') return <PromptsDataSourcePage key={workspace?.id} workspace={workspace} onSave={onSaveWorkspace} />;
-  if (current.id === 'organization') return <OrganizationDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;
+  if (current.id === 'domains') return <DomainsDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;
   if (current.id === 'competitors') return <CompetitorsDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;
   if (current.id === 'social-accounts') return <SocialAccountsDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;
   if (current.id === 'news-keywords') return <NewsKeywordsDataSourcePage workspace={workspace} onSave={onSaveWorkspace} />;

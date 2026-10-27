@@ -1,5 +1,9 @@
+import { FreeAccountOverview } from './components/free-account-overview';
+import { UpgradeDialog } from './components/upgrade-dialog';
+import { IntelligencePreview } from './components/intelligence-preview';
 import { Agentation } from 'agentation';
 import { TourProvider } from './components/guided-tour/tour-context';
+import { useTour } from './components/guided-tour/use-tour';
 import { SetupProgressCard } from './components/shell/setup-progress-card';
 import { useObservatory } from './hooks/use-observatory';
 import { AppShell } from './components/shell/app-shell';
@@ -13,10 +17,17 @@ import { IntelligenceEmptyPage } from './components/intelligence-empty-page';
 import { IntelligenceChatPage } from './components/intelligence-chat/intelligence-chat-page';
 import { DataSourcesPage } from './components/data-sources-page';
 import { PersonDetailPage } from './components/person-detail-page';
+import { YourAccountPage } from './components/your-account-page';
 import { ToastProvider } from '@/components/ui/toast';
 import { NewsMediaPage } from './components/news-media/news-media-page';
 import { AnalyticsV2Page } from './components/analytics-v2/analytics-v2-page';
 import { BookmarksPage } from './components/bookmarks-page';
+
+function ObservatoryToasts({ children }) {
+  const tour = useTour();
+  const gettingStartedVisible = tour?.index === null;
+  return <ToastProvider position={gettingStartedVisible ? 'bottom-left' : 'bottom-right'}>{children}</ToastProvider>;
+}
 
 export function Observatory() {
   const model = useObservatory();
@@ -26,14 +37,21 @@ export function Observatory() {
   const personId = route.personId ?? (personPathMatch ? decodeURIComponent(personPathMatch[1]) : null);
   const bookmarkWorkspaceId = route.path.match(/^\/console\/bookmarks\/([^/]+)$/)?.[1] ?? null;
   const directory = ['accounts', 'people', 'entities'].find((id) => route.path === '/console/' + id);
+  const freeIntelligence = account?.scenario === 'free' && route.path.startsWith('/intelligence/');
+  const gated = freeIntelligence && Boolean(route.lensId);
+  const declineUpgrade = () => { window.location.hash = model.previousPage || '/console'; };
   let page;
-  if (route.path.startsWith('/console/bookmarks')) page = <BookmarksPage model={model} workspaceId={bookmarkWorkspaceId} />;
+  if (gated) page = <IntelligencePreview model={model} />;
+  else if (freeIntelligence) page = <FreeAccountOverview model={model} />;
+  else if (route.path.startsWith('/console/bookmarks')) page = <BookmarksPage key={model.selectedAccountId} model={model} workspaceId={bookmarkWorkspaceId} />;
   else if (route.path === '/console' && account && route.threadId) page = <IntelligenceChatPage key={account.id + route.threadId} model={model} />;
   else if (route.path === '/console') page = <ObservatoryHome model={model} />;
+  else if (route.path === '/console/your-account') page = <YourAccountPage model={model} workspace={selectedWorkspace} />;
   else if (personId) page = <PersonDetailPage key={personId} personId={personId} workspaces={model.accounts} onSetupAction={model.recordSetupAction} peopleModel={model} />;
   else if (route.path.startsWith('/console/data-sources')) page = <DataSourcesPage sectionId={route.path.split('/')[3]} workspace={selectedWorkspace} onSaveWorkspace={model.saveWorkspaceProfile} />;
-  else if (directory) page = <DirectoryPage key={directory} type={directory} workspaces={model.accounts} onSetupAction={model.recordSetupAction} selectedWorkspaceId={model.selectedAccountId} peopleModel={model} />;
+  else if (directory) page = <DirectoryPage key={directory + model.selectedAccountId} type={directory} workspaces={model.accounts} onSetupAction={model.recordSetupAction} selectedWorkspaceId={model.selectedAccountId} peopleModel={model} />;
   else if (route.path === '/console/reports') page = <ReportHistory key={account?.id ?? 'all-reports'} account={account} />;
+  else if (account && !account.hasSampleData && route.path.startsWith('/intelligence/') && route.lensId !== 'report:history' && route.lensId !== 'account:summary' && route.lensId !== 'intelligence:chat') page = <IntelligenceEmptyPage setup />;
   else if (account && route.lensId === 'account:summary') page = <AccountProfile key={account.id} model={model} />;
   else if (account && route.lensId === 'report:history') page = <ReportHistory key={account.id} account={account} />;
   else if (account && route.lensId === 'intelligence:chat') page = <IntelligenceChatPage key={account.id + (route.threadId || 'new')} model={model} />;
@@ -45,14 +63,15 @@ export function Observatory() {
   else page = <div className="space-y-3"><h1 className="text-xl font-semibold">Page not found</h1><a href="#/console" className="underline">Return to Observatory</a></div>;
 
   return (
-    <TourProvider><ToastProvider bottomOffset="14.75rem">
+    <TourProvider><ObservatoryToasts>
       <div className="min-h-dvh bg-background font-sans text-foreground antialiased" data-observatory-live-recreation>
         <AppShell model={model}>
           {page}
         </AppShell>
-        <SetupProgressCard key={model.selectedAccountId} model={model} />
-        {import.meta.env.DEV && <Agentation />}
+        {gated && <UpgradeDialog key={route.path + route.lensId} lensId={route.lensId} onDecline={declineUpgrade} />}
+        {!gated && <SetupProgressCard key={model.selectedAccountId} model={model} />}
+        {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
       </div>
-    </ToastProvider></TourProvider>
+    </ObservatoryToasts></TourProvider>
   );
 }

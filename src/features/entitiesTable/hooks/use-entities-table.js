@@ -3,7 +3,7 @@ import { useState } from "react";
 export function useEntitiesTable() {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
   const [sorting, setSorting] = useState([
     {

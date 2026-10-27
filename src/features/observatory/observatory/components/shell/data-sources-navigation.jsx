@@ -1,11 +1,11 @@
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Plug, PlugConnected } from '@/components/ui/icons';
-import { dataSourceSections } from '../../data/data-source-navigation';
+import { workspaceSourceSections } from '../../data/data-source-navigation';
 import { SidebarTooltipContent } from './sidebar-tooltip-content';
 
-export function DataSourcesNavigation({ route, onNavigate }) {
+export function DataSourcesNavigation({ route, onNavigate, workspace }) {
   return <SidebarGroup data-tour="sources"><SidebarMenu className="gap-1">
-    {dataSourceSections.map((section) => <DataSourceItem key={section.id} section={section} route={route} onNavigate={onNavigate} />)}
+    {workspaceSourceSections(workspace).map((section) => <DataSourceItem key={section.id} section={section} route={route} onNavigate={onNavigate} />)}
   </SidebarMenu></SidebarGroup>;
 }
 

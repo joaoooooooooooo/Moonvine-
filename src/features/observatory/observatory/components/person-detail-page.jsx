@@ -16,8 +16,8 @@ const emptyActivity = [
   ['Shared link views', '0'],
 ];
 
-export function PersonDetailPage({ personId, workspaces, onSetupAction, peopleModel }) {
-  const person = peopleModel.addedPeople.find((item) => item.id === personId) ?? findDirectoryPerson(personId, workspaces);
+export function PersonDetailPage({ personId, workspaces, onSetupAction, peopleModel, accountPerson, pageTitle }) {
+  const person = accountPerson ?? peopleModel.addedPeople.find((item) => item.id === personId) ?? findDirectoryPerson(personId, workspaces);
   const workspace = workspaces.find((item) => item.id === person?.accountId);
   const initialProfile = peopleModel.personProfiles[personId] ?? { name: person?.name ?? '', email: person?.email ?? '', title: '', company: workspace?.name ?? '', linkedin: '', website: '' };
   const [savedProfile, setSavedProfile] = useState(initialProfile);
@@ -40,7 +40,7 @@ export function PersonDetailPage({ personId, workspaces, onSetupAction, peopleMo
     event.preventDefault();
     setSavedProfile(profile);
     peopleModel.setPersonProfiles((current) => ({ ...current, [personId]: profile }));
-    onSetupAction?.('profile', person.accountId);
+    onSetupAction?.(accountPerson ? 'account' : 'profile', person.accountId);
     toastManager.add({ title: 'Profile updated', description: `${profile.name}'s profile was saved.`, type: 'success' });
   }
 
@@ -49,17 +49,17 @@ export function PersonDetailPage({ personId, workspaces, onSetupAction, peopleMo
       <div className="flex min-w-0 items-start gap-3">
         <Avatar className="size-12 outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10">
           <AvatarImage alt="" src={person.imageSrc} />
-          <AvatarFallback>{person.name.split(' ').map((part) => part[0]).join('').slice(0, 2)}</AvatarFallback>
+          <AvatarFallback>{savedProfile.name.split(' ').map((part) => part[0]).join('').slice(0, 2)}</AvatarFallback>
         </Avatar>
         <div className="min-w-0">
-          <h1 className="truncate font-heading text-2xl font-medium tracking-tight">{person.name}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{person.email}</p>
+          <h1 className="max-w-lg truncate font-heading text-2xl font-medium tracking-tight">{pageTitle ?? savedProfile.name}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{savedProfile.email || savedProfile.name}</p>
           <p className="mt-1 text-sm text-muted-foreground">{workspace?.name}</p>
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
         <Button type="button" variant="outline" onClick={copyAccessLink}><CopyIcon aria-hidden="true" />Copy access link</Button>
-        <Button type="button" variant="secondary" onClick={() => toastManager.add({ title: 'Access email sent', description: `An access email was sent to ${person.email}.`, type: 'success' })}><SendIcon aria-hidden="true" />Send access email</Button>
+        <Button type="button" variant="secondary" disabled={!savedProfile.email} onClick={() => toastManager.add({ title: 'Access email sent', description: `An access email was sent to ${savedProfile.email}.`, type: 'success' })}><SendIcon aria-hidden="true" />Send access email</Button>
       </div>
     </div>
 
@@ -85,7 +85,7 @@ export function PersonDetailPage({ personId, workspaces, onSetupAction, peopleMo
           <TableBody>
             <TableRow className="h-14">
               <TableCell className="w-1/3 font-medium"><span className="flex items-center gap-2"><ShieldCheckIcon aria-hidden="true" className="size-4 text-muted-foreground" />Sign-in</span></TableCell>
-              <TableCell className="text-muted-foreground">{person.name} can sign in to Moonvine.</TableCell>
+              <TableCell className="text-muted-foreground">{savedProfile.name} can sign in to Moonvine.</TableCell>
             </TableRow>
             <TableRow className="h-14">
               <TableCell className="w-1/3 font-medium"><span className="flex items-center gap-2"><UserPenIcon aria-hidden="true" className="size-4 text-muted-foreground" />Account permissions</span></TableCell>

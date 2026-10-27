@@ -9,7 +9,7 @@ export function LatestReports({ account }) {
         <h2 className="text-base font-medium">Latest reports</h2>
         <Button render={<a href={accountHref(account.id, 'report:history')} />} variant="link" size="sm">View all reports</Button>
       </div>
-      <ReportsTable key={account.id} account={account} pageSize={3} label="Latest reports" />
+      <ReportsTable key={account.id} account={account} label="Latest reports" />
     </section>
   );
 }

@@ -1,8 +1,9 @@
-import { Building2, ShieldCheckIcon, Users } from '@/components/ui/icons';
+import { Building2, ShieldCheckIcon, Users, UserPenIcon } from '@/components/ui/icons';
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
 const items = [
-  { label: 'Workspace', href: '#/console/accounts', icon: Building2 },
+  { label: 'Your Account', href: '#/console/your-account', icon: UserPenIcon },
+  { label: 'Workspaces', href: '#/console/accounts', icon: Building2 },
   { label: 'People', href: '#/console/people', icon: Users },
   { label: 'Access', href: '#/console/data-sources/access', icon: ShieldCheckIcon },
 ];

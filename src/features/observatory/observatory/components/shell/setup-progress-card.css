@@ -6,7 +6,7 @@
 body:has([data-slot="dialog-popup"]:not([data-setup-state])) [data-slot="setup-overlay"][data-base-ui-inert] { visibility: hidden; pointer-events: none; }
 [data-setup-dialog-portal] [data-slot="dialog-backdrop"] { backdrop-filter: none; }
 .setup-flow__dialog { scale: none; will-change: auto; }
-body:has([data-setup-state]) [data-agentation-root] { visibility: hidden; }
+body:has([data-slot="dialog-popup"][data-setup-state]) [data-agentation-root] { visibility: hidden; }
 .setup-flow__illustration { height: 200px; }
 .setup-progress__check[data-checked="true"] { background: var(--info-foreground); box-shadow: none; }
 .setup-progress__check[data-checked="true"] svg { stroke-dashoffset: 0; }
@@ -125,3 +125,5 @@ body:has([data-setup-state]) [data-agentation-root] { visibility: hidden; }
     transition: none !important;
   }
 }
+
+body:has(.v2-chat-composer) [data-slot="setup-overlay"] { bottom: 7rem; }

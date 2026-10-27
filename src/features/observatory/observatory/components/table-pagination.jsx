@@ -10,20 +10,20 @@ export function TablePagination({ total, pageIndex = 0, pageSize = 10, onPageCha
   return (
     <FrameFooter className="p-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2 whitespace-nowrap">
+        <div className="flex items-center gap-2 whitespace-nowrap tabular-nums">
           <p className="text-sm text-muted-foreground">Viewing</p>
-          <Select items={ranges} value={pageCount ? pageIndex : null} onValueChange={(value) => { if (value !== null) onPageChange?.(value); }} disabled={!pageCount}>
+          {pageCount > 1 ? <Select items={ranges} value={pageCount ? pageIndex : null} onValueChange={(value) => { if (value !== null) onPageChange?.(value); }} disabled={!pageCount}>
             <SelectTrigger aria-label="Select result range" className="w-fit min-w-0" size="sm"><SelectValue placeholder="0" /></SelectTrigger>
             <SelectPopup>{ranges.map((range) => <SelectItem key={range.value} value={range.value}>{range.label}</SelectItem>)}</SelectPopup>
-          </Select>
+          </Select> : <span className="text-sm font-medium">{total}</span>}
           <p className="text-sm text-muted-foreground">of <strong className="font-medium text-foreground">{total}</strong> results</p>
         </div>
-        <Pagination className="mx-0 w-auto justify-end">
+        {pageCount > 1 && <Pagination className="mx-0 w-auto justify-end">
           <PaginationContent>
             <PaginationItem><PaginationPrevious className="sm:*:[svg]:hidden" render={<Button disabled={pageIndex === 0} onClick={() => onPageChange?.(pageIndex - 1)} size="sm" variant="secondary" />} /></PaginationItem>
             <PaginationItem><PaginationNext className="sm:*:[svg]:hidden" render={<Button disabled={pageIndex >= pageCount - 1} onClick={() => onPageChange?.(pageIndex + 1)} size="sm" variant="secondary" />} /></PaginationItem>
           </PaginationContent>
-        </Pagination>
+        </Pagination>}
         <span className="sr-only" aria-live="polite">Page {pageCount ? pageIndex + 1 : 0} of {pageCount}</span>
       </div>
     </FrameFooter>

@@ -4,7 +4,7 @@ import { LiveBreadcrumbs } from '../live-breadcrumbs';
 import { activeShellItem } from './navigation';
 import { intelligenceItems } from '../../data/intelligence-navigation';
 import { findDirectoryPerson } from '../../data/directory-rows';
-import { dataSourceSections } from '../../data/data-source-navigation';
+import { workspaceSourceSections } from '../../data/data-source-navigation';
 import { Brain, Building2, LayoutGrid, MessageCircle, Plug, PlugConnected, SatelliteDish, Settings, Users, BookmarkIcon, FolderIcon } from '@/components/ui/icons';
 import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -15,7 +15,7 @@ export function AppHeader({ model }) {
   const isHomeChat = model.route.path === '/console' && !isChatPage;
   const item = activeShellItem(model.route);
   const dataSourceLabels = {
-    organization: 'Organization',
+    domains: 'Domains',
     competitors: 'Competitors',
     'social-accounts': 'Social accounts',
     'news-keywords': 'News keywords',
@@ -34,16 +34,16 @@ export function AppHeader({ model }) {
   const personPathMatch = isPerson ? model.route.path.match(/^\/console\/people\/([^/]+)$/) : null;
   const personId = model.route.personId ?? (personPathMatch ? decodeURIComponent(personPathMatch[1]) : null);
   const person = personId ? findDirectoryPerson(personId, model.accounts) : null;
-  const title = isBookmarks ? (bookmarkNames[bookmarkId] ?? 'Bookmarks') : isDataSource ? dataSourceLabels[dataSourceSection] ?? 'Organization' : isPerson ? person?.name ?? 'Person' : model.route.path === '/console/people' ? 'People' : model.route.path === '/console/accounts' ? 'Workspaces' : model.route.path === '/console/reports' ? item.label : model.account ? detail ?? intelligenceItems.find((entry) => entry.lens === (model.route.lensId ?? ''))?.label : item.label;
+  const title = model.route.path === '/console/your-account' ? 'Your Account' : isBookmarks ? (bookmarkNames[bookmarkId] ?? 'Bookmarks') : isDataSource ? dataSourceLabels[dataSourceSection] ?? 'Domains' : isPerson ? person?.name ?? 'Person' : model.route.path === '/console/people' ? 'People' : model.route.path === '/console/accounts' ? 'Workspaces' : model.route.path === '/console/reports' ? item.label : model.account ? detail ?? intelligenceItems.find((entry) => entry.lens === (model.route.lensId ?? ''))?.label : item.label;
   const root = model.route.lensId === 'intelligence:chat' && model.route.path !== '/console'
     ? { label: 'Chat', icon: MessageCircle }
     : model.route.path.startsWith('/intelligence/')
       ? { label: 'Intelligence', icon: Brain }
       : { label: 'Observatory', icon: LayoutGrid };
-  const source = dataSourceSections.find((section) => section.id === dataSourceSection);
+  const source = workspaceSourceSections(model.accounts.find((item) => item.id === model.selectedAccountId)).find((section) => section.id === dataSourceSection);
   const parent = isBookmarks && bookmarkId
     ? { label: 'Bookmarks', icon: BookmarkIcon }
-    : dataSourceSection === 'access'
+    : dataSourceSection === 'access' || ['/console/your-account', '/console/accounts', '/console/people'].includes(model.route.path)
     ? { label: 'Settings', icon: Settings }
     : isDataSource
       ? { label: 'Data Sources', icon: Plug }

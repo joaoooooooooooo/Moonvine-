@@ -217,7 +217,7 @@ export function EntitiesTable() {
                 Viewing range
               </Label>
               <p className="text-muted-foreground text-sm">Viewing</p>
-              <Select
+              {table.getPageCount() > 1 ? <Select
                 onValueChange={(value) => table.setPageIndex(Number(value))}
                 value={table.getState().pagination.pageIndex.toString()}
               >
@@ -240,13 +240,13 @@ export function EntitiesTable() {
                     );
                   })}
                 </SelectContent>
-              </Select>
+              </Select> : <span className="text-sm font-medium tabular-nums">{table.getRowCount()}</span>}
               <p className="text-muted-foreground text-sm">
                 of <span className="text-foreground">{table.getRowCount()}</span> results
               </p>
             </div>
 
-            <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+            {table.getPageCount() > 1 && <Pagination className="mx-0 w-auto justify-start sm:justify-end">
               <PaginationContent>
                 <PaginationItem>
                   <Button
@@ -293,7 +293,7 @@ export function EntitiesTable() {
                   </Button>
                 </PaginationItem>
               </PaginationContent>
-            </Pagination>
+            </Pagination>}
           </div>
         </CardFrameFooter>
       </CardFrame>
