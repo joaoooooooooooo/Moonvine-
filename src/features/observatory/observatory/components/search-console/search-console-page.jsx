@@ -1,3 +1,4 @@
+import { pageInsight } from '../../data/page-insights';
 import { leaderHeadline } from '../../data/section-insights';
 import { Button } from '@/components/ui/button';
 import { Globe, ChartNoAxesCombined } from '@/components/ui/icons';
@@ -16,7 +17,7 @@ export function SearchConsolePage({ account, lens }) {
   const data = searchConsoleData(lens, account);
   return <div className="v2-page-sections">
     <div className="space-y-2">
-      <PageHeading title="From search to your site." />
+      <PageHeading title={pageInsight(lens)} />
       <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">See how people discover {account.name}, what they search for, and what earns a click.</p>
       <Button className="mt-3" variant="default" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Search Console</Button>
     </div>

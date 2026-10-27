@@ -1,3 +1,4 @@
+import { overviewInsight } from '../data/page-insights';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { LatestReports } from './latest-reports';
@@ -14,7 +15,7 @@ export function AccountWorkspace({ model }) {
   return (
     <div className="v2-page-sections">
       <div className="min-w-0 space-y-4">
-        <PageHeading title={account.description} />
+        <PageHeading title={overviewInsight(lenses)} />
         <div className="flex flex-wrap items-center gap-3">
           {latestReport && <Button variant="default" onClick={() => setReportOpen(true)}>See last report</Button>}
         </div>

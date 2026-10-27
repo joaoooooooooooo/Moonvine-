@@ -1,3 +1,4 @@
+import { pageInsight } from '../../data/page-insights';
 import { leaderHeadline } from '../../data/section-insights';
 import { Button } from '@/components/ui/button';
 import { Globe, ChartNoAxesCombined } from '@/components/ui/icons';
@@ -17,7 +18,7 @@ export function AnalyticsV2Page({ account, lens, period }) {
   const data = analyticsV2Data(lens, period);
   const mobileShare = data.total ? Math.round((data.devices.find((device) => device.label === 'Mobile')?.value ?? 0) / data.total * 100) : 0;
   return <div className="v2-page-sections">
-    <div className="space-y-2"><PageHeading title="Understand every visit." /><p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Traffic, engagement, and the paths people take through {account.name}.</p><Button className="mt-3" variant="default" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Analytics</Button></div>
+    <div className="space-y-2"><PageHeading title={pageInsight(lens)} /><p className="max-w-[36ch] text-base leading-6 text-muted-foreground">Traffic, engagement, and the paths people take through {account.name}.</p><Button className="mt-3" variant="default" render={<a href="#/console/data-sources/first-party-data" />}>Manage Google Analytics</Button></div>
     <ReportSignalSummary data={analyticsSummary(data)} />
     <AnalyticsTrends metrics={data.metrics} />
     <SectionDivider />

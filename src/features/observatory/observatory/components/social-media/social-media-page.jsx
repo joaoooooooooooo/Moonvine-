@@ -1,3 +1,4 @@
+import { pageInsight } from '../../data/page-insights';
 import { PageHeading } from '../page-heading';
 import { SectionDivider } from '../section-divider';
 import { socialMediaData, watchedSocialAccounts } from '../../data/social-media';
@@ -12,7 +13,7 @@ export function SocialMediaPage({ account, period, lens }) {
   return (
     <div className="v2-page-sections">
       <div className="space-y-2">
-        <PageHeading title="Watched accounts are posting while you are quiet." />
+        <PageHeading title={pageInsight(lens)} />
         <p className="max-w-[36ch] text-base leading-6 text-muted-foreground">{data.posts.length} watched-account posts were saved. No posts from {account.name} were captured for this report week.</p>
       </div>
       <SocialEngagementChart lens={lens} />
