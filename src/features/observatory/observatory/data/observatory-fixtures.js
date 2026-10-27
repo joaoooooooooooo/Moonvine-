@@ -9,26 +9,26 @@ const emptySetup = {
 
 // Keep stable IDs so existing bookmarks and deep links still resolve.
 export const accounts = [
-  { ...emptySetup, id: 'northstar', name: 'New Account', imageSrc: '/entity-profiles/northstar.svg', initials: 'NA', scenario: 'new' },
+  { ...emptySetup, id: 'northstar', name: 'New Domain', imageSrc: '/entity-profiles/northstar.svg', initials: 'ND', scenario: 'new' },
   {
-    ...emptySetup, id: 'canopy', name: 'Set Up Account', imageSrc: '/entity-profiles/canopy.svg', initials: 'SA', scenario: 'configured',
+    ...emptySetup, id: 'canopy', name: 'Set Up Domain', imageSrc: '/entity-profiles/canopy.svg', initials: 'SD', scenario: 'configured',
     domain: 'setup.example', description: 'A configured workspace for exploring sources, people, and reports.',
     people: 5, entities: 9, multiplier: 0.68, hasSampleData: true,
-    nicknames: ['Set Up Account'],
+    nicknames: ['Set Up Domain'],
     socialAccounts: ['https://www.linkedin.com/company/setup-account', 'https://www.instagram.com/setup-account'],
-    newsKeywords: ['Set Up Account', 'design', 'technology'],
+    newsKeywords: ['Set Up Domain', 'design', 'technology'],
     competitors: [
       { id: 'curio-digital', name: 'Curio Digital', domain: 'curiodigital.io' },
       { id: 'hlabs', name: 'HLabs', domain: 'hlabs.co.uk' },
       { id: 'superside', name: 'Superside', domain: 'superside.com' },
     ],
-    prompts: ['Which companies lead in design and technology?', 'How does Set Up Account compare with its competitors?'],
+    prompts: ['Which companies lead in design and technology?', 'How does Set Up Domain compare with its competitors?'],
     firstPartyConnections: {
-      analytics: { id: 'workspace', name: 'Set Up Account', domain: 'setup.example' },
-      searchConsole: { id: 'workspace', name: 'Set Up Account', domain: 'setup.example' },
+      analytics: { id: 'workspace', name: 'Set Up Domain', domain: 'setup.example' },
+      searchConsole: { id: 'workspace', name: 'Set Up Domain', domain: 'setup.example' },
     },
   },
-  { ...emptySetup, id: 'meridian', name: 'Free Account', imageSrc: '/entity-profiles/meridian.svg', initials: 'FA', scenario: 'free' },
+  { ...emptySetup, id: 'meridian', name: 'Free Domain', imageSrc: '/entity-profiles/meridian.svg', initials: 'FD', scenario: 'free' },
 ];
 
 export const periods = [{

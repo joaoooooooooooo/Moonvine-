@@ -40,7 +40,6 @@ export function AppSidebar({ model }) {
   return (
     <TooltipProvider delay={150} timeout={500}><Sidebar id="observatory-sidebar" className={tourMobile ? `v2-sidebar !fixed inset-y-0 left-0 z-50 !w-72 ${tour.step.id === 'chat' ? 'hidden' : ''}` : "v2-sidebar static min-h-full group-data-[collapsible=offcanvas]:hidden"} collapsible={tourMobile ? "none" : "icon"} variant="sidebar">
       <SidebarHeader className="gap-1 p-2 pt-3">
-        {sidebarAccount.scenario === 'free' && <UpgradePlanButton className="mb-2 w-full group-data-[collapsible=icon]:hidden" />}
         <WorkspaceSwitcher model={model} />
         <SearchCommand model={model} />
       </SidebarHeader>
